@@ -15,7 +15,7 @@ class Bras
     Servomoteur servoCoude;
     Servomoteur servoEpaule;
     int capteurCouleur;//int pour le moment
-    int pompe;
+    Pompe pompe;
     
 };
 
