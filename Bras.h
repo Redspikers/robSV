@@ -6,7 +6,9 @@
 class Bras
 {
     public:
-    bool atrapeCD();
+    Bras(); 
+    bool attrapeCD();
+    int getCapteurCouleur();
 
 
     private:

@@ -2,7 +2,22 @@
 
 using namespace std;
 
-void Bras::attrapeCD()
+Bras::Bras(){
+	
+	
+	
+	
+	
+	
+}
+
+bool Bras::attrapeCD()
 {
     //ok
 }
+
+int Bras::getCapteurCouleur()
+{
+    //ok
+}
+
