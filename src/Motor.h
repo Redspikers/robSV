@@ -1,7 +1,7 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-#include <Servo.h>
+#include "include.h"
 
 class Motor {
 private:

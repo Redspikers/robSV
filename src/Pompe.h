@@ -1,7 +1,7 @@
 #ifndef __POMPE__
 #define __POMPE__
 
-#include "constantes.h"
+#include "include.h"
 
 class Pompe {
 public:
