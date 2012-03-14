@@ -7,7 +7,7 @@ class Bras
 {
     public:
     Bras(); 
-    bool attrapeCD();
+    boolean attrapeCD();
     int getCapteurCouleur();
 
 
