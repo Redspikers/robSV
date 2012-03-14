@@ -1,6 +1,15 @@
 #include "Bras.h"
 
+#define ANGLE_EPAULE 30
+#define ANGLE_COUDE 30
+
 Bras::Bras() {
+	this->servoCoude = new Servo();
+	this->servoEpaule = new Servo();
+	this->pompe = new Pompe();
+	
+	this->servoCoude()->attach(PIN_SERVO_COUDE);
+	this->servoEpaule()->attach(PIN_SERVO_EPAULE);
 
 }
 
@@ -14,14 +23,17 @@ bool Bras::attrapeCD() {
 	 * */
 
 	//Mouvement des deux servos. Le même tout le temps ?
-
+	//~ this->servoCoude().
+	
+	
+	
 	//Compresion de la pompe 
 	this->pompe->compresser();
 
 	//Mouvement des servos pour aller au tapis
 
 	//Relachement au dessus du tapis
-	this->pompe->compresser();
+	this->pompe->relacher();
 
 	//Retour position initiale
 

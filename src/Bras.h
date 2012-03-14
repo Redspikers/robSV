@@ -14,7 +14,6 @@ class Bras
     private:
     Servomoteur* servoCoude;
     Servomoteur* servoEpaule;
-    int capteurCouleur;//int pour le moment
     Pompe* pompe;
     
 };
