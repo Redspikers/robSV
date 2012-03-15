@@ -1,6 +1,4 @@
-#include <Arduino.h>
-#include <Servo.h>
-#include "Motor.h"
+#include "include.h"
 
 Servo *test;
 

@@ -1,7 +1,5 @@
 #include "Pompe.h"
 
-using namespace std;
-
 Pompe::Pompe() {
 
 }
