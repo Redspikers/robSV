@@ -20,49 +20,27 @@ bool Bras::attrapeCD() {
 	 * */
 
 	//Mouvement des deux servos. Le même tout le temps car on choppe que les CDs du bas
-	//Coude
-	this->servoCoude-> write(90+VITESSE_MOTEUR);
-	delay(TEMPS_COUDE1);
-	this->servoCoude-> write(90);
-	
-	//Epaule
-	this->servoEpaule->write(90+VITESSE_MOTEUR);
-	delay(TEMPS_EPAULE1);
-	this->servoEpaule->write(90);
+	this->servoCoude-> write(ANGLE_COUDE1);//Coude
+	this->servoEpaule->write(ANGLE_EPAULE1);//Epaule
 	//FIN Mouvement
 	
-	//~ if(getCapteurCouleur())
-		//~ return False;
+	if(getCapteurCouleur()){
+		retourPositionInitiale();
+		return false;
+	}
 	
 	//Compresion de la pompe 
 	this->pompe->compresser();
 
 	//Mouvement des servos pour aller au tapis
-	//Coude
-	this->servoCoude-> write(90+VITESSE_MOTEUR);
-	delay(TEMPS_COUDE2);
-	this->servoCoude-> write(90);
-	
-	//Epaule
-	this->servoEpaule->write(90+VITESSE_MOTEUR);
-	delay(TEMPS_EPAULE2);
-	this->servoEpaule->write(90);
+	this->servoCoude-> write(ANGLE_COUDE2);//Coude
+	this->servoEpaule->write(ANGLE_EPAULE2);//Epaule
 	//FIN Mouvement
 
 	//Relachement au dessus du tapis
 	this->pompe->relacher();
 
-	//Retour position initiale
-	//Coude
-	this->servoCoude-> write(90-VITESSE_MOTEUR);
-	delay(TEMPS_COUDE1);
-	this->servoCoude-> write(90);
-	
-	//Epaule
-	this->servoEpaule->write(90-VITESSE_MOTEUR);
-	delay(TEMPS_EPAULE1);
-	this->servoEpaule->write(90);
-	//FIN Mouvement
+	retourPositionInitiale();
 
 	return true;
 }
@@ -71,3 +49,9 @@ int Bras::getCapteurCouleur() {
 	return analogRead(PIN_CAPTEUR_COULEUR);
 }
 
+void Bras::retourPositionInitiale(){
+	//Retour position initiale
+	this->servoCoude-> write(ANGLE_COUDE3);//Coude
+	this->servoEpaule->write(ANGLE_EPAULE3);//Epaule
+	//FIN Mouvement
+}
