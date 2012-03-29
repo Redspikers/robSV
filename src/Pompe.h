@@ -10,7 +10,7 @@ public:
 	void relacher();
 
 private:
-	int pompe_elec; //int pour l'instant
+	boolean compressee; //int pour l'instant
 
 };
 

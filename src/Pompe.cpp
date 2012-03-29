@@ -1,14 +1,17 @@
 #include "Pompe.h"
 
 Pompe::Pompe() {
-
+	pinMode(PIN_POMPE, OUTPUT);
+	
 }
 
 void Pompe::compresser() {
-	//ok
+	digitalWrite(PIN_POMPE, HIGH);
+	this->compressee = true;
 }
 
 void Pompe::relacher() {
-	//ok
+	digitalWrite(PIN_POMPE, LOW);
+	this->compressee = false;
 }
 

@@ -25,7 +25,9 @@ const int capteur_conversion[12][2] = {
 #define PIN_SERVO_EPAULE     2 
 #define PIN_SERVO_COUDE      3 
 #define PIN_SERVO_VOLET1     4 
-#define PIN_SERVO_VOLET2     5 
+#define PIN_SERVO_VOLET2     5
+#define PIN_POMPE		     6
+ 
 
 
 

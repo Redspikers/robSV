@@ -14,7 +14,7 @@ int Capteur::get(){
 		valeur += analogRead(this->pinNumber);
 	valeur /= 20;
 	
-	//On approxime la distrance en utilisant le tableau
+	//On approxime la distance en utilisant le tableau
 	for(i=0; i<12; i++){
 		if((valeur < capteur_conversion[i][1]) && (valeur >= borne_inf[1])){
 			return (int)(borne_inf[0]+((valeur-borne_inf[1])
