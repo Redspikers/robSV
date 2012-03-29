@@ -3,6 +3,8 @@
 
 #include <Servo.h>
 
+#define ANGLE_OUVERTURE
+#define ANGLE_FERMETURE
 
 class Volet
 {

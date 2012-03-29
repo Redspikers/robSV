@@ -23,8 +23,8 @@ class Bras
 
 
     private:
-    Servomoteur* servoCoude;
-    Servomoteur* servoEpaule;
+    Servo* servoCoude;
+    Servo* servoEpaule;
     Pompe* pompe;
     
 };
