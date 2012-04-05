@@ -15,7 +15,9 @@ class Volet
 
 
     private:
-        Servo* servoVolet;
+        Servo* servoVoletGauche; //Droite et gauche déf par rapport
+								//à la marche avant du robot (choix arbitraire)
+        Servo* servoVoletDroite;
 
 };
 

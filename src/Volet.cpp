@@ -6,13 +6,14 @@ Volet::Volet()
 
 }
 
-// TODO : le fonctionnement ici dépend du sens de montage des servo moteur mécaniquement
-// TODO : Servo a monter mécaniquement soit en position 0, 90 ou 180
-
+// TODO : le fonctionnement ici dÃ©pend du sens de montage des servo moteur mï¿½caniquement
+// TODO : Servo a monter mï¿½caniquement soit en position 0, 90 ou 180
+//droite et gauche choisis arbitrairement dans le sens de la marche avant du robot
 Volet::openVolet()
 {
 
-    this->servoVolet -> write(ANGLE_OUVERTURE);
+    this->servoVoletDroite -> write(ANGLE_OUVERTURE_DROITE);
+    this->servoVoletGauche -> write(ANGLE_OUVERTURE_GAUCHE)
 
 }
 
@@ -20,7 +21,8 @@ Volet::openVolet()
 Volet::closeVolet()
 {
 
-    this-> servoVolet -> write(ANGLE_FERMETURE);
+    this-> servoVoletDroite -> write(ANGLE_FERMETURE_DROITE);
+    this-> servoVoletGauche -> write(ANGLE_FERMETURE_GAUCHE);
 }
 
 
