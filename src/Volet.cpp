@@ -1,8 +1,11 @@
 #include "Volet.h"
 
+
+
 Volet::Volet()
 {
-    this->servoVolet = new Servo();
+    this->servoVoletDroite = new Servo();
+    this->servoVoletGauche = new Servo();
 
 }
 
