@@ -21,13 +21,13 @@ const int capteur_conversion[12][2] = {
 {20, 492}};
 
 //Pins : 
-#define PIN_CAPTEUR_COULEUR  1 //Le numero du pin où il y a le capteur (au hasard pour l'instant)
-#define PIN_SERVO_EPAULE     2 
-#define PIN_SERVO_COUDE      3 
+#define PIN_CAPTEUR_COULEUR		   1 //Le numero du pin où il y a le capteur (au hasard pour l'instant)
+#define PIN_SERVO_EPAULE    	   2 
+#define PIN_SERVO_COUDE     	   3 
 #define PIN_SERVO_VOLET_DROITE     4 
 #define PIN_SERVO_VOLET_GAUCHE     5
-#define PIN_POMPE		     6
-#define PIN_TAPIS		     7
+#define PIN_POMPE				   6
+#define PIN_TAPIS				   7
  
 
 
