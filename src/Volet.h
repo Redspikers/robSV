@@ -15,7 +15,7 @@ class Volet
 
 
     private:
-        Servomoteur* servoVolet;
+        Servo* servoVolet;
 
 };
 
