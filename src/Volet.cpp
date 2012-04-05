@@ -1,9 +1,6 @@
 #include "Volet.h"
 
-#define ANGLE_OUVERTURE_DROITE
-#define ANGLE_OUVERTURE_GAUCHE
-#define ANGLE_FERMETURE_GAUCHE
-#define ANGLE__FERMETURE_DROITE
+
 
 Volet::Volet()
 {
