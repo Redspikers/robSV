@@ -10,7 +10,7 @@ Bras::Bras() {
 
 }
 
-bool Bras::attrapeCD() {
+boolean Bras::attrapeCD() {
 	/*
 	 * On verifie qu'il est de bonne couleur et on attrape le cd
 	 * Si à n'importe quel moment , le CD est laché (et donc le capteur ne voit plus rien)

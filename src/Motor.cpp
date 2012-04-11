@@ -18,9 +18,9 @@ Motor::~Motor() {
 
 }
 
-void Motor::attach(int pinLeft, int rightLeft) {
+void Motor::attach(int pinLeft, int pinRight) {
 	this->servoLeft->attach(pinLeft);
-	this->servoRight->attach(rightLeft);
+	this->servoRight->attach(pinRight);
 
 	this->attached = true;
 }
@@ -32,7 +32,7 @@ void Motor::detach() {
 	this->attached = false;
 }
 
-bool Motor::isAttached() {
+boolean Motor::isAttached() {
 	return this->attached;
 }
 

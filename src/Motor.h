@@ -8,7 +8,7 @@ private:
 	Servo *servoLeft;
 	Servo *servoRight;
 
-	bool attached;
+	boolean attached;
 
 public:
 	Motor();
@@ -16,7 +16,7 @@ public:
 
 	void attach(int pinLeft, int pinRight);
 	void detach();
-	bool isAttached();
+	boolean isAttached();
 
 	void move(int distanceMM);
 	void turn(int angleDegree, int distanceMM);
