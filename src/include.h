@@ -13,7 +13,7 @@
 #include "Tapis.h"
 #include "Volet.h"
 #include "constantes.h"
-#include "variable Global.h"
+#include "variableGlobal.h"
 
 
 

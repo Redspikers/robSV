@@ -1,4 +1,5 @@
 #ifndef __VARIABLE__
 #define __VARIABLE__
 
-int compteurImpulsionRoueGauche, compteurImpulsionRoueDroite;
+volatile int compteurImpulsionRoueGauche, compteurImpulsionRoueDroite;
+int *distanceRoueDroite, *distanceRoueGauche;
