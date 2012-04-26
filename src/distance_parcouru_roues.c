@@ -9,8 +9,8 @@
 void distanceTotaleParcourue(int compteurImpulsionRoueGauche, int compteurImpulsionRoueDroite, int *distanceTotaleRoueDroite, int *distanceTotaleRoueGauche)
 {
 	
-	*distanceRoueDroite = (compteurImpulsionRoueDroite / 20.25 ) * 189.028 ;
-	*distanceRoueGauche = (compteurImpulsionRoueGauche / 20.25 ) * 189.028 ;
+	*distanceTotaleRoueDroite = (compteurImpulsionRoueDroite / 20.25 ) * 189.028 ;
+	*distanceTotaleRoueGauche = (compteurImpulsionRoueGauche / 20.25 ) * 189.028 ;
 	
 	
 }
