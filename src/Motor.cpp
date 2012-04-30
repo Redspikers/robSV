@@ -40,12 +40,11 @@ void Motor::move(int distanceMilliMeter) {
 	//TODO convertir distance en temps selon la circonférence des roues + glissement + attuenation générale
 
 	//TODO calculer la vitesse réelle
-	int speedMillimeterPerSeconds = 100; //1cm par secondes
+	//int speedMillimeterPerSeconds = 100; //1cm par secondes
 
-	int millisecondsMoving = (distanceMilliMeter * speedMillimeterPerSeconds) / 1000;
+	//int millisecondsMoving = (distanceMilliMeter * speedMillimeterPerSeconds) / 1000;
+	
 
-	this->servoLeft->writeMicroseconds(millisecondsMoving);
-	this->servoRight->writeMicroseconds(millisecondsMoving);
 }
 
 void Motor::turn(int angleDegree, int distanceMilliMeter) {

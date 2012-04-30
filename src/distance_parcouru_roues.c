@@ -6,11 +6,11 @@
 // Distance totale parcourue par chaque roue depuis le début du match : pointeur distanceRoueGauche et distanceRoueDroite
 
 
-void distanceTotaleParcourue(int compteurImpulsionRoueGauche, int compteurImpulsionRoueDroite, int *distanceTotaleRoueDroite, int *distanceTotaleRoueGauche)
+void distanceTotaleParcourue(int compteurImpulsionRoueGauche, int compteurImpulsionRoueDroite, int distanceTotaleRoueDroite, int distanceTotaleRoueGauche)
 {
 	
-	*distanceTotaleRoueDroite = (compteurImpulsionRoueDroite / 20.25 ) * 189.028 ;
-	*distanceTotaleRoueGauche = (compteurImpulsionRoueGauche / 20.25 ) * 189.028 ;
+	distanceTotaleRoueDroite = (compteurImpulsionRoueDroite / 20.25 ) * 189.028 ; //distance en mm
+	distanceTotaleRoueGauche = (compteurImpulsionRoueGauche / 20.25 ) * 189.028 ;  //distance en mm
 	
 	
 }
@@ -18,19 +18,19 @@ void distanceTotaleParcourue(int compteurImpulsionRoueGauche, int compteurImpuls
 // Convertit le nb d'impulsions des roues codeuse en distancez parcourue
 // par les roues depuis le dernier appel à cette fonction
 
-void distanceParcourue(int compteurImpulsionRoueDroite, int compteurImpulsionRoueGauche, int *distanceRoueDroite, int *distanceRoueGauche) 
+void distanceParcourue(int compteurImpulsionRoueDroite, int compteurImpulsionRoueGauche, int distanceRoueDroite, int distanceRoueGauche) 
 {
 	
 	
-	*distanceRoueDroite = (( compteurImpulsionRoueDroite - *nbImpulsionDroite ) / 20.25 ) * 189.028 ;
-	*distanceRoueGauche = (( compteurImpulsionRoueGauche - *nbImpulsionGauche ) / 20.25 ) * 189.028 ;
+	distanceRoueDroite = (( compteurImpulsionRoueDroite - nbImpulsionDroite ) / 20.25 ) * 189.028 ;  //distance en mm
+	distanceRoueGauche = (( compteurImpulsionRoueGauche - nbImpulsionGauche ) / 20.25 ) * 189.028 ;  //distance en mm
 	
 	
 	
 	// nbImpulsion(Gauche et Droite) reçoivent le nb d'impulsion. Ainsi a l' occurence n+1 de cette fonction
 	// ces variables seront le nb d'impulsion lors de l'occurence n de cette fonction
-	*nbImpulsionDroite = compteurImpulsionRoueDroite;
-	*nbImpulsionGauche = compteurImpulsionRoueGauche;
+	nbImpulsionDroite = compteurImpulsionRoueDroite;
+	nbImpulsionGauche = compteurImpulsionRoueGauche;
 	
 	
 }
