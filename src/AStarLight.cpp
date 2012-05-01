@@ -8,130 +8,161 @@
 #include "AStarLight.h"
 
 
-AStarLight::AStarLight() {
-	this->map = new Map();
-
-	this->openList = new NodeQueue();
-	this->closedList = new NodeQueue();
-}
-
-AStarLight::AStarLight(Map* map) {
+AStarLight::AStarLight(Map* map, int radius) {
+	this->radius = radius;
 	this->map = map;
 
-	this->openList = new NodeQueue();
-	this->closedList = new NodeQueue();
+	this->openList = NULL;
+	this->closedList = NULL;
 }
 
 AStarLight::~AStarLight() {
 
 }
 
-Node* AStarLight::getBestNode() {
-	Node *result = NULL;
+Node* AStarLight::compute(Cell* begin, Cell* end) {
+	/*
+	 * 0 - Déclaration des variables (on ne le fait pas à la volée afin de réduire l'espace nécessaire)
+	 */
 
-	Node *tmp = NULL;
-
-	if(this->openList->size() > 0) {
-		for(int i=0 ; i < this->openList->size() ; i++) {
-			tmp = this->openList->get(i);
-			if(tmp->getCost() < result->getCost()) {
-				result = tmp;
-			}
-		}
-	}
-
-	return result;
-}
-
-bool AStarLight::compute(Node* begin, Node* end) {
-	bool result = false;
-
+	//1
 	Node* currentNode = NULL;
+
+	//2
+	Cell** neighbors = NULL;
+	int neighborsCount = 0;
+	int i = 0;
+
+	//3
+	Cell* candidate = NULL;
+	int candidateCost = 0;
+	Node* candidateNode = NULL;
+	Node* browseClosedList = NULL;
+	bool inClosedList = false;
+	Cell** candidateNeighbors = NULL;
+	int candidateNeighborsCount = 0;
+	bool blocked = false;
+	int j = 0;
+
+	//4
+	NodeQueueItem* browseOpenList = NULL;
 	Node* bestNode = NULL;
 
-	Node** neighbors = NULL;
-	Node* currentNeighbor = NULL;
+	/*
+	 * 1 - Initialisation
+	 */
 
-	int i = 0;
-	int neighborsCount = 0;
-	int currentCost = 0;
-
-	//Reset des listes pour une nouvelle recherche
+	//Reset de la liste ouverte pour une nouvelle recherche
 	this->openList = new NodeQueue();
-	this->closedList = new NodeQueue();
 
-	//On commence à partir du début
-	currentNode = begin;
-	//Le noeud où on est est forcement dans la liste fermée car obligatoirement un point de passage : on l'ajotue donc
-	this->closedList->push(begin);
+	//On commence à partir du début - c'est le premier, donc pas de parent, pas de next
+	currentNode = new Node(begin);
+	currentNode->setParent(NULL);
+	currentNode->setNext(NULL);
+	this->closedList = currentNode;
 
 	//Tant que la destination n'est pas atteinte
-	while(currentNode != end) {
-		//Récuperer les noeuds adjacents et leur nombres
-		neighbors = this->map->getNeighbors(currentNode->getX(), currentNode->getY());
-		neighborsCount = this->map->getNeighborsCount(currentNode->getX(), currentNode->getY());
+	do {
+		/*
+		 * 2 - Récupérer les voisins
+		 */
 
-		//Pour chaque voisins
+		//Récuperer les cellules adjacents et leur nombres
+		neighbors = this->map->getNeighbors(currentNode->getCell()->getX(), currentNode->getCell()->getY(), 1);
+		neighborsCount = this->map->getNeighborsCount(currentNode->getCell()->getX(), currentNode->getCell()->getY(), 1);
+
+		/*
+		 * 3 - Chaque voisin est candidat en tant que noeud possible (i.e. openList)
+		 */
 		for(i = 0 ; i < neighborsCount ; i++) {
-			currentNeighbor = neighbors[i];
+			candidate = neighbors[i];
+
 
 			//Calcul du cout pour ce noeud - Celui de son parent + sa distance par rapport à l'arrivée
-			currentCost = currentNode->getCost() + sqrt((currentNeighbor->getX() - end->getX())*(currentNeighbor->getX() - end->getX()) + (currentNeighbor->getY() - end->getY())*(currentNeighbor->getY() - end->getY()));
+			//Attention, on ne prend volontairement pas de racine carrée pour garder l'exactitude (et ça prend moins de temps)
+			candidateCost = currentNode->getCost() + (candidate->getX() - end->getX())*(candidate->getX() - end->getX()) + (candidate->getY() - end->getY())*(candidate->getY() - end->getY());
 
-			//Si le noeud est un obstacle
-			if(currentNeighbor->isBlocked()) {
-				//On l'oublie
-			//Sinon si le noeud est un voisin déjà présent dans la liste fermée
-			} else if(this->closedList->contains(currentNeighbor)) {
-				//On l'oublie
-			//Sinon si le noeud est déjà présent dans la liste ouverte
-			} else if(this->openList->contains(currentNeighbor)) {
-				//Si le noeud avait une moins bonne qualité, on met à jour la qualité et le parent
-				if(currentNeighbor->getCost() > currentCost) {
-					currentNeighbor->setParent(currentNode);
-					currentNeighbor->setCost(currentCost);
+			//Recherche du candidat dans la closedList
+			browseClosedList = this->closedList;
+			inClosedList = false;
+			while(browseClosedList != NULL && inClosedList == false) {
+				if(browseClosedList->getCell() == candidate) {
+					inClosedList = true;
 				}
-
-			//Sinon
-			} else {
-				//On ajout le noeud dans la liste ouverte
-				currentNeighbor->setParent(currentNode);
-				currentNeighbor->setCost(currentCost);
-				this->openList->push(currentNeighbor);
-
+				browseClosedList = browseClosedList->getParent();
 			}
-			//FinSi
-		}
-		//FinPour
 
+			//Le noeud est joingnable (i.e. pas d'obstacles chez les voinsins
+			candidateNeighbors = this->map->getNeighbors(candidate->getX(), candidate->getY(), this->radius);
+			candidateNeighborsCount = this->map->getNeighborsCount(candidate->getX(), candidate->getY(), this->radius);
+			blocked = false;
+			for(j=0 ; (j < candidateNeighborsCount && !blocked) ; j++) {
+				if(candidateNeighbors[j]->isBlocked()) {
+					blocked = true;
+				}
+			}
+
+			//Si le noeud est un obstacle ou fait parti de la closedList : on l'oublie, sinon on le traite
+			if(!blocked && !inClosedList) {
+				candidateNode = this->openList->getNode(candidate); // NULL if not in this list
+				if(candidateNode != NULL) {
+					//Si le noeud avait une moins bonne qualité, on met à jour la qualité et le parent
+					if(candidateNode->getCost() > candidateCost) {
+						candidateNode->setParent(currentNode);
+						candidateNode->setCost(candidateCost);
+					}
+
+				//Sinon c'est que le noeud est un candidat légitime pour le chemin
+				} else {
+					//On ajoute le noeud dans la liste ouverte
+					candidateNode = new Node(candidate);
+					candidateNode->setParent(currentNode);
+					candidateNode->setCost(candidateCost);
+
+					this->openList->push(candidateNode);
+				}
+			}
+		}
+
+		/*
+		 * 4 - Recherche du meilleur noeud dans la liste ouverte
+		 */
 		//Chercher le meilleur noeud de la liste ouverte et le mettre dans la liste fermée
-		bestNode = this->getBestNode();
-
-		//Si pas de solutions
-		if(bestNode == NULL) {
-			//Fin de la boucle - Erreur, destination impossible
-			break;
-		//Sinon
-		} else {
-			//Retirer ce noeud de la liste ouverte
-			this->openList->remove(bestNode);
-
-			//Ajouter ce noeud dans la liste fermée
-			this->closedList->push(bestNode);
-
-			//Changer le noeud courant par le noeud ajoutée
-			currentNode = bestNode;
+		bestNode = NULL;
+		browseOpenList = this->openList->getFirst();
+		if(browseOpenList != NULL) {
+			bestNode = browseOpenList->getNode();
+			while(browseOpenList != NULL) {
+				if(browseOpenList->getNode()->getCost() < bestNode->getCost()) {
+					bestNode = browseOpenList->getNode();
+				}
+				browseOpenList = browseOpenList->getNext();
+			}
 		}
-		//FinSi
+		//Retirer ce noeud de la liste ouverte
+		this->openList->remove(bestNode);
+		//Ajouter ce noeud dans la liste fermée
+		this->closedList = bestNode;
+		//Changer le noeud courant par le noeud ajoutée
+		currentNode = bestNode;
 
+	} while(currentNode->getCell() != end && this->openList->size() != 0);
+
+
+	/*
+	 * 5 - Solution de l'algorithme
+	 */
+
+	//Si il y a eu une solution - alors on retourne la solution (le premier noeud)
+	//On construit le lien double de la liste de Node (jusqu'à présent, et pour le besoin de l'algorithme, on ne se servait que du lien montant (parnt)
+	if(currentNode->getCell() == end) {
+		browseClosedList = this->closedList;
+		while(browseClosedList->getParent() != NULL) {
+			browseClosedList->getParent()->setNext(browseClosedList);
+			browseClosedList = browseClosedList->getParent();
+		}
+		return browseClosedList;
 	}
-	//FinTq
-
-	//Si il y a eu une solution
-	if(currentNode == end) {
-		//Renvoyer le premier noeud
-		result = true;
-	}
-
-	return result;
+	//Par défaut, on retourne NULL indiquant pas de solutions ou une erreur
+	return NULL;
 }

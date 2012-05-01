@@ -10,25 +10,25 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <newarray.h>
 
 #include "Node.h"
 #include "NodeQueue.h"
+#include "NodeQueueItem.h"
 #include "Map.h"
+//#include "Robot.h"
 
 class AStarLight {
 	public:
-		AStarLight();
-		AStarLight(Map* map);
-		virtual ~AStarLight();
+		AStarLight(Map* map, int radius);
+		~AStarLight();
 
-		bool compute(Node* begin, Node* end);
-		Node* getBestNode();
+		Node* compute(Cell* begin, Cell* end);
 
 	private:
-		Map *map;
-		NodeQueue *openList;
-		NodeQueue *closedList;
+		int radius;
+		Map* map;
+		NodeQueue* openList;
+		Node* closedList;
 
 
 };

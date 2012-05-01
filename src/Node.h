@@ -9,33 +9,31 @@
 #define NODE_H
 
 #include <stdlib.h>
+#include "Cell.h"
 
 class Node {
 	public:
-		Node(int x, int y, bool m_blocked);
+		Node(Cell *cell);
 		~Node();
-
-		void setX(int x);
-		int getX();
-
-		void setY(int y);
-		int getY();
 
 		void setCost(int cost);
 		int getCost();
 
-		void setBlocked(bool blocked);
-		bool isBlocked();
-
 		void setParent(Node *parent);
 		Node *getParent();
 
+		void setNext(Node* next);
+		Node* getNext();
+
+		Cell* getCell();
+
 	private:
-		int m_x; // position x
-		int m_y; // position y
-		bool m_blocked;
-		int m_cost;
-		Node *m_parent;
+		Cell* cell;
+		int cost;
+
+		Node* parent;
+		Node* next;
+
 };
 #endif
 

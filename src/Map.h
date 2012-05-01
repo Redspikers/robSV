@@ -9,21 +9,28 @@
 #define MAP_H_
 
 #include <stdlib.h>
-#include <newarray.h>
+#include <math.h>
 
-#include "Node.h"
+#include "Cell.h"
 
 class Map {
 	public:
+		//Create every Cell on the map, store it into map and cds arrays
 		Map();
 		~Map();
 
-		Node* getNode(int x, int y);
-		Node** getNeighbors(int x, int y);
-		int getNeighborsCount(int x, int y);
+		Cell* getCell(int x, int y);
+
+		//Useful for pathfindings
+		Cell** getNeighbors(int x, int y, int range);
+		int getNeighborsCount(int x, int y, int range);
+
+		//Return the closest Cell where there is a CD
+		Cell* getClosestCD(Cell* begin);
 
 	private:
-		Node ***map;
+		//Store all Cell in the map : it is a double array with Cell pointer's
+		Cell*** map;
 		int lines;
 		int columns;
 

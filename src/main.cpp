@@ -1,29 +1,37 @@
-#include "include.h"
+/*
+ * main.cpp
+ *
+ *  Created on: 21 avr. 2012
+ *      Author: Koudja
+ */
 
+#include <Arduino.h>
 
+#include "AStarLight.h"
+#include "Map.h"
+
+void setup() {
+
+}
+
+void loop() {
+
+}
 
 int main(void) {
+	init();
+
+#if defined(USBCON)
+	USB.attach();
+#endif
+
 	setup();
 
-	for (;;)
+	for (;;) {
 		loop();
+		if (serialEventRun)
+			serialEventRun();
+	}
 
 	return 0;
 }
-
-void setup() {
-	
-	attachInterrupt(0, incrementation_roueCodeuseGauche, RISING);// 0 correspond à la pin digital 2. le signal de la roue codeuse doit y etre relié
-	attachInterrupt(1, incrementation_roueCodeuseDroite, RISING);// 1 correspond à la pin digital 3
-	
-
-}
-
-
-
-void loop() {
-	
-	
-
-}
-

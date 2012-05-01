@@ -7,48 +7,37 @@
 
 #include "Node.h"
 
-Node::Node(int x, int y, bool blocked) {
-	this->m_x = x;
-	this->m_y = y;
-	this->m_cost = 0;
-	this->m_parent = NULL;
+Node::Node(Cell *cell) {
+	this->cell = cell;
+	this->parent = NULL;
+
 }
 Node::~Node() {
 
 }
 
-void Node::setX(int x) {
-	this->m_x = x;
-}
-int Node::getX() {
-	return this->m_x;
-}
-
-void Node::setY(int y) {
-	this->m_y = y;
-}
-int Node::getY() {
-	return this->m_y;
-}
 
 void Node::setCost(int cost) {
-	this->m_cost = cost;
+	this->cost = cost;
 }
 int Node::getCost() {
-	return this->m_cost;
+	return this->cost;
 }
 
 void Node::setParent(Node *parent) {
-	this->m_parent = parent;
+	this->parent = parent;
 }
-Node *Node::getParent() {
-	return this->m_parent;
-}
-
-void Node::setBlocked(bool blocked) {
-	this->m_blocked = blocked;
+Node* Node::getParent() {
+	return this->parent;
 }
 
-bool Node::isBlocked() {
-	return this->m_blocked;
+Cell* Node::getCell() {
+	return this->cell;
+}
+
+void Node::setNext(Node* next) {
+	this->next = next;
+}
+Node* Node::getNext() {
+	return this->next;
 }

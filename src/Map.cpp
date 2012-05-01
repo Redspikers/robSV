@@ -9,26 +9,36 @@
 
 Map::Map() {
 	//Construction de la map
-	//DEBUG : Aucun obstacle
-	this->lines = 10;
-	this->columns = 10;
 
-	this->map = new Node**[this->lines];
+	//Taille des noeuds : 10cm par 10cm (total 2m par 3m)
+	this->lines = 20;
+	this->columns = 30;
 
+	this->map = new Cell**[this->lines];
+
+	//Initialisation
 	for(int i=0 ; i < this->lines ;i++) {
-		this->map[i] = new Node*[this->columns];
+		this->map[i] = new Cell*[this->columns];
 
 		for(int j=0 ; j < this->columns ;j++) {
-			this->map[i][j] = new Node(i, j, false);
+			this->map[i][j] = new Cell(i, j, false);
 		}
 	}
+
+	//Régler les obstacles fixes
+	//TODO
+	this->map[4][5]->setBlocked(true);
+
+	//Régler les CDs
+	//TODO
+
 }
 
 Map::~Map() {
 
 }
 
-Node* Map::getNode(int x, int y) {
+Cell* Map::getCell(int x, int y) {
 	//On vérifie que l'on est pas hors champs
 	if(x < this->lines && y < this->columns) {
 		return this->map[x][y];
@@ -36,100 +46,60 @@ Node* Map::getNode(int x, int y) {
 	return NULL;
 }
 
-Node** Map::getNeighbors(int x, int y) {
-	Node** result = NULL;
-	if(x < this->lines && y < this->columns) {
-		if(x < this->lines && y < this->columns) {
-				if(x == 0 && y == 0) {
-					result = new Node*[3];
-					result[0] = this->map[0][1];
-					result[1] = this->map[1][0];
-					result[2] = this->map[1][1];
-				} else if(x == 0 && y == this->columns - 1) {
-					result = new Node*[3];
-					result[0] = this->map[0][this->columns - 2];
-					result[1] = this->map[1][this->columns - 1];
-					result[2] = this->map[1][this->columns - 2];
-				} else if(x == this->lines - 1 && y == 0) {
-					result = new Node*[3];
-					result[0] = this->map[this->lines - 1][1];
-					result[1] = this->map[this->lines - 2][0];
-					result[2] = this->map[this->lines - 2][1];
-				} else if(x == this->lines - 1 && y == this->columns - 1) {
-					result = new Node*[3];
-					result[0] = this->map[this->lines - 1][this->columns - 2];
-					result[1] = this->map[this->lines - 2][this->columns - 1];
-					result[2] = this->map[this->lines - 2][this->columns - 2];
-				} else {
-					if(x == 0) {
-						result = new Node*[5];
-						result[0] = this->map[0][y-1];
-						result[1] = this->map[0][y+1];
-						result[2] = this->map[1][y-1];
-						result[3] = this->map[1][y];
-						result[4] = this->map[1][y+1];
-					} else if(x == this->lines - 1) {
-						result = new Node*[5];
-						result[0] = this->map[this->lines - 1][y-1];
-						result[1] = this->map[this->lines - 1][y+1];
-						result[2] = this->map[this->lines - 2][y-1];
-						result[3] = this->map[this->lines - 2][y];
-						result[4] = this->map[this->lines - 2][y+1];
-					} else if(y == 0) {
-						result = new Node*[5];
-						result[0] = this->map[x-1][0];
-						result[1] = this->map[x+1][0];
-						result[2] = this->map[x-1][1];
-						result[3] = this->map[x][1];
-						result[4] = this->map[x+1][1];
-					} else if(y == this->columns - 1) {
-						result = new Node*[5];
-						result[0] = this->map[x-1][this->columns - 1];
-						result[1] = this->map[x+1][this->columns - 1];
-						result[2] = this->map[x-1][this->columns - 2];
-						result[3] = this->map[x][this->columns - 2];
-						result[4] = this->map[x+1][this->columns - 2];
-					} else {
-						result = new Node*[8];
-						result[0] = this->map[x-1][y-1];
-						result[1] = this->map[x-1][y];
-						result[2] = this->map[x-1][y+1];
-						result[3] = this->map[x][y-1];
-						result[4] = this->map[x][y+1];
-						result[5] = this->map[x+1][y-1];
-						result[6] = this->map[x+1][y];
-						result[7] = this->map[x+1][y+1];
-					}
+Cell** Map::getNeighbors(int x, int y, int range) {
+	Cell** result = new Cell*[this->getNeighborsCount(x, y, range)];
+	int currentIndex = 0;
+
+	for(int i = x-range ; i <= x+range; i++){
+		for(int j = y-range ; j <= y+range ; j++) {
+			if(i >= 0 && i < this->lines && j >= 0 && j < this->columns) {
+				if(!(i == x && j == y)) {
+					result[currentIndex] = this->map[i][j];
+					currentIndex++;
 				}
 			}
+		}
+
 	}
 
 	return result;
 }
 
-int Map::getNeighborsCount(int x, int y) {
+int Map::getNeighborsCount(int x, int y, int range) {
 	int result = 0;
 
-	if(x < this->lines && y < this->columns) {
-		if(x == 0 && y == 0) {
-			result = 3;
-		} else if(x == 0 && y == this->columns - 1) {
-			result = 3;
-		} else if(x == this->lines - 1 && y == 0) {
-			result = 3;
-		} else if(x == this->lines - 1 && y == this->columns - 1) {
-			result = 3;
-		} else {
-			if(x == 0) {
-				result = 5;
-			} else if(x == this->lines - 1) {
-				result = 5;
-			} else if(y == 0) {
-				result = 5;
-			} else if(y == this->columns - 1) {
-				result = 5;
-			} else {
-				result = 8;
+	//Par défaut, c'est laire du carré de longuer (2*range+1) moins le noeud central
+	result = (2*range+1)*(2*range+1)-1;
+
+	//Pour chaque cellules, on regarde si elle est hors-champs
+	for(int i = x-range ; i <= x+range; i++){
+		for(int j = y-range ; j <= y+range ; j++) {
+			if(i < 0 || i > this->lines || j < 0 || j > this->columns) {
+				result--;
+			}
+		}
+
+	}
+
+	return result;
+}
+
+Cell* Map::getClosestCD(Cell* begin) {
+	Cell* result = NULL;
+	double result_cost = 0;
+
+	Cell* temp = NULL;
+	double temp_cost = 0;
+
+	//On parcours l'ensemble de la map (peut-être à améliorer) pour trouver le plus proche CD (le résultat est optimal par contre)
+	for(int i = 0 ; i < this->lines ; i++) {
+		for(int j = 0 ; j < this->columns ; j++) {
+			temp = this->map[i][j];
+			temp_cost = sqrt((temp->getX() - begin->getX())*(temp->getX() - begin->getX()) + (temp->getY() - begin->getY())*(temp->getY() - begin->getY()));
+
+			if(temp_cost < result_cost) {
+				result = temp;
+				result_cost = temp_cost;
 			}
 		}
 	}
