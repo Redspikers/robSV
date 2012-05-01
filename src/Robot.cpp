@@ -22,6 +22,13 @@ Robot::~Robot() {
 	// TODO Auto-generated destructor stub
 }
 
+
+void Robot::setup() {
+	
+	
+	attachInterrupt (2, incrementation_roueCodeuseRight(), RISING);
+	attachInterrupt (5, incrementation_roueCodeuseLeft(), RISING);
+}
 void Robot::loop() {
 	//TODO
 

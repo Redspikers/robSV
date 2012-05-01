@@ -27,6 +27,7 @@ class Robot {
 
 		//Fonctions à executer à chaque boucle de la Arduino, cette fonction prend les actions sur le moment et à venir
 		void loop();
+		void setup();
 
 	private:
 		State state;

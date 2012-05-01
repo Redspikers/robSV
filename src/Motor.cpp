@@ -141,3 +141,44 @@ void Motor::turn(int angleDegree, int distanceMilliMeter) {
 
 }
 
+void distanceTotaleParcourue(int countPulseRight, int countPulseLeft, int distanceTotaleRight, int distanceTotaleLeft)
+{
+	
+	distanceTotaleRight = (countPulseRight / 20.25 ) * 189.028 ; //distance en mm
+	distanceTotaleLeft = (countPulseLeft / 20.25 ) * 189.028 ;  //distance en mm
+	
+	
+}
+
+
+void distanceParcourue(int countPulseRight, int countPulseLeft, int distanceRight, int distanceLeft) 
+{
+	
+	
+	distanceRight = (( countPulseRight - nbPulseRight_temp ) / 20.25 ) * 189.028 ;  //distance en mm
+	distanceLeft = (( countPulseLeft - nbPulseLeft_temp ) / 20.25 ) * 189.028 ;  //distance en mm
+	
+	
+	
+	// nbPulse(Left et Right)_temp reçoivent le nb d'impulsion. Ainsi a l' occurence n+1 de cette fonction
+	// ces variables seront le nb d'impulsion lors de l'occurence n de cette fonction
+	nbPulseRight_temp = countPulseRight;
+	nbPulseLeft_temp = countPulseLeft;
+	
+	
+}
+
+
+void incrementation_roueCodeuseLeft()
+
+{	
+	countPulseLeft++;	
+}
+
+void incrementation_roueCodeuseRight ()
+
+{
+	countPulseRight++;
+}
+
+
