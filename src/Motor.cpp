@@ -138,7 +138,20 @@ void Motor::turn(int angleDegree, int distanceMilliMeter) {
 
 		// TODO : gérer le differentiel de distance entre les roues droites et gauches
 	}
+	if (angleDegree > 90) {
+		int alpha = 90 + angleDegree;
+		distanceRight = 15.97 * sqrt(1 - cos(alpha));
+		distanceLeft = (distanceRight * 308) / 127.58;
+		//Lancer les deux servo à 120 puis les arreter en différé pour gerer
+		//le differentiel de distance a parcourir   ??? Bonne idée, ou pas, a voir
+		for (pos = 90; pos < 120; pos++) {
+			this->servoRight->write(pos);
+			this->servoLeft->write(pos);
+			delay(15);
+		}
 
+		// TODO : gérer le differentiel de distance entre les roues droites et gauches
+	}
 }
 
 void distanceTotaleParcourue(int countPulseRight, int countPulseLeft, int distanceTotaleRight, int distanceTotaleLeft)
