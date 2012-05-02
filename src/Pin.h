@@ -10,7 +10,14 @@
 
 class Pin {
 	public:
-		static const int CAPTOR = 1;
+		static const int CAPTOR_HL = 1; //haut droit
+		static const int CAPTOR_HR = 8; //haut gauche
+		static const int CAPTOR_MD = 9; //Milieu
+		static const int CAPTOR_DR = 10; //Bas droit
+		static const int CAPTOR_DM = 11; //Bas milieu
+		static const int CAPTOR_DL = 12; //Bas gauche
+
+
 		static const int SHOULDER = 2;
 		static const int ELBOW = 3;
 		static const int GATE_LEFT = 4;
