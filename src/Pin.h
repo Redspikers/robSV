@@ -25,9 +25,14 @@ class Pin {
 		static const int ELBOW = 9;
 		static const int GATE_LEFT = 11;
 		static const int GATE_RIGHT = 10;
+		static const int MOTOR_RIGHT = 7;
+		static const int MOTOR_LEFT = 6;
+		
+		
 		static const int POMP = 5;
 		static const int CONVEYOR = 4;
-
+		static const int JACK = 3;
+		
 		Pin();
 		virtual ~Pin();
 };
