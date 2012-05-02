@@ -11,33 +11,66 @@
 #include <Arduino.h>
 #include "Map.h"
 #include "AStarLight.h"
+#include "Arm.h"
+#include "Conveyor.h"
+#include "Motor.h"
 
 class Robot {
 	public:
 		enum State {
-		      SEARCH,
-		      BACK,
-		      TAKE,
-		      DROP
+			IDLE,
+			SEARCH,
+			BACK,
+			TAKE,
+			DROP
 		};
 		static const int PLACE_RADIUS = 2;
 
 		Robot();
 		~Robot();
 
-		//Fonctions à executer à chaque boucle de la Arduino, cette fonction prend les actions sur le moment et à venir
-		void loop();
+		//Fonctions de la arduino, reportées dans cette classe
 		void setup();
+		void loop();
+
+		//Fonctions spécifiques à chaque états
+		void actionIdle();
+		void actionSearch();
+		void actionBack();
+		void actionTake();
+		void actionDrop();
+
 
 	private:
+		//Etat du robot temps en temps réel (détermine le comportement)
 		State state;
 
+		//Carte
 		Map* map;
+
+		//Recherche de chemin (pathfinding)
 		AStarLight* pathfinding;
+		Node* path;
 
 		//Bras
+		Arm* arm;
+
+		//Tapis
+		Conveyor* conveyor;
+
 		//Déplacement
-		//Reconnaissance
+		Motor* motor;
+
+		//Reconnaissance (capteurs)
+		Captor* captorBL;
+		Captor* captorBM;
+		Captor* captorBR;
+
+		Captor* captorUL;
+		Captor* captorUM;
+		Captor* captorUR;
+
+		Captor* captorBack;
 };
 
 #endif /* ROBOT_H_ */

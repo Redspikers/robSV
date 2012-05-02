@@ -34,6 +34,14 @@ class Map {
 		int lines;
 		int columns;
 
+		Cell** captainZoneLeft;
+		Cell** captainZoneRight;
+		int captainZoneLength;
+
+		Cell** stockZoneLeft;
+		Cell** stockZoneRight;
+		int stockZoneLength;
+
 };
 
 #endif /* MAP_H_ */
