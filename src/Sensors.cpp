@@ -81,6 +81,8 @@ void Sensor::Analyse(int *distancesObstacle[])
     if(distancesObstacle[3]==0 && distancesObstacle[0]==0 && ComprisEntre(20,50,valeur[4]))   //CD MILIEU
     {
         distancesObstacle[2]=valeur[4];
+    }else{
+    distancesObstacle[2]=0;
     }
 
     //**********AUTRES OBSTACLES*****************
@@ -88,23 +90,33 @@ void Sensor::Analyse(int *distancesObstacle[])
     {
 
         distancesObstacle[5]=valeur[0]; //Obstacle à Droite à Xcm
+    }else{
+    distancesObstacle[5]=0;
     }
+
+
     if(ComprisEntre(20,150,valeur[1]) && ComprisEntre(20,150,valeur[5]) && EnvironEgal(valeur[1],valeur[5],20))   //Haut Gauche et bas Gauche
     {
 
         distancesObstacle[6]=valeur[1]; //Obstacle à Gauche à Xcm
+    }else{
+     distancesObstacle[6]=0;
     }
 
     if(ComprisEntre(20,50,valeur[1]) && ComprisEntre(20,50,valeur[0]) && ComprisEntre(20,55,valeur[2]))   //Haut Gauche et Haut droit et Milieu
     {
 
         distancesObstacle[7]=valeur[2]; //Obstacle à Gauche à Xcm
+    }else{
+    distancesObstacle[7]=0;
     }
 
     if(ComprisEntre(60,150,valeur[2]))   //Milieu
     {
         distancesObstacle[8]=valeur[2]; //Obstacle à Gauche à Xcm
 
+    }else{
+         distancesObstacle[8]=0;
     }
 
 }
