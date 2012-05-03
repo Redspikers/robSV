@@ -1,0 +1,9 @@
+Capteurs;CD à gauche; CD au milieu gauche ;CD au milieu;CD au milieu droite;Cd à droite;Obstacle à Droite;Obastacle à Gauche;obstacle proche devant;Obstacle loins devant
+;;;;;;;;;
+Haut Gauche;;;;;;;20-150cm;20-49cm;
+Haut Droit;;;;;;20-150cm;;20-49cm;
+Milieu;;;;;;;;;>60cm
+Bas Droit;;;;20-50cm;20-50cm;20-150cm;;;
+Bas Milieu;;20-50cm;20-50cm;20-50cm;;;;20-49cm;
+Bas Gauche;20-50cm;20-50cm;;;;;20-150cm;;
+;;;;;;si pas environ egales : priorité au plus proche;;;
