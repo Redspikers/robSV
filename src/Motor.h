@@ -5,6 +5,10 @@
 #include <Servo.h>
 #include <math.h>  // Peux etre virer si besoin d'optimisation niveau mémoire : besoin uniquement de cosinus.
 
+//Temps du robot pour faire une rotation relative de 90° vers la droite ou vers la gauche (en milliSecondes)
+//moins le temps de d'acceleration et de deceleration
+#define TEMPS_ROTATION90 1.0
+
 class Motor {
 	private:
 	

@@ -128,25 +128,33 @@ void Motor::back(int distanceMilliMeter) {
 }
 
 // de 0° a 90° angle vers la droite du robot
-//de 91° a 180° angel vers la gauche du robot
-//
-void Motor::turn(int angleDegree, int distanceMilliMeter) {
+//de 91° a 180° angle vers la gauche du robot
+//Le robot ne bouge pas par rapport au terrain,  il se contente de faire une rotation sur place
+//Peut etre faudra-t-il enlever les etapes d'acceleration et deceleration : on aura une vitesse basse de rotation
+//mais une meilleure precision
+void Motor::turn(int angleDegree) {
+	int alpha = 90-angleDegree;
+
 	// angle vers la droite du robot
 	if (angleDegree < 90) {
-		int alpha = 90 - angleDegree;
-		this->distanceRight = 15.97 * sqrt(1 - cos(alpha));
-		this->distanceLeft = (this->distanceRight * 308) / 127.58;
-		//Lancer les deux servo à 120 puis les arreter en différé pour gerer
-		//le differentiel de distance a parcourir   ??? Bonne idée, ou pas, a voir
+
+		//Acceleration
 		for (pos = 90; pos < 120; pos++) {
 			this->servoRight->write(pos);
-			this->servoLeft->write(pos);
+			this->servoLeft->write(180-pos);
 			delay(15);
 		}
-
-		// TODO : gérer le differentiel de distance entre les roues droites et gauches
+		
+		delay((int)(TEMPS_ROTATION90*(90/alpha));//Formule à revoir !!
+		
+		//Deceleration
+		for (pos=119; pos >= 90; pos--) {
+			this->servoRight->write(pos);
+			this->servoLeft->write(180-pos);
+			delay(15);
+		}
 	}
-
+	//idem pour l'autre sens, tester d'abord pour angleDegree < 90	
 }
 
 void Motor::distanceTotaleParcourue(int countPulseRight, int countPulseLeft, int distanceTotaleRight, int distanceTotaleLeft) {
