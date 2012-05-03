@@ -5,6 +5,7 @@ Captor::Captor(int pinN){
 	this->pinNumber = pinN;
 }
 
+//Renvoie la distance - quelle angle de portée ?
 int Captor::get(){
 	int valeur = 0;
 	int i = 0;

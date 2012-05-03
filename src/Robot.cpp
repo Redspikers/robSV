@@ -9,7 +9,7 @@
 
 Robot::Robot() {
 	//Etat par défaut du robot : on cherche un CD
-	this->state = Robot::SEARCH;
+	this->state = Robot::State::IDLE;
 
 	//Construction de la map (codée en dur)
 	this->map = new Map();
@@ -24,30 +24,88 @@ Robot::~Robot() {
 
 
 void Robot::setup() {
-	
-	
-	attachInterrupt (2, incrementation_roueCodeuseRight(), RISING);
-	attachInterrupt (5, incrementation_roueCodeuseLeft(), RISING);
+	//TODO fix this error
+	//attachInterrupt(2, this->motor->incrementation_roueCodeuseRight(), RISING);
+	//attachInterrupt(5, this->motor->incrementation_roueCodeuseLeft(), RISING);
+
+	//TODO indiquer la position de départ du robot, gauche ou droite
 }
 void Robot::loop() {
-	//TODO
+	//Selon l'état du robot, on adopte un comportement différent
+	//L'ordre des états permet d'optimiser la boucle if/else (on limite les calculs de booléens)
+	if(this->state == Robot::State::SEARCH) {
+		this->actionSearch();
+	} else if(this->state == Robot::State::BACK) {
+		this->actionBack();
+	} else if(this->state == Robot::State::TAKE) {
+		this->actionTake();
+	} else if(this->state == Robot::State::DROP) {
+		this->actionDrop();
+	} else if(this->state == Robot::State::IDLE) {
+		this->actionIdle();
+	}
 
-	//Mettre à jour sa position
+}
 
-	//Mettre à jour la position de l'ennemi
 
-	//Si SEARCH || BACK
-		//Chercher son prochain déplacement (peut-être va t'on éviter de faire un appe lau pathfinding à chaque fois et faire du tampons
-		//Vérifier le contenu de la prochaine case (un CD qui peut avoir été déplacé, où le robot adverse)
-		//Se déplacer ou contourner
+void Robot::actionIdle() {
+	//Seule chose à faire : tester le JACK
+	//Si i la été retiré, alors on passe à l'état SEARCH
+}
+void Robot::actionSearch() {
+	//Si un chemin existe (i.e. path non nul)
+		//Mettre à jour les cases adjacentes via capteurs pour le robot adverse et/ou les CDs éventuels
+
+		//Si c'était la fin du chemin
+			//Si le CD est bien là
+				//Passer en état TAKE
+			//Sinon
+				//Mettre à jour la carte, chercher un autre CD (nouveau chemin à faire)
+			//FinSi
+		//Sinon
+			//Si pas de changements (le plus fréquent)
+				//Se déplacer d'une case
+			//Sinon si un CD est apparu
+				//Passer en état TAKE
+			//Sinon si le robot adverse est apparu
+				//Recalculer un nouveau chemin (pour l'éviter)
+		//FinSi
+	//Sinon
+		//Recherche le CD le plus proche
+		//Calculer un chemin vers ce CD
 	//FinSi
+}
+void Robot::actionBack() {
+	//Si un chemin existe (i.e. path non nul)
+		//Mettre à jour les cases adjacentes via capteurs pour le robot adverse et/ou les CDs éventuels
 
-	//Si TAKE
-		//Amorcer le processus ou le continuer
+		//Si c'était la fin du chemin
+			//Passer en état DROP
+		//Sinon
+			//Si pas de changements (le plus fréquent)
+				//Se déplacer d'une case
+			//Sinon si un CD est apparu
+				//Rafraichir la carte avec ce nouveau CD
+			//Sinon si le robot adverse est apparu
+				//Recalculer un nouveau chemin (pour l'éviter)
+		//FinSi
+	//Sinon
+		//Recherche de la zone où il faut déposer le CD
+		//Calculer un chemin vers cette zone
 	//FinSi
-
-	//Si DROP
-		//Amorcer le processus ou le continuer
+}
+void Robot::actionTake() {
+	//Se tourner vers le CDs
+	//Le prendre
+	//le mettre à l'intérieur
+	//Si il y a moins de 4 CDs
+		//On passe en état SEARCH
+	//Sinon
+		//Passer en état BACK
 	//FinSi
-
+}
+void Robot::actionDrop() {
+	//Se tourner
+	//Lacher les CDs
+	//Passer en état SEARCH
 }
