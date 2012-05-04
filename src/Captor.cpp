@@ -5,7 +5,7 @@ Captor::Captor(int pinN){
 	this->pinNumber = pinN;
 }
 
-//Renvoie la distance - quelle angle de portée ?
+//Renvoie la distance - quelle angle de portée ? ---> angle très très reduit : capteur infrarouge ultra directif
 int Captor::get(){
 	int valeur = 0;
 	int i = 0;
