@@ -24,7 +24,24 @@ class Robot {
 			TAKE,
 			DROP
 		};
+
+		enum Position {
+			LEFT,
+			RIGHT
+		};
+
+		/**
+		 * Variables de configuration
+		 */
+		//Position de départ du robot - Qualifie les zones et la cellule de départ pour le robot
+		static const Robot::Position START_POSITION = Robot::Position::LEFT;
+		//Place qu'occupe le robot pour le pathfinding
 		static const int PLACE_RADIUS = 2;
+		//Nombre de CD maximum que le robot peut contenir avant de retourner à la base
+		static const int MAX_CD = 4;
+		/*
+		 *
+		 */
 
 		Robot();
 		~Robot();
@@ -47,9 +64,19 @@ class Robot {
 
 		//Carte
 		Map* map;
+		//Position actuelle du robot
+		Cell* position;
+		//Angle du robot
+		int angle;
+		//Cible éventuel du robot
+		Cell* target;
+
+		//Nombre de CD qu'il contient
+		int cds;
 
 		//Recherche de chemin (pathfinding)
 		AStarLight* pathfinding;
+		//Résultat du pathfinding
 		Node* path;
 
 		//Bras
@@ -66,11 +93,24 @@ class Robot {
 		Captor* captorBM;
 		Captor* captorBR;
 
-		Captor* captorUL;
-		Captor* captorUM;
-		Captor* captorUR;
+		Captor* captorTL;
+		Captor* captorTM;
+		Captor* captorTR;
 
 		Captor* captorBack;
+
+		//Met à jour la Map via les capteurs
+		bool updateMap();
+		//Change l'état courant du robot
+		void changeState(Robot::State newState);
+		//Détermine si le robot a déjà un chemin à suivre ou non
+		bool hasPath();
+		//Bouge le robot, met à jour la position, transcrit les cellules en distance réelles
+		void move(Cell* destination);
+		//Recherche le CD le plus proche, et s'arrête à la bonn cellule pour le bras puisse le prendre
+		void findPathToCD();
+
+		void findPathToBack();
 };
 
 #endif /* ROBOT_H_ */

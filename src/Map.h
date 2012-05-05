@@ -15,6 +15,9 @@
 
 class Map {
 	public:
+		static const int CELL_WIDTH = 100;
+		static const int CELL_HEIGHT = 100;
+
 		//Create every Cell on the map, store it into map and cds arrays
 		Map();
 		~Map();
