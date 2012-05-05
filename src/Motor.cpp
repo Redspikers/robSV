@@ -7,8 +7,9 @@
 
 #include "Motor.h"
 
-Motor::Motor() {
-	this->attached = false;
+Motor::Motor(int pinLeft, int pinRight) {
+	this->pinLeft = pinLeft;
+	this->pinRight = pinRight;
 
 	this->distanceTotaleRight=0;
 	this->distanceTotaleLeft=0;
@@ -20,28 +21,13 @@ Motor::Motor() {
 
 	this->servoLeft = new Servo();
 	this->servoRight = new Servo();
+
+	this->servoLeft->attach(this->pinLeft);
+	this->servoRight->attach(this->pinRight);
 }
 
 Motor::~Motor() {
 
-}
-
-void Motor::attach(int pinLeft, int pinRight) {
-	this->servoLeft->attach(pinLeft);
-	this->servoRight->attach(pinRight);
-
-	this->attached = true;
-}
-
-void Motor::detach() {
-	this->servoLeft->detach();
-	this->servoRight->detach();
-
-	this->attached = false;
-}
-
-bool Motor::isAttached() {
-	return this->attached;
 }
 
 //Fonction qui va faire tourner un seul servo à la distance a aprcourir voulu
@@ -132,7 +118,7 @@ void Motor::back(int distanceMilliMeter) {
 //Le robot ne bouge pas par rapport au terrain,  il se contente de faire une rotation sur place
 //Peut etre faudra-t-il enlever les etapes d'acceleration et deceleration : on aura une vitesse basse de rotation
 //mais une meilleure precision
-void Motor::turn(int angleDegree) {
+void Motor::turnOnSpot(int angleDegree) {
 	int alpha = 90-angleDegree;
 
 	// angle vers la droite du robot
@@ -145,7 +131,7 @@ void Motor::turn(int angleDegree) {
 			delay(15);
 		}
 		
-		delay((int)(TEMPS_ROTATION90*(90/alpha));//Formule à revoir !!
+		delay((int)(TEMPS_ROTATION90*(90/alpha)));//Formule à revoir !!
 		
 		//Deceleration
 		for (pos=119; pos >= 90; pos--) {

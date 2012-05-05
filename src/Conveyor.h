@@ -9,8 +9,11 @@ class Conveyor {
 		//Temps durant lequel on laisse tourner le tapis
 		static const int RUN_TIME = 4000;
 
-		Conveyor();
+		Conveyor(int pin);
 		void action();
+
+	private:
+		int pin;
 
 };
 

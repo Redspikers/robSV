@@ -1,6 +1,9 @@
 #include "Arm.h"
 
-Arm::Arm() {
+Arm::Arm(int pinElbow, int pinShoulder, int pinPomp) {
+	this->pinElbow = pinElbow;
+	this->pinShoulder = pinShoulder;
+
 	this->angleShoulderTake = Arm::ANGLE_SHOULDER_TAKE;
 	this->angleElbowTake = Arm::ANGLE_ELBOW_TAKE;
 
@@ -12,10 +15,10 @@ Arm::Arm() {
 
 	this->servoElbow = new Servo();
 	this->servoShoulder = new Servo();
-	this->pomp = new Pomp();
+	this->pomp = new Pomp(pinPomp);
 
-	this->servoElbow->attach(Pin::ELBOW);
-	this->servoShoulder->attach(Pin::SHOULDER);
+	this->servoElbow->attach(this->pinElbow);
+	this->servoShoulder->attach(this->pinShoulder);
 
 }
 
@@ -55,7 +58,9 @@ bool Arm::takeCD() {
 }
 
 int Arm::getCaptor() {
-	return analogRead(Pin::CAPTOR);
+	//TODO
+	return 0;
+	//return analogRead(Pin::CAPTOR);
 }
 
 void Arm::idle() {

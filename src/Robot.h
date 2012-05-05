@@ -14,6 +14,7 @@
 #include "Arm.h"
 #include "Conveyor.h"
 #include "Motor.h"
+#include "Sensor.h"
 
 class Robot {
 	public:
@@ -34,7 +35,7 @@ class Robot {
 		 * Variables de configuration
 		 */
 		//Position de départ du robot - Qualifie les zones et la cellule de départ pour le robot
-		static const Robot::Position START_POSITION = Robot::Position::LEFT;
+		static const Robot::Position START_POSITION = Robot::LEFT;
 		//Place qu'occupe le robot pour le pathfinding
 		static const int PLACE_RADIUS = 2;
 		//Nombre de CD maximum que le robot peut contenir avant de retourner à la base
@@ -89,13 +90,7 @@ class Robot {
 		Motor* motor;
 
 		//Reconnaissance (capteurs)
-		Captor* captorBL;
-		Captor* captorBM;
-		Captor* captorBR;
-
-		Captor* captorTL;
-		Captor* captorTM;
-		Captor* captorTR;
+		Sensor* sensor;
 
 		Captor* captorBack;
 

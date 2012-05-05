@@ -1,14 +1,15 @@
 #include "Conveyor.h"
 
 
-Conveyor::Conveyor() {
-	pinMode(Pin::CONVEYOR, OUTPUT);
+Conveyor::Conveyor(int pin) {
+	this->pin = pin;
+	pinMode(this->pin, OUTPUT);
 	
 }
 
 void Conveyor::action() {
-	digitalWrite(Pin::CONVEYOR, HIGH);
+	digitalWrite(this->pin, HIGH);
 	delay(Conveyor::RUN_TIME);
-	digitalWrite(Pin::CONVEYOR, LOW);
+	digitalWrite(this->pin, LOW);
 }
 

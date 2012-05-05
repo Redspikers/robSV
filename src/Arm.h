@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "Pin.h"
 #include "Pomp.h"
 
 class Arm {
@@ -18,7 +17,7 @@ class Arm {
 		static const int ANGLE_SHOULDER_IDLE = 30;
 		static const int ANGLE_ELBOW_IDLE = 20;
 
-		Arm();
+		Arm(int pinElbow, int pinShoulder, int pinPomp);
 		bool takeCD();
 		int getCaptor();
 		void idle();
@@ -36,6 +35,9 @@ class Arm {
 		Servo* servoElbow;
 		Servo* servoShoulder;
 		Pomp* pomp;
+
+		int pinElbow;
+		int pinShoulder;
 
 };
 

@@ -3,16 +3,16 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "Pin.h"
 
 class Pomp {
 	public:
-		Pomp();
+		Pomp(int pin);
 		void compress();
 		void drop();
 
 	private:
 		boolean compressed; //int pour l'instant
+		int pin;
 
 };
 

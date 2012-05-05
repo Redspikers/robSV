@@ -9,7 +9,7 @@
 
 Robot::Robot() {
 	//Etat par défaut du robot : IDLE
-	this->state = Robot::State::IDLE;
+	this->state = Robot::IDLE;
 
 	//Construction de la map (codée en dur)
 	this->map = new Map();
@@ -29,24 +29,18 @@ Robot::Robot() {
 	this->motor = new Motor(Pin::MOTOR_LEFT, Pin::MOTOR_RIGHT);
 
 	//Les différents capteurs
-	this->captorBL = new Captor(Pin::CAPTOR_BOTTOM_LEFT);
-	this->captorBM = new Captor(Pin::CAPTOR_BOTTOM_MIDDLE);
-	this->captorBR = new Captor(Pin::CAPTOR_BOTTOM_RIGHT);
-
-	this->captorTL = new Captor(Pin::CAPTOR_TOP_LEFT);
-	this->captorTM = new Captor(Pin::CAPTOR_TOP_MIDDLE);
-	this->captorTR = new Captor(Pin::CAPTOR_TOP_RIGHT);
+	this->sensor = new Sensor();
 
 	this->captorBack = new Captor(Pin::CAPTOR_BACK);
 
 	this->cds = 0;
 
 	//Valeurs qui dépendent de la position de départ du robot, il suffit de changer la variable globales "POSITION"
-	if(START_POSITION == Position::LEFT){
+	if(START_POSITION == LEFT){
 		//TODO régler les valeurs
 		this->position = this->map->getCell(0, 0);
 		this->angle = 0;
-	} else if(START_POSITION == Position::RIGHT) {
+	} else if(START_POSITION == RIGHT) {
 		//TODO régler les valeurs
 		this->position = this->map->getCell(0, 0);
 		this->angle = 0;
@@ -70,15 +64,15 @@ void Robot::setup() {
 void Robot::loop() {
 	//Selon l'état du robot, on adopte un comportement différent
 	//L'ordre des états permet d'optimiser la boucle if/else (on limite les calculs de booléens)
-	if(this->state == Robot::State::SEARCH) {
+	if(this->state == SEARCH) {
 		this->actionSearch();
-	} else if(this->state == Robot::State::BACK) {
+	} else if(this->state == BACK) {
 		this->actionBack();
-	} else if(this->state == Robot::State::TAKE) {
+	} else if(this->state == TAKE) {
 		this->actionTake();
-	} else if(this->state == Robot::State::DROP) {
+	} else if(this->state == DROP) {
 		this->actionDrop();
-	} else if(this->state == Robot::State::IDLE) {
+	} else if(this->state == IDLE) {
 		this->actionIdle();
 	}
 
@@ -90,8 +84,8 @@ void Robot::actionIdle() {
 	//TODO
 
 	//Si il a été retiré, alors on passe à l'état SEARCH
-	if() {
-		this->changeState(Robot::State::SEARCH);
+	if(true) {
+		this->changeState(SEARCH);
 	}
 }
 
@@ -109,7 +103,7 @@ void Robot::actionSearch() {
 			this->path = this->path->getNext();
 			//Si c'était le dernier noeud, passer en état TAKE
 			if(this->path == NULL) {
-				this->changeState(Robot::State::TAKE);
+				this->changeState(TAKE);
 			}
 		} else {
 			this->findPathToCD();
@@ -133,7 +127,7 @@ void Robot::actionBack() {
 			this->path = this->path->getNext();
 			//Si c'était le dernier noeud, passer en état DROP
 			if(this->path == NULL) {
-				this->changeState(Robot::State::DROP);
+				this->changeState(DROP);
 			}
 		} else {
 			this->findPathToBack();
@@ -157,10 +151,10 @@ void Robot::actionTake() {
 	//Si il y a moins de 4 CDs
 	if(this->cds < Robot::MAX_CD) {
 		//On passe en état SEARCH
-		this->changeState(Robot::State::SEARCH);
+		this->changeState(SEARCH);
 	} else {
 		//Passer en état BACK
-		this->changeState(Robot::State::BACK);
+		this->changeState(BACK);
 	}
 }
 
@@ -172,7 +166,7 @@ void Robot::actionDrop() {
 	//TODO
 
 	//Passer en état SEARCH
-	this->changeState(Robot::State::SEARCH);
+	this->changeState(SEARCH);
 }
 
 void Robot::changeState(Robot::State newState) {

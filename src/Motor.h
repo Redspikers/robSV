@@ -26,18 +26,18 @@ class Motor {
 		Servo* servoLeft;
 		Servo* servoRight;
 		int pos;
-		bool attached;
+
+		int pinLeft;
+		int pinRight;
 
 	public:
-		Motor();
+		Motor(int pinLeft, int pinRight);
 		virtual ~Motor();
 
-		void attach(int pinLeft, int pinRight);
-		void detach();
-		bool isAttached();
 		void back(int distanceMM);
 		void move(int distanceMM);
 		void turn(int angleDegree, int distanceMM);
+		void turnOnSpot(int angleDegree);
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
 		void distanceParcourue(int countPulseRight, int countPulseLeft, int distanceRight, int distanceLeft);
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);
