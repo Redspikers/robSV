@@ -14,7 +14,7 @@
 #include "Arm.h"
 #include "Conveyor.h"
 #include "Motor.h"
-#include "Sensor.h"
+#include "Recognition.h"
 
 class Robot {
 	public:
@@ -90,7 +90,7 @@ class Robot {
 		Motor* motor;
 
 		//Reconnaissance (capteurs)
-		Sensor* sensor;
+		Recognition* sensor;
 
 		Captor* captorBack;
 

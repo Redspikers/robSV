@@ -1,38 +1,34 @@
-/*
- * Sensor.h
- *
- *  Created on: 1 mai 2012
- *      Author: claude
- */
+#ifndef __CAPTOR__
+#define __CAPTOR__
 
-#ifndef SENSOR_H_
-#define SENSOR_H_
-
-#include "Captor.h"
-#include "Pin.h"
+#include <Arduino.h>
 
 class Sensor {
-    public:
-        Sensor();
+public:
+	//Tableau de conversion entre la valeur du capteur et la distance reelle
+	static const int CONVERSION[12][2];
 
-        void getValues();
-        bool environEgal(int value1, int value2, int ecartmax);
-        bool comprisEntre(int min, int max, int value);
-        int* getObstacles();
-        void analyse(int* distancesObstacle[]);
+	Sensor(int pinN);
+	int get();
 
-    private:
-        Captor* captorBL;
-        Captor* captorBM;
-        Captor* captorBR;
-
-        Captor* captorTL;
-        Captor* captorTM;
-        Captor* captorTR;
-
-        int* valeur;
-        int* distancesObstacles;
+private:
+	int pinNumber; //int pour l'instant
 
 };
 
-#endif /* SENSOR_H_ */
+const int Sensor::CONVERSION[12][2] = {
+		{130, 87},
+		{120, 95},
+		{110,105},
+		{100,115},
+		{90, 131},
+		{80, 144},
+		{70, 170},
+		{60, 195},
+		{50, 235},
+		{40, 296},
+		{30, 384},
+		{20, 492}
+	};
+
+#endif

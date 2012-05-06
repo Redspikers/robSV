@@ -29,7 +29,7 @@ Robot::Robot() {
 	this->motor = new Motor(Pin::MOTOR_LEFT, Pin::MOTOR_RIGHT);
 
 	//Les différents capteurs
-	this->sensor = new Sensor();
+	this->sensor = new Recognition();
 
 	this->captorBack = new Captor(Pin::CAPTOR_BACK);
 
