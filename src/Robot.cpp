@@ -31,8 +31,6 @@ Robot::Robot() {
 	//Les différents capteurs
 	this->sensor = new Recognition();
 
-	this->captorBack = new Captor(Pin::CAPTOR_BACK);
-
 	this->cds = 0;
 
 	//Valeurs qui dépendent de la position de départ du robot, il suffit de changer la variable globales "POSITION"
@@ -190,6 +188,10 @@ bool Robot::updateMap() {
 
 void Robot::move(Cell* destination) {
 	//TODO - utiliser le motor (simple) mettre à jour l'angle et tourner éventuellement le robot
+}
+
+void Robot::turn(int newAngle) {
+	//TODO
 }
 
 void Robot::findPathToCD() {

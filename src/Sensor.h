@@ -2,33 +2,17 @@
 #define __CAPTOR__
 
 #include <Arduino.h>
+#include "SensorConversion.h"
 
 class Sensor {
 public:
-	//Tableau de conversion entre la valeur du capteur et la distance reelle
-	static const int CONVERSION[12][2];
-
-	Sensor(int pinN);
+	Sensor(int pinN, SensorConversion* conversion);
 	int get();
 
 private:
 	int pinNumber; //int pour l'instant
+	SensorConversion* conversion;
 
 };
-
-const int Sensor::CONVERSION[12][2] = {
-		{130, 87},
-		{120, 95},
-		{110,105},
-		{100,115},
-		{90, 131},
-		{80, 144},
-		{70, 170},
-		{60, 195},
-		{50, 235},
-		{40, 296},
-		{30, 384},
-		{20, 492}
-	};
 
 #endif

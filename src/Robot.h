@@ -92,8 +92,6 @@ class Robot {
 		//Reconnaissance (capteurs)
 		Recognition* sensor;
 
-		Captor* captorBack;
-
 		//Met à jour la Map via les capteurs
 		bool updateMap();
 		//Change l'état courant du robot
@@ -102,7 +100,9 @@ class Robot {
 		bool hasPath();
 		//Bouge le robot, met à jour la position, transcrit les cellules en distance réelles
 		void move(Cell* destination);
-		//Recherche le CD le plus proche, et s'arrête à la bonn cellule pour le bras puisse le prendre
+		//Tourne le robot
+		void turn(int newAngle);
+		//Recherche le CD le plus proche, et s'arrête à la bonne cellule pour le bras puisse le prendre
 		void findPathToCD();
 
 		void findPathToBack();

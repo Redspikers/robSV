@@ -19,7 +19,7 @@ class Recognition {
         bool environEgal(int value1, int value2, int ecartmax);
         bool comprisEntre(int min, int max, int value);
         int* getObstacles();
-        void analyse(int* distancesObstacle[]);
+        void analyse();
 
     private:
         Sensor* captorBL;
@@ -30,8 +30,12 @@ class Recognition {
         Sensor* captorTM;
         Sensor* captorTR;
 
+        Sensor* captorBack;
+
         int* valeur;
         int* distancesObstacles;
+
+        SensorConversion* conversion;
 
 };
 
