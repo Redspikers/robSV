@@ -67,7 +67,7 @@ class Robot {
 		Map* map;
 		//Position actuelle du robot
 		Cell* position;
-		//Angle du robot
+		//Angle du robot - de 0 à 360 (0 correspond au robot aligné sur l'axe X (de la carte, i.e. les 3mètres) qui "regarde à droite")
 		int angle;
 		//Cible éventuel du robot
 		Cell* target;
@@ -106,6 +106,8 @@ class Robot {
 		void findPathToCD();
 
 		void findPathToBack();
+
+		int diffAngle(Cell* destination);
 };
 
 #endif /* ROBOT_H_ */

@@ -33,17 +33,19 @@ Robot::Robot() {
 
 	this->cds = 0;
 
+	//POSITION DE DEPART : Robot centrée sur à 25.5cm de chaque bord
 	//Valeurs qui dépendent de la position de départ du robot, il suffit de changer la variable globales "POSITION"
 	if(START_POSITION == LEFT){
-		//TODO régler les valeurs
-		this->position = this->map->getCell(0, 0);
+		this->position = this->map->getCell(25, 175);
+		//Angle de 0 on positionne le robot face à la carte, aligné sur l'axe des abcisses
 		this->angle = 0;
 	} else if(START_POSITION == RIGHT) {
-		//TODO régler les valeurs
-		this->position = this->map->getCell(0, 0);
-		this->angle = 0;
+		this->position = this->map->getCell(275, 175);
+		//Angle de 1800 on positionne le robot face à la carte (donc dans le sens inverse que LEFT), aligné sur l'axe des abcisses
+		this->angle = 180;
 	}
 
+	//Par défaut, on a aucune cible, c'est l'algorithme qui se chargeras d'en trouver une dès que nécessaire
 	this->target = NULL;
 
 }
@@ -186,12 +188,65 @@ bool Robot::updateMap() {
 	return result;
 }
 
+int Robot::diffAngle(Cell* destination) {
+	//ATTENTION : Dans cette fonction, on assume que les cellules sont carrées !
+	int newAngle = 0;
+
+	if(this->position->getX() < destination->getX()) {
+		//Il faut se déplacer sur la droite
+		newAngle = newAngle + 0;
+	} else if(this->position->getX() > destination->getX()) {
+		//Il faut se déplacer sur la gauche
+		newAngle = newAngle + 180;
+	} else {
+		//On se déplace en ne changeant pas d'abcisse
+	}
+
+	if(this->position->getY() < destination->getY()) {
+		//Il faut se déplacer vers le haut
+		newAngle = newAngle + 90;
+	} else if(this->position->getY() > destination->getY()) {
+		//Il faut se déplacer vers le bas
+		newAngle = newAngle - 90;
+	} else {
+		//On se déplace en ne changeant pas d'ordonnée
+	}
+
+	if(newAngle < 0) {
+		newAngle = newAngle + 360;
+	}
+
+	return newAngle;
+}
+
 void Robot::move(Cell* destination) {
-	//TODO - utiliser le motor (simple) mettre à jour l'angle et tourner éventuellement le robot
+	//ATTENTION : Dans le déroulement de cette fonction on assume que la cellule destination est une des cellules voisines !
+
+	//Premièrement, il faut déterminer l'angle que le robot doit avoir pour pouvoir avancer TOUT DROIT vers la cellule visée
+	this->turn(this->diffAngle(destination));
+
+	//Ensuite, il faut transcrire le changement de cellule en une distance en mm
+	//Soit la case est une diagonale (X et Y diffèrent), soit non
+	if(destination->getX() != this->position->getX() && destination->getY() != this->position->getY()) {
+		this->motor->move(Map::CELL_DIAGONAL);
+	} else {
+		this->motor->move(Map::CELL_WIDTH);
+	}
+
+	//Enfin, nous pouvons utiliser le moteur pour se déplacer
+
 }
 
 void Robot::turn(int newAngle) {
-	//TODO
+	int diff = newAngle - this->angle;
+
+	if(diff < 0) {
+		diff = diff+360;
+	}
+
+	this->motor->turnOnSpot(diff);
+
+	this->angle = newAngle;
 }
 
 void Robot::findPathToCD() {

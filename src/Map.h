@@ -17,6 +17,9 @@ class Map {
 	public:
 		static const int CELL_WIDTH = 100;
 		static const int CELL_HEIGHT = 100;
+		//Permet d'éviter de refaire le calcul à chaque fois !
+		//141,42mm pour être exact
+		static const int CELL_DIAGONAL = 141;
 
 		//Create every Cell on the map, store it into map and cds arrays
 		Map();

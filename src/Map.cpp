@@ -58,9 +58,9 @@ Map::Map() {
 		//Capitaine droite
 	this->captainZoneRight = new Cell*[this->captainZoneLength];
 	current = 0;
-			// X(de 2500 à 3000cm (50 cases)) sur Y(4500 à 5000cm (50cases))
+			// X(de 2500 à 3000cm (50 cases)) sur Y(1500cm à 2000cm (50cases))
 	for(i = 250; i < 300 ; i++) {
-		for(j = 450; j < 500 ; j++) {
+		for(j = 150; j < 200 ; j++) {
 			this->captainZoneRight[current] = this->map[i][j];
 			current++;
 		}
