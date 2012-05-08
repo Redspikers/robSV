@@ -36,9 +36,9 @@ Map::Map() {
 		//Capitaine gauche
 	this->captainZoneLeft = new Cell*[this->captainZoneLength];
 	current = 0;
-			// X(de 0cm à 500cm (50 cases)) sur Y(1500cm à 2000cm (50cases))
-	for(i = 0; i < 50 ; i++) {
-		for(j = 150; j < 200 ; j++) {
+			// X(de 0cm à 500mm (50 cases)) sur Y(1500mm à 2000mm (5cases))
+	for(i = 0; i < 5 ; i++) {
+		for(j = 15; j < 20 ; j++) {
 			this->captainZoneLeft[current] = this->map[i][j];
 			current++;
 		}
@@ -47,9 +47,9 @@ Map::Map() {
 		//Câle gauche
 	this->stockZoneLeft = new Cell*[this->stockZoneLength];
 	current = 0;
-			// X(de 0cm à 400cm (40 cases)) sur Y(750cm à 1500cm (70cases))
-	for(i = 0; i < 40 ; i++) {
-		for(j = 75; j < 150 ; j++) {
+			// X(de 0mm à 400mm (4 cases)) sur Y(750mm à 1500mm (7cases))
+	for(i = 0; i < 4 ; i++) {
+		for(j = 8; j < 14 ; j++) {
 			this->stockZoneLeft[current] = this->map[i][j];
 			current++;
 		}
@@ -58,9 +58,9 @@ Map::Map() {
 		//Capitaine droite
 	this->captainZoneRight = new Cell*[this->captainZoneLength];
 	current = 0;
-			// X(de 2500 à 3000cm (50 cases)) sur Y(1500cm à 2000cm (50cases))
-	for(i = 250; i < 300 ; i++) {
-		for(j = 150; j < 200 ; j++) {
+			// X(de 2500mm à 3000mm (5 cases)) sur Y(1500mm à 2000mm (5cases))
+	for(i = 25; i < 30 ; i++) {
+		for(j = 15; j < 20 ; j++) {
 			this->captainZoneRight[current] = this->map[i][j];
 			current++;
 		}
@@ -69,9 +69,9 @@ Map::Map() {
 		//Câle droite
 	this->stockZoneRight = new Cell*[this->stockZoneLength];
 	current = 0;
-			// X(de 2600cm à 3000cm (40 cases)) sur Y(750cm à 1500cm (70cases))
-	for(i = 260; i < 300 ; i++) {
-		for(j = 75; j < 150 ; j++) {
+			// X(de 2600mm à 3000mm (4 cases)) sur Y(750mm à 1500mm (7cases))
+	for(i = 26; i < 30 ; i++) {
+		for(j = 8; j < 14 ; j++) {
 			this->stockZoneRight[current] = this->map[i][j];
 			current++;
 		}
@@ -81,16 +81,16 @@ Map::Map() {
 	//Régler les obstacles fixes
 		//Câle avec couvercle : on n'y rentre pas !
 		//Partie gauche
-			// X(de 0cm à 400cm (40 cases)) sur Y(0cm à 750cm (75cases))
-	for(i = 0; i < 40 ; i++) {
-		for(j = 0; j < 75 ; j++) {
+			// X(de 0mm à 400mm (4 cases)) sur Y(0cm à 750mm (7cases))
+	for(i = 0; i < 4 ; i++) {
+		for(j = 0; j < 7 ; j++) {
 			this->map[i][j]->setBlocked(true);
 		}
 	}
 		//Partie droite
-			// X(de 2600cm à 3000cm (40 cases)) sur Y(0cm à 750cm (75cases))
-	for(i = 260; i < 300 ; i++) {
-		for(j = 0; j < 75 ; j++) {
+			// X(de 2600mm à 3000mm (4 cases)) sur Y(0mm à 750mm (7cases))
+	for(i = 26; i < 30 ; i++) {
+		for(j = 0; j < 7 ; j++) {
 			this->map[i][j]->setBlocked(true);
 		}
 	}
@@ -108,6 +108,28 @@ Map::Map() {
 		for(j = 87; j < 113 ; j++) {
 			this->map[i][j]->setBlocked(true);
 		}
+	}
+
+		//Bordure de la carte
+	//Bordure haut et bas
+	for(j = 0; j < this->columns ; j++) {
+		this->map[0][j]->setBlocked(true);
+		this->map[this->lines-1][j]->setBlocked(true);
+	}
+	//Bordure gauche et droite
+	for(i = 0; i < this->lines ; i++) {
+		this->map[i][0]->setBlocked(true);
+		this->map[i][this->columns-1]->setBlocked(true);
+	}
+
+	//Bordure entre la zone du capitaine et la zone de stockage
+	//Gauche
+	for(i=0 ; i < 5 ; i++) {
+		this->map[i][14]->setBlocked(true);
+	}
+	//Droite
+	for(i=25 ; i < 30 ; i++) {
+		this->map[i][14]->setBlocked(true);
 	}
 
 	//Régler les CDs

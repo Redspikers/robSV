@@ -20,7 +20,7 @@ Robot::Robot() {
 	this->path = NULL;
 
 	//Le bras mécanique avec ventouse
-	this->arm = new Arm(Pin::ELBOW, Pin::SHOULDER, Pin::POMP);
+	this->arm = new Arm(Pin::ELBOW, Pin::SHOULDER, Pin::POMP, Pin::PUSH_CD);
 
 	//Le tapis au sein du robot
 	this->conveyor = new Conveyor(Pin::CONVEYOR);
@@ -36,11 +36,11 @@ Robot::Robot() {
 	//POSITION DE DEPART : Robot centrée sur à 25.5cm de chaque bord
 	//Valeurs qui dépendent de la position de départ du robot, il suffit de changer la variable globales "POSITION"
 	if(START_POSITION == LEFT){
-		this->position = this->map->getCell(25, 175);
+		this->position = this->map->getCell(1, 17);
 		//Angle de 0 on positionne le robot face à la carte, aligné sur l'axe des abcisses
 		this->angle = 0;
 	} else if(START_POSITION == RIGHT) {
-		this->position = this->map->getCell(275, 175);
+		this->position = this->map->getCell(28, 17);
 		//Angle de 1800 on positionne le robot face à la carte (donc dans le sens inverse que LEFT), aligné sur l'axe des abcisses
 		this->angle = 180;
 	}
@@ -80,11 +80,8 @@ void Robot::loop() {
 
 
 void Robot::actionIdle() {
-	//Seule chose à faire : tester le JACK
-	//TODO
-
 	//Si il a été retiré, alors on passe à l'état SEARCH
-	if(true) {
+	if(digitalRead(Pin::JACK) == 1) {
 		this->changeState(SEARCH);
 	}
 }
@@ -142,11 +139,13 @@ void Robot::actionTake() {
 	//Se tourner vers le CDs
 	//TODO
 
-	//Le prendre (essayer partout ou le bouton poussoir)
-	//TODO
+	//Le prendre  ?(essayer partout ou le bouton poussoir) ?
+	this->arm->takeCD();
 
-	//Le mettre à l'intérieur
-	//TODO
+	//Le mettre à l'intérieur - si le CD a été pris
+	if(this->arm->hasCD()) {
+		this->arm->dropInside();
+	}
 
 	//Si il y a moins de 4 CDs
 	if(this->cds < Robot::MAX_CD) {
@@ -163,7 +162,7 @@ void Robot::actionDrop() {
 	//TODO
 
 	//Lacher les CDs
-	//TODO
+	this->conveyor->action();
 
 	//Passer en état SEARCH
 	this->changeState(SEARCH);
