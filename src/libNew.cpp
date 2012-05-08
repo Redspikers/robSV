@@ -1,4 +1,4 @@
-#include <libNew.h>
+#include "libNew.h"
 
 __extension__ typedef int __guard __attribute__((mode (__DI__)));
 
