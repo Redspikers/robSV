@@ -38,8 +38,6 @@ Recognition::Recognition() {
 	this->captorTL = new Sensor(Pin::CAPTOR_TOP_LEFT, this->conversion);
 	this->captorTM = new Sensor(Pin::CAPTOR_TOP_MIDDLE, this->conversion);
 	this->captorTR = new Sensor(Pin::CAPTOR_TOP_RIGHT, this->conversion);
-
-	//TODO intégrer le capteur arrière dans les calculs
 	this->captorBack = new Sensor(Pin::CAPTOR_BACK, this->conversion);
 
 	this->valeur = new int[7];

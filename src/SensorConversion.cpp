@@ -6,7 +6,7 @@
  */
 
 #include "SensorConversion.h"
-
+#include <new.h>
 SensorConversion::SensorConversion() {
 	this->conversion = new int*[12];
 
