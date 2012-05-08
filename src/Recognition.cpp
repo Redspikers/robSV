@@ -38,6 +38,8 @@ Recognition::Recognition() {
 	this->captorTL = new Sensor(Pin::CAPTOR_TOP_LEFT, this->conversion);
 	this->captorTM = new Sensor(Pin::CAPTOR_TOP_MIDDLE, this->conversion);
 	this->captorTR = new Sensor(Pin::CAPTOR_TOP_RIGHT, this->conversion);
+
+	//TODO intégrer le capteur arrière dans les calculs
 	this->captorBack = new Sensor(Pin::CAPTOR_BACK, this->conversion);
 
 	this->valeur = new int[7];
@@ -57,20 +59,20 @@ void Recognition::analyse() {
 	 */
 
 	//*******OBSTACLE CD*************
+
 	if (comprisEntre(20, 50, this->valeur[5])) {
 		this->distancesObstacles[0] = this->valeur[5]; //CD GAUCHE
-	}else
+	}else{
 			this->distancesObstacles[0] = 0; //On supprime CD Gauche
 		}
-	}
 
 	//Bas Droit
 	if (comprisEntre(20, 50, this->valeur[3])) {
 		this->distancesObstacles[2] = this->valeur[3]; //CD Droit
-		else {
+	}else {
 			this->distancesObstacles[2] = 0; //On supprime CD Droit
 		}
-	}
+
 
 	//CD MILIEU
 	if ( comprisEntre(20, 50, this->valeur[4])) {
