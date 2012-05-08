@@ -17,10 +17,13 @@ class Arm {
 		static const int ANGLE_SHOULDER_IDLE = 30;
 		static const int ANGLE_ELBOW_IDLE = 20;
 
-		Arm(int pinElbow, int pinShoulder, int pinPomp);
-		bool takeCD();
-		int getCaptor();
+		Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton);
+		void takeCD();
+		void dropInside();
 		void idle();
+
+		bool hasCD();
+
 
 	private:
 		int angleShoulderTake;
@@ -38,6 +41,7 @@ class Arm {
 
 		int pinElbow;
 		int pinShoulder;
+		int pinPushButton;
 
 };
 

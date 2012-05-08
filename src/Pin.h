@@ -13,6 +13,7 @@
 // elles sont définis à la dur dans Motor.h parce que c'est legerement différent...
 class Pin {
 	public:
+		//TODO Remplacer les Pin
 		static const int CAPTOR_BOTTOM_LEFT = 12;
 		static const int CAPTOR_BOTTOM_MIDDLE = 13;
 		static const int CAPTOR_BOTTOM_RIGHT = 14;
@@ -31,6 +32,7 @@ class Pin {
 		static const int POMP = 5;
 		static const int CONVEYOR = 4;
 		static const int JACK = 3;
+		static const int PUSH_CD = 2;
 		
 		Pin();
 		virtual ~Pin();
