@@ -137,14 +137,15 @@ void Robot::actionBack() {
 
 void Robot::actionTake() {
 	//Se tourner vers le CDs
-	//TODO
+	this->turn(this->diffAngle(this->target));
 
-	//Le prendre  ?(essayer partout ou le bouton poussoir) ?
+	//Le prendre  ?(essayer partout ou le bouton poussoir)?
 	this->arm->takeCD();
 
 	//Le mettre à l'intérieur - si le CD a été pris
 	if(this->arm->hasCD()) {
 		this->arm->dropInside();
+		this->cds = this->cds + 1;
 	}
 
 	//Si il y a moins de 4 CDs
@@ -158,11 +159,13 @@ void Robot::actionTake() {
 }
 
 void Robot::actionDrop() {
-	//Se tourner
+	//Se tourner - le cul vers la destination !
 	//TODO
 
 	//Lacher les CDs
 	this->conveyor->action();
+
+	this->cds = 0;
 
 	//Passer en état SEARCH
 	this->changeState(SEARCH);

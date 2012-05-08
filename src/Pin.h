@@ -32,7 +32,7 @@ class Pin {
 		static const int POMP = 5;
 		static const int CONVEYOR = 4;
 		static const int JACK = 3;
-		static const int PUSH_CD = 2;
+		static const int PUSH_CD = 2; //TODO
 		
 		Pin();
 		virtual ~Pin();

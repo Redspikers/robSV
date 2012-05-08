@@ -74,10 +74,10 @@ void Motor::servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter
 
 
 void Motor::move(int distanceMilliMeter) {
-	// servo moteur de 24 a 90 marche avant !
-	// Cette boucle fait passer la vitesse des moteur de 90 a 60 en evitant les glissements.
+	// servo moteur de 90 a 158 marche avant !
+	// Cette boucle fait passer la vitesse des moteur de 90 a 120 en evitant les glissements.
 	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 90; this->pos >= 60; this->pos--) {
+	for (this->pos = 90; this->pos < 120; this->pos++) {
 		this->servoRight->write(this->pos);
 		this->servoLeft->write(this->pos);
 		delay(15);
@@ -86,7 +86,7 @@ void Motor::move(int distanceMilliMeter) {
 	// Durée de déplacement à ajouter (avec un delay() ) en fonction de distanceMM
 	// Cette boucle fait passer la vitesse des moteur de 120 à 90 en evitant les glissements.
 	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 61; this->pos < 90; this->pos++) {
+	for (this->pos = 120; this->pos < 90; this->pos--) {
 		this->servoRight->write(this->pos);
 		this->servoLeft->write(this->pos);
 		delay(15);
@@ -95,10 +95,10 @@ void Motor::move(int distanceMilliMeter) {
 }
 
 void Motor::back(int distanceMilliMeter) {
-	// Servo moteur de 90 à 158 : marche arrière
+	// Servo moteur de 90 à 24 : marche arrière
 	// Cette boucle fait passer la vitesse des moteur de 90 a 60 en evitant les glissements.
 	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 90; this->pos < 120; this->pos++) {
+	for (this->pos = 90; this->pos < 60; this->pos--) {
 		this->servoRight->write(this->pos);
 		this->servoLeft->write(this->pos);
 		delay(15); //Delay qui evite les glissements.
@@ -106,7 +106,7 @@ void Motor::back(int distanceMilliMeter) {
 	// Durée de déplacement à ajouter (avec un delay() ) en fonction de distanceMM
 	// Cette boucle fait passer la vitesse des moteur de 60 a 90 en evitant les glissements.
 	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 90; this->pos >= 60; this->pos--) {
+	for (this->pos = 60; this->pos < 90; this->pos++) {
 		this->servoRight->write(this->pos);
 		this->servoLeft->write(this->pos);
 		delay(15);
