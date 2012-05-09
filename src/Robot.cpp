@@ -160,7 +160,12 @@ void Robot::actionTake() {
 
 void Robot::actionDrop() {
 	//Se tourner - le cul vers la destination !
-	//TODO
+	int angle = this->diffAngle(this->target) + 180;
+
+	if(angle > 360) {
+		angle = angle - 360;
+	}
+	this->turn(angle);
 
 	//Lacher les CDs
 	this->conveyor->action();
@@ -256,10 +261,13 @@ void Robot::findPathToCD() {
 	//TODO - prendre en compte le fait qu'il y a 3 cases de différence entre le robot et le cd (PLACE_RADIUS+1)
 	//this->target = this->map->getClosestCD(this->position);
 	//Recalculer un nouveau chemin (pour l'éviter)
+
+	//target doit pointer 2 cases avant le cd (pour que le bras fasse son job)
 }
 
 void Robot::findPathToBack() {
 	//Recherche de la zone où il faut déposer
 	//TODO
 	//TODO - prendre en compte le fait qu'il y a 2 cases de différence (PLACE_RADIUS)
+	//target doit pointer 2 case avant la fin réel
 }
