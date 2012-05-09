@@ -22,6 +22,12 @@ class Cell {
 		void setBlocked(bool blocked);
 		bool isBlocked();
 
+		void setCD(bool cd);
+		bool hasCD();
+
+		void setRobot(bool robot);
+		bool hasRobot();
+
 	private:
 		int x;
 		int y;

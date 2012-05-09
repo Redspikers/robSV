@@ -31,14 +31,14 @@ Recognition::Recognition() {
 	//Instanciation des capteurs avec le PIN
 
 	//Les différents capteurs
-	this->captorBL = new Sensor(Pin::CAPTOR_BOTTOM_LEFT, this->conversion);
-	this->captorBM = new Sensor(Pin::CAPTOR_BOTTOM_MIDDLE, this->conversion);
-	this->captorBR = new Sensor(Pin::CAPTOR_BOTTOM_RIGHT, this->conversion);
+	this->captorBL = new Sensor(Pin::SENSOR_BOTTOM_LEFT, this->conversion);
+	this->captorBM = new Sensor(Pin::SENSOR_BOTTOM_MIDDLE, this->conversion);
+	this->captorBR = new Sensor(Pin::SENSOR_BOTTOM_RIGHT, this->conversion);
 
-	this->captorTL = new Sensor(Pin::CAPTOR_TOP_LEFT, this->conversion);
-	this->captorTM = new Sensor(Pin::CAPTOR_TOP_MIDDLE, this->conversion);
-	this->captorTR = new Sensor(Pin::CAPTOR_TOP_RIGHT, this->conversion);
-	this->captorBack = new Sensor(Pin::CAPTOR_BACK, this->conversion);
+	this->captorTL = new Sensor(Pin::SENSOR_TOP_LEFT, this->conversion);
+	this->captorTM = new Sensor(Pin::SENSOR_TOP_MIDDLE, this->conversion);
+	this->captorTR = new Sensor(Pin::SENSOR_TOP_RIGHT, this->conversion);
+	this->captorBack = new Sensor(Pin::SENSOR_BACK, this->conversion);
 
 	this->valeur = new int[7];
 	this->distancesObstacles = new int[9];

@@ -15,11 +15,11 @@
 
 class Map {
 	public:
-		static const int CELL_WIDTH = 100;
-		static const int CELL_HEIGHT = 100;
+		static const int CELL_WIDTH = 50;
+		static const int CELL_HEIGHT = 50;
 		//Permet d'éviter de refaire le calcul à chaque fois !
-		//141,42mm pour être exact
-		static const int CELL_DIAGONAL = 141;
+		//70.71mm pour être exact
+		static const int CELL_DIAGONAL = 71;
 
 		//Create every Cell on the map, store it into map and cds arrays
 		Map();
@@ -27,7 +27,7 @@ class Map {
 
 		Cell* getCell(int x, int y);
 
-		//Useful for pathfindings
+		//Useful for pathfindings, integer is index, not millimeter
 		Cell** getNeighbors(int x, int y, int range);
 		int getNeighborsCount(int x, int y, int range);
 
@@ -37,16 +37,19 @@ class Map {
 	private:
 		//Store all Cell in the map : it is a double array with Cell pointer's
 		Cell*** map;
-		int lines;
-		int columns;
+		int width;
+		int height;
 
 		Cell** captainZoneLeft;
 		Cell** captainZoneRight;
-		int captainZoneLength;
 
 		Cell** stockZoneLeft;
 		Cell** stockZoneRight;
-		int stockZoneLength;
+
+		//All integer in millimeter
+		Cell** getArea(int x, int y, int width, int height);
+		void setAreaBlocked(int x, int y, int width, int height);
+		void setCD(int x, int y);
 
 };
 

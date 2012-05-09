@@ -1,6 +1,6 @@
 #include "Arm.h"
 
-Arm::Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton) {
+Arm::Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton, int pinSensorColor) {
 	this->pinElbow = pinElbow;
 	this->pinShoulder = pinShoulder;
 	this->pinPushButton = pinPushButton;
@@ -17,6 +17,7 @@ Arm::Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton) {
 	this->servoElbow = new Servo();
 	this->servoShoulder = new Servo();
 	this->pomp = new Pomp(pinPomp);
+	this->sensor = new SensorColor(pinSensorColor);
 
 	this->servoElbow->attach(this->pinElbow);
 	this->servoShoulder->attach(this->pinShoulder);
@@ -38,9 +39,13 @@ void Arm::takeCD() {
 	this->servoShoulder->write(this->angleElbowTake); //Shoulder
 	//FIN Mouvement
 
-	//Compresion de la pomp
-	this->pomp->compress();
+	//On vérifie qu'il y a bien un CD
+	if(this->sensor->getColor() == SensorColor::WHITE) {
+		//Compresion de la pompe
+		this->pomp->compress();
+	}
 
+	//Dans tout les cas, on revient à la position initiale
 	this->idle();
 }
 

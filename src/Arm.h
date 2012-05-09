@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "Pomp.h"
+#include "SensorColor.h"
 
 class Arm {
 	public:
@@ -17,7 +18,7 @@ class Arm {
 		static const int ANGLE_SHOULDER_IDLE = 30;
 		static const int ANGLE_ELBOW_IDLE = 20;
 
-		Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton);
+		Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton, int pinSensorColor);
 		void takeCD();
 		void dropInside();
 		void idle();
@@ -38,6 +39,7 @@ class Arm {
 		Servo* servoElbow;
 		Servo* servoShoulder;
 		Pomp* pomp;
+		SensorColor* sensor;
 
 		int pinElbow;
 		int pinShoulder;

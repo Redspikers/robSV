@@ -14,13 +14,13 @@
 class Pin {
 	public:
 		//TODO Remplacer les Pin
-		static const int CAPTOR_BOTTOM_LEFT = 12;
-		static const int CAPTOR_BOTTOM_MIDDLE = 13;
-		static const int CAPTOR_BOTTOM_RIGHT = 14;
-		static const int CAPTOR_TOP_LEFT = 15;
-		static const int CAPTOR_TOP_MIDDLE = 16;
-		static const int CAPTOR_TOP_RIGHT = 17;
-		static const int CAPTOR_BACK = 18;
+		static const int SENSOR_BOTTOM_LEFT = 12;
+		static const int SENSOR_BOTTOM_MIDDLE = 13;
+		static const int SENSOR_BOTTOM_RIGHT = 14;
+		static const int SENSOR_TOP_LEFT = 15;
+		static const int SENSOR_TOP_MIDDLE = 16;
+		static const int SENSOR_TOP_RIGHT = 17;
+		static const int SENSOR_BACK = 18;
 		
 		static const int SHOULDER = 8;
 		static const int ELBOW = 9;
@@ -31,8 +31,10 @@ class Pin {
 		
 		static const int POMP = 5;
 		static const int CONVEYOR = 4;
-		static const int JACK = 3;
 		static const int PUSH_CD = 2; //TODO
+		static const int COLOR_SENSOR = 1; //TODO
+
+		static const int JACK = 3;
 		
 		Pin();
 		virtual ~Pin();

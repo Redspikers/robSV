@@ -45,3 +45,18 @@ bool Cell::isBlocked() {
 	return this->blocked;
 }
 
+void Cell::setCD(bool cd) {
+	this->cd = cd;
+}
+
+bool Cell::hasCD() {
+	return this->cd;
+}
+
+void Cell::setRobot(bool robot) {
+	this->robot = robot;
+}
+
+bool Cell::hasRobot() {
+	return this->robot;
+}

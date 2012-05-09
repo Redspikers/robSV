@@ -20,7 +20,7 @@ Robot::Robot() {
 	this->path = NULL;
 
 	//Le bras mécanique avec ventouse
-	this->arm = new Arm(Pin::ELBOW, Pin::SHOULDER, Pin::POMP, Pin::PUSH_CD);
+	this->arm = new Arm(Pin::ELBOW, Pin::SHOULDER, Pin::POMP, Pin::PUSH_CD, Pin::COLOR_SENSOR);
 
 	//Le tapis au sein du robot
 	this->conveyor = new Conveyor(Pin::CONVEYOR);

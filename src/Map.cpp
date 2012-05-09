@@ -8,132 +8,99 @@
 #include "Map.h"
 
 Map::Map() {
-	//Variables pour boucle for (économie de mémoire)
-	int i = 0;
-	int j = 0;
-	int current = 0;
+	//Construction de la map - codée à la dure
+	this->width = 40;
+	this->height = 60;
 
-	//Construction de la map
-	//Taille des noeuds : 10cm par 10cm (total 2m par 3m)
-	this->lines = 20;
-	this->columns = 30;
-
-	this->map = new Cell**[this->lines];
+	this->map = new Cell**[this->width];
 
 	//Initialisation
-	for(i=0 ; i < this->lines ;i++) {
-		this->map[i] = new Cell*[this->columns];
+	for(int i=0 ; i < this->width ;i++) {
+		this->map[i] = new Cell*[this->height];
 
-		for(j=0 ; j < this->columns ;j++) {
+		for(int j=0 ; j < this->height ;j++) {
 			this->map[i][j] = new Cell(i, j, false);
 		}
 	}
 
 	//Construction des zones
-	this->captainZoneLength = 250;
-	this->stockZoneLength = 25;
+	//Capitaine gauche - X(de 0cm à 500mm (10 cases)) sur Y(1500mm à 2000mm (10cases))
+	this->captainZoneLeft = this->getArea(0, 1500, 500, 500);
 
-		//Capitaine gauche
-	this->captainZoneLeft = new Cell*[this->captainZoneLength];
-	current = 0;
-			// X(de 0cm à 500mm (50 cases)) sur Y(1500mm à 2000mm (5cases))
-	for(i = 0; i < 5 ; i++) {
-		for(j = 15; j < 20 ; j++) {
-			this->captainZoneLeft[current] = this->map[i][j];
-			current++;
-		}
-	}
+	//Câle gauche - X(de 0mm à 400mm (8 cases)) sur Y(750mm à 1500mm (15cases))
+	this->stockZoneLeft = this->getArea(0, 750, 400, 750);
 
-		//Câle gauche
-	this->stockZoneLeft = new Cell*[this->stockZoneLength];
-	current = 0;
-			// X(de 0mm à 400mm (4 cases)) sur Y(750mm à 1500mm (7cases))
-	for(i = 0; i < 4 ; i++) {
-		for(j = 8; j < 14 ; j++) {
-			this->stockZoneLeft[current] = this->map[i][j];
-			current++;
-		}
-	}
+		//Capitaine droite - X(de 2500mm à 3000mm (10 cases)) sur Y(1500mm à 2000mm (10cases))
+	this->captainZoneRight = this->getArea(2500, 1500, 500, 500);
 
-		//Capitaine droite
-	this->captainZoneRight = new Cell*[this->captainZoneLength];
-	current = 0;
-			// X(de 2500mm à 3000mm (5 cases)) sur Y(1500mm à 2000mm (5cases))
-	for(i = 25; i < 30 ; i++) {
-		for(j = 15; j < 20 ; j++) {
-			this->captainZoneRight[current] = this->map[i][j];
-			current++;
-		}
-	}
-
-		//Câle droite
-	this->stockZoneRight = new Cell*[this->stockZoneLength];
-	current = 0;
-			// X(de 2600mm à 3000mm (4 cases)) sur Y(750mm à 1500mm (7cases))
-	for(i = 26; i < 30 ; i++) {
-		for(j = 8; j < 14 ; j++) {
-			this->stockZoneRight[current] = this->map[i][j];
-			current++;
-		}
-	}
+		//Câle droite - X(de 2600mm à 3000mm (8 cases)) sur Y(750mm à 1500mm (15cases))
+	this->stockZoneRight = this->getArea(2600, 750, 400, 750);
 
 
 	//Régler les obstacles fixes
 		//Câle avec couvercle : on n'y rentre pas !
 		//Partie gauche
 			// X(de 0mm à 400mm (4 cases)) sur Y(0cm à 750mm (7cases))
-	for(i = 0; i < 4 ; i++) {
-		for(j = 0; j < 7 ; j++) {
-			this->map[i][j]->setBlocked(true);
-		}
-	}
+	this->setAreaBlocked(0, 0, 400, 750);
 		//Partie droite
 			// X(de 2600mm à 3000mm (4 cases)) sur Y(0mm à 750mm (7cases))
-	for(i = 26; i < 30 ; i++) {
-		for(j = 0; j < 7 ; j++) {
-			this->map[i][j]->setBlocked(true);
-		}
-	}
+	this->setAreaBlocked(2600, 0, 400, 750);
 
 		//Poteau gauche
 			// X(de 975cm à 1225cm (25 cases+2)) sur Y(875cm à 1125cm (25cases+2))
-	for(i = 97; i < 123 ; i++) {
-		for(j = 87; j < 113 ; j++) {
-			this->map[i][j]->setBlocked(true);
-		}
-	}
+	this->setAreaBlocked(975, 875, 250, 250);
 		//Poteau droit
 			// X(de 1775cm à 2025cm (25 cases+2)) sur Y(875cm à 1125cm (25cases+2))
-	for(i = 178; i < 203 ; i++) {
-		for(j = 87; j < 113 ; j++) {
-			this->map[i][j]->setBlocked(true);
-		}
-	}
+	this->setAreaBlocked(1775, 875, 250, 250);
 
 		//Bordure de la carte
-	//Bordure haut et bas
-	for(j = 0; j < this->columns ; j++) {
-		this->map[0][j]->setBlocked(true);
-		this->map[this->lines-1][j]->setBlocked(true);
-	}
-	//Bordure gauche et droite
-	for(i = 0; i < this->lines ; i++) {
-		this->map[i][0]->setBlocked(true);
-		this->map[i][this->columns-1]->setBlocked(true);
-	}
+	//Bordure bas
+	this->setAreaBlocked(0, 0, this->width, 1);
+	//Bordure haut
+	this->setAreaBlocked(0, this->height, this->width, 1);
+	//Bordure gauche
+	this->setAreaBlocked(0, 0, 1, this->height);
+	//Bordure droite
+	this->setAreaBlocked(this->width, 0, 1, this->height);
 
 	//Bordure entre la zone du capitaine et la zone de stockage
 	//Gauche
-	for(i=0 ; i < 5 ; i++) {
-		this->map[i][14]->setBlocked(true);
-	}
+	this->setAreaBlocked(0, 1500, 500, 1);
 	//Droite
-	for(i=25 ; i < 30 ; i++) {
-		this->map[i][14]->setBlocked(true);
-	}
+	this->setAreaBlocked(2500, 1500, 500, 1);
 
 	//Régler les CDs
-	//TODO
+	//Haut gauche et haut droit
+	this->setCD(1000, 1500);
+	this->setCD(2000, 1500);
+
+	//Bas gauche et bas droit
+	this->setCD(450, 300); //Gauche
+	this->setCD(2550, 300); //Droit
+
+	//Bas milieu
+	this->setCD(1425, 300); //gauche (X approximatif)
+	this->setCD(1575, 300); //droit (X approximatif)
+	this->setCD(1500, 220); //bas (Y approximatif)
+	this->setCD(1500, 220); //haut (Y approximatif)
+
+	//Poteau gauche
+	this->setCD(1100, 1240); //haut
+	this->setCD(890, 1210); //haut gauche
+	this->setCD(1310, 1210); //haut droit
+	this->setCD(860, 1000); //milieu gauche
+	this->setCD(1100, 760); //bas
+	this->setCD(890, 790); //bas gauche
+	this->setCD(1310, 790); //bas droit
+
+	//Poteau droite
+	this->setCD(1900, 1240); //haut
+	this->setCD(1690, 1210); //haut gauche
+	this->setCD(2110, 1210); //haut droit
+	this->setCD(2140, 1000); //milieu droit
+	this->setCD(1900, 760); //bas
+	this->setCD(1690, 790); //bas gauche
+	this->setCD(2110, 790); //bas droit
 
 }
 
@@ -141,9 +108,48 @@ Map::~Map() {
 
 }
 
+Cell** Map::getArea(int x, int y, int width, int height) {
+	Cell** result = NULL;
+
+	int iStart = (int)(x / CELL_WIDTH);
+	int jStart = (int)(y / CELL_HEIGHT);
+
+	int iStop = (int)(width / CELL_WIDTH) + iStart;
+	int jStop = (int)(height / CELL_HEIGHT) + jStart;
+
+	result = new Cell*[(iStop - iStart)*(jStop - jStart)];
+	int currentIndex = 0;
+
+	for(int i = iStart; i < iStop ; i++) {
+		for(int j = jStart; j < jStop ; j++) {
+			result[currentIndex] = this->map[i][j];
+			currentIndex++;
+		}
+	}
+
+	return result;
+}
+
+void Map::setAreaBlocked(int x, int y, int width, int height) {
+	Cell** area = this->getArea(x, y, width, height);
+
+	int size = (int)(width / CELL_WIDTH) * (int)(height / CELL_HEIGHT);
+
+	for(int i = 0; i < size ; i++) {
+		area[i]->setBlocked(true);
+	}
+}
+
+void Map::setCD(int x, int y) {
+	int i = (int)(x / CELL_WIDTH);
+	int j = (int)(y / CELL_HEIGHT);
+
+	this->map[i][j]->setCD(true);
+}
+
 Cell* Map::getCell(int x, int y) {
 	//On vérifie que l'on est pas hors champs
-	if(x < this->lines && y < this->columns) {
+	if(x < this->width && y < this->height) {
 		return this->map[x][y];
 	}
 	return NULL;
@@ -155,7 +161,7 @@ Cell** Map::getNeighbors(int x, int y, int range) {
 
 	for(int i = x-range ; i <= x+range; i++){
 		for(int j = y-range ; j <= y+range ; j++) {
-			if(i >= 0 && i < this->lines && j >= 0 && j < this->columns) {
+			if(i >= 0 && i < this->width && j >= 0 && j < this->height) {
 				if(!(i == x && j == y)) {
 					result[currentIndex] = this->map[i][j];
 					currentIndex++;
@@ -177,7 +183,7 @@ int Map::getNeighborsCount(int x, int y, int range) {
 	//Pour chaque cellules, on regarde si elle est hors-champs
 	for(int i = x-range ; i <= x+range; i++){
 		for(int j = y-range ; j <= y+range ; j++) {
-			if(i < 0 || i > this->lines || j < 0 || j > this->columns) {
+			if(i < 0 || i > this->width || j < 0 || j > this->height) {
 				result--;
 			}
 		}
@@ -195,8 +201,8 @@ Cell* Map::getClosestCD(Cell* begin) {
 	double temp_cost = 0;
 
 	//On parcours l'ensemble de la map (peut-être à améliorer) pour trouver le plus proche CD (le résultat est optimal par contre)
-	for(int i = 0 ; i < this->lines ; i++) {
-		for(int j = 0 ; j < this->columns ; j++) {
+	for(int i = 0 ; i < this->width ; i++) {
+		for(int j = 0 ; j < this->height ; j++) {
 			temp = this->map[i][j];
 			temp_cost = sqrt((temp->getX() - begin->getX())*(temp->getX() - begin->getX()) + (temp->getY() - begin->getY())*(temp->getY() - begin->getY()));
 

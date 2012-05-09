@@ -10,7 +10,7 @@ public:
 	int get();
 
 private:
-	int pinNumber; //int pour l'instant
+	int pinNumber;
 	SensorConversion* conversion;
 
 };
