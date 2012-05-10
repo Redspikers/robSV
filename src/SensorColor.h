@@ -8,6 +8,8 @@
 #ifndef SENSORCOLOR_H_
 #define SENSORCOLOR_H_
 
+#include <Arduino.h>
+
 class SensorColor {
 	public:
 		enum Color {

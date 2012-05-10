@@ -148,6 +148,7 @@ Node* AStarLight::compute(Cell* begin, Cell* end) {
 
 	} while(currentNode->getCell() != end && this->openList->size() != 0);
 
+	//TODO - Mémoire leak sur la openlist et les variables temporaire ?
 
 	/*
 	 * 5 - Solution de l'algorithme
