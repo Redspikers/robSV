@@ -118,6 +118,8 @@ void Recognition::updateValues() {
 	this->valeur[4] = this->captorBM->get();
 	this->valeur[5] = this->captorBL->get();
 	this->valeur[6] = this->captorBack->get();
+
+	this->analyse();
 }
 
 bool Recognition::isBetween(int min, int max, int value) {

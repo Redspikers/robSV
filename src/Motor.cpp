@@ -11,12 +11,12 @@ Motor::Motor(int pinLeft, int pinRight) {
 	this->pinLeft = pinLeft;
 	this->pinRight = pinRight;
 
-	this->distanceTotaleRight=0;
+	//this->distanceTotaleRight=0;
 	this->distanceTotaleLeft=0;
-	this->distanceRight = 0;
+	//this->distanceRight = 0;
 	this->distanceLeft = 0;
 
-	this->nbPulseRight_temp = 0;
+	//this->nbPulseRight_temp = 0;
 	this->nbPulseLeft_temp =0;
 
 	this->servoLeft = new Servo();
@@ -78,18 +78,18 @@ void Motor::move(int distanceMilliMeter) {
 	
 	
 	acceleration(80);
-	while(distanceLeft(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
+	while(distanceParcourue(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
 	{
 		delay(5);
 	}
 	
 	deceleration(80);
 	
-	if(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+	if(distanceParcourue(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
 	{
 		acceleration(85);
 		
-		while(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+		while(distanceParcourue(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
 		{
 			delay(1);
 		}
@@ -106,18 +106,18 @@ void Motor::back(int distanceMilliMeter) {
 	
 	
 	acceleration(100);
-	while(distanceLeft(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
+	while(distanceParcourue(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
 	{
 		delay(15);
 	}
 	
 	deceleration(100);
 	
-	if(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+	if(distanceParcourue(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
 	{
 		acceleration(95);
 		
-		while(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+		while(distanceParcourue(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
 		{
 			delay(1);
 		}
@@ -229,21 +229,22 @@ int Motor::distanceParcourue(int countPulseLeft, int distanceLeft) {
 
 void Motor::acceleration(int pos) //accelere de 90 a pos
 {
+	int i=0;
 	if(pos > 90)
 	{
-		for(i=90, i < pos, i++)
+		for(i=90; i < pos; i++)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i));
+			this->servoLeft->write(i);
 			delay(15);
 		}
 	}
 	if(pos < 90)
 	{
-		for(i=90, i>= pos, i--)
+		for(i=90; i>= pos; i--)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i));
+			this->servoLeft->write(i);
 			delay(15);
 		}
 	}
@@ -251,21 +252,22 @@ void Motor::acceleration(int pos) //accelere de 90 a pos
 
 void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 {
+	int i=0;
 	if(posCourante > 90)
 	{
-		for(i=posCourante, i >= 90, i--)
+		for(i=posCourante; i >= 90; i--)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i));
+			this->servoLeft->write(i);
 			delay(15);
 		}
 	}
 	if(posCourante < 90)
 	{
-		for(i=posCourante, i < 90, i++)
+		for(i=posCourante; i < 90; i++)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i));
+			this->servoLeft->write(i);
 			delay(15);
 		}
 	}

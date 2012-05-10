@@ -35,7 +35,6 @@ class Motor {
 		virtual ~Motor();
 		
 		void acceleration(int pos); 
-		void decelaration(int posCourante); 
 		
 		void back(int distanceMM);
 		void move(int distanceMM);
@@ -46,6 +45,7 @@ class Motor {
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);
 		void incrementation_roueCodeuseLeft();
 		void incrementation_roueCodeuseRight();
+		void deceleration(int posCourante);
 
 };
 
