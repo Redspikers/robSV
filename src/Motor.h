@@ -12,16 +12,16 @@
 class Motor {
 	private:
 	
-		int distanceTotaleRight;
+		//int distanceTotaleRight;
 		int distanceTotaleLeft; //distance parcourue depuis le début du match
-		int distanceRight;
+		//int distanceRight;
 		int distanceLeft; //distance parcourue depuis la dernière occurence de la fonction distanceParcourue
 
-		int nbPulseRight_temp;
+		//int nbPulseRight_temp;
 		int nbPulseLeft_temp; //nb d'impulsion temporaire (nb depuis la derniere occurence de distanceParcourue
 		
 		int countPulseLeft;
-		int countPulseRight;
+		//int countPulseRight;
 		
 		Servo* servoLeft;
 		Servo* servoRight;
@@ -33,13 +33,16 @@ class Motor {
 	public:
 		Motor(int pinLeft, int pinRight);
 		virtual ~Motor();
-
+		
+		void acceleration(int pos); 
+		void decelaration(int posCourante); 
+		
 		void back(int distanceMM);
 		void move(int distanceMM);
 		void turn(int angleDegree, int distanceMM);
 		void turnOnSpot(int angleDegree);
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
-		void distanceParcourue(int countPulseRight, int countPulseLeft, int distanceRight, int distanceLeft);
+		int distanceParcourue(int countPulseLeft, int distanceLeft);
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);
 		void incrementation_roueCodeuseLeft();
 		void incrementation_roueCodeuseRight();

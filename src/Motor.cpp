@@ -74,96 +74,207 @@ void Motor::servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter
 
 
 void Motor::move(int distanceMilliMeter) {
-	// servo moteur de 90 a 158 marche avant !
-	// Cette boucle fait passer la vitesse des moteur de 90 a 120 en evitant les glissements.
-	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 90; this->pos < 120; this->pos++) {
-		this->servoRight->write(this->pos);
-		this->servoLeft->write(this->pos);
-		delay(15);
+	// servo moteur de 90 a 24 marche avant !
+	
+	
+	acceleration(80);
+	while(distanceLeft(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
+	{
+		delay(5);
 	}
-
-	// Durée de déplacement à ajouter (avec un delay() ) en fonction de distanceMM
-	// Cette boucle fait passer la vitesse des moteur de 120 à 90 en evitant les glissements.
-	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 120; this->pos < 90; this->pos--) {
-		this->servoRight->write(this->pos);
-		this->servoLeft->write(this->pos);
-		delay(15);
+	
+	deceleration(80);
+	
+	if(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+	{
+		acceleration(85);
+		
+		while(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+		{
+			delay(1);
+		}
+		
+		this->servoRight->write(90);
+		this->servoLeft->write(90);
+	
 	}
 
 }
 
 void Motor::back(int distanceMilliMeter) {
-	// Servo moteur de 90 à 24 : marche arrière
-	// Cette boucle fait passer la vitesse des moteur de 90 a 60 en evitant les glissements.
-	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 90; this->pos < 60; this->pos--) {
-		this->servoRight->write(this->pos);
-		this->servoLeft->write(this->pos);
-		delay(15); //Delay qui evite les glissements.
-	}
-	// Durée de déplacement à ajouter (avec un delay() ) en fonction de distanceMM
-	// Cette boucle fait passer la vitesse des moteur de 60 a 90 en evitant les glissements.
-	// Distance parcourue pendant cette boucle : A EVALUER
-	for (this->pos = 60; this->pos < 90; this->pos++) {
-		this->servoRight->write(this->pos);
-		this->servoLeft->write(this->pos);
+	// Servo moteur de 90 à 158 : marche arrière
+	
+	
+	acceleration(100);
+	while(distanceLeft(this->countPulseLeft, this->distanceLeft) < (distanceMilliMeter - 100))
+	{
 		delay(15);
+	}
+	
+	deceleration(100);
+	
+	if(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+	{
+		acceleration(95);
+		
+		while(distanceLeft(this->countPulseLeft, this->distanceLeft) < distanceMilliMeter)
+		{
+			delay(1);
+		}
+		
+		this->servoRight->write(90);
+		this->servoLeft->write(90);
+	
 	}
 }
 
-// de 0° a 90° angle vers la droite du robot
-//de 91° a 180° angle vers la gauche du robot
+
+
 //Le robot ne bouge pas par rapport au terrain,  il se contente de faire une rotation sur place
-//Peut etre faudra-t-il enlever les etapes d'acceleration et deceleration : on aura une vitesse basse de rotation
-//mais une meilleure precision
 void Motor::turnOnSpot(int angleDegree) {
-	int alpha = 90-angleDegree;
 
-	// angle vers la droite du robot
-	if (angleDegree < 90) {
-
+	// 967.12 = perimetre du cercle que parcourt le robot en rotation sur lui même
+	
+	
+	
+	//angle vers la gauche du robot
+	if (angleDegree <= 180) {
+	
+	double distanceMilliMeter = ((967.12/360) * angleDegree);
 		//Acceleration
-		for (pos = 90; pos < 120; pos++) {
+		for (pos = 90; pos >= 80; pos--) {
 			this->servoRight->write(pos);
 			this->servoLeft->write(180-pos);
 			delay(15);
 		}
+			
 		
-		delay((int)(TEMPS_ROTATION90*(90/alpha)));//Formule à revoir !!
+		while( distanceParcourue(countPulseLeft, distanceLeft) < (distanceMilliMeter - 200) )
+		{
+			delay(15);
+		}
 		
 		//Deceleration
-		for (pos=119; pos >= 90; pos--) {
+		for (pos= 81; pos < 87; pos++) {
 			this->servoRight->write(pos);
 			this->servoLeft->write(180-pos);
 			delay(15);
 		}
+		
+		while( distanceParcourue(countPulseLeft, distanceLeft) < (distanceMilliMeter) )
+		{
+			delay(5);
+		}
+		
+		this->servoRight->write(90);
+		this->servoLeft->write(90);
+
+		
 	}
-	//idem pour l'autre sens, tester d'abord pour angleDegree < 90	
+	
+	
+	//angle vers la droite du robot
+	
+if (angleDegree > 180) {
+	
+	double distanceMilliMeter = ((967.12/360) * ( 360 - angleDegree) );
+	
+		//Acceleration
+		for (pos = 90; pos >= 80; pos--) {
+			this->servoLeft->write(pos);
+			this->servoRight->write(180-pos);
+			delay(15);
+		}
+		
+		while( distanceParcourue(countPulseLeft, distanceLeft) < (distanceMilliMeter) )
+		{
+			delay(5);
+		}
+		
+		//Deceleration
+		for (pos= 81; pos < 87; pos++) {
+			this->servoLeft->write(pos);
+			this->servoRight->write(180-pos);
+			delay(15);
+		}
+		
+		
+		while( distanceParcourue(countPulseLeft, distanceLeft) < (distanceMilliMeter) )
+		{
+			delay(5);
+		}
+		
+		this->servoRight->write(90);
+		this->servoLeft->write(90);
+
+	}	
 }
 
 void Motor::distanceTotaleParcourue(int countPulseRight, int countPulseLeft, int distanceTotaleRight, int distanceTotaleLeft) {
-	distanceTotaleRight = (countPulseRight / 20.25 ) * 189.028 ; //distance en mm
+	//distanceTotaleRight = (countPulseRight / 20.25 ) * 189.028 ; //distance en mm
 	distanceTotaleLeft = (countPulseLeft / 20.25 ) * 189.028 ;  //distance en mm
 }
 
 
-void Motor::distanceParcourue(int countPulseRight, int countPulseLeft, int distanceRight, int distanceLeft) {
-	distanceRight = (( countPulseRight - this->nbPulseRight_temp ) / 20.25 ) * 189.028 ;  //distance en mm
+int Motor::distanceParcourue(int countPulseLeft, int distanceLeft) {
+	//distanceRight = (( countPulseRight - this->nbPulseRight_temp ) / 20.25 ) * 189.028 ;  //distance en mm
 	distanceLeft = (( countPulseLeft - this->nbPulseLeft_temp ) / 20.25 ) * 189.028 ;  //distance en mm
 	
 	// nbPulse(Left et Right)_temp reçoivent le nb d'impulsion. Ainsi a l' occurence n+1 de cette fonction
 	// ces variables seront le nb d'impulsion lors de l'occurence n de cette fonction
-	this->nbPulseRight_temp = countPulseRight;
+	//this->nbPulseRight_temp = countPulseRight;
 	this->nbPulseLeft_temp = countPulseLeft;
+	return distanceLeft;
 }
 
+void Motor::acceleration(int pos) //accelere de 90 a pos
+{
+	if(pos > 90)
+	{
+		for(i=90, i < pos, i++)
+		{
+			this->servoRight->write(i);
+			this->servoLeft->write(i));
+			delay(15);
+		}
+	}
+	if(pos < 90)
+	{
+		for(i=90, i>= pos, i--)
+		{
+			this->servoRight->write(i);
+			this->servoLeft->write(i));
+			delay(15);
+		}
+	}
+}
+
+void Motor::deceleration(int posCourante) // decelere de posCourante à 90
+{
+	if(posCourante > 90)
+	{
+		for(i=posCourante, i >= 90, i--)
+		{
+			this->servoRight->write(i);
+			this->servoLeft->write(i));
+			delay(15);
+		}
+	}
+	if(posCourante < 90)
+	{
+		for(i=posCourante, i < 90, i++)
+		{
+			this->servoRight->write(i);
+			this->servoLeft->write(i));
+			delay(15);
+		}
+	}
+}
 
 void Motor::incrementation_roueCodeuseLeft() {
 	this->countPulseLeft++;
 }
 
-void Motor::incrementation_roueCodeuseRight() {
-	this->countPulseRight++;
-}
+//void Motor::incrementation_roueCodeuseRight() {
+//	this->countPulseRight++;
+//}
