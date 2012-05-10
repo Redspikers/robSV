@@ -277,6 +277,8 @@ void Motor::incrementation_roueCodeuseLeft() {
 	this->countPulseLeft++;
 }
 
-//void Motor::incrementation_roueCodeuseRight() {
-//	this->countPulseRight++;
-//}
+/*
+void Motor::incrementation_roueCodeuseRight() {
+	this->countPulseRight++;
+}
+*/

@@ -38,13 +38,12 @@ class Motor {
 		
 		void back(int distanceMM);
 		void move(int distanceMM);
-		void turn(int angleDegree, int distanceMM);
 		void turnOnSpot(int angleDegree);
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
 		int distanceParcourue(int countPulseLeft, int distanceLeft);
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);
 		void incrementation_roueCodeuseLeft();
-		void incrementation_roueCodeuseRight();
+		//void incrementation_roueCodeuseRight();
 		void deceleration(int posCourante);
 
 };

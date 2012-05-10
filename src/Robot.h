@@ -48,8 +48,8 @@ class Robot {
 		~Robot();
 
 		//Fonctions de la arduino, reportées dans cette classe
-		void setup();
 		void loop();
+		Motor* getMotor();
 
 		//Fonctions spécifiques à chaque états
 		void actionIdle();

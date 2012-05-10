@@ -59,13 +59,6 @@ Robot::~Robot() {
 
 }
 
-
-void Robot::setup() {
-	//TODO fix this error - peut-être le mettre dans la fonction setup ?
-	//attachInterrupt(2, this->motor->incrementation_roueCodeuseRight(), RISING);
-	//attachInterrupt(5, this->motor->incrementation_roueCodeuseLeft(), RISING);
-}
-
 void Robot::loop() {
 	//Selon l'état du robot, on adopte un comportement différent
 	//L'ordre des états permet d'optimiser la boucle if/else (on limite les calculs de booléens)
@@ -322,4 +315,8 @@ void Robot::findPathToBack() {
 	}
 	//TODO Mémoire leak sur ceux qui restent ?
 	temp->setNext(NULL);
+}
+
+Motor* Robot::getMotor() {
+	return this->motor;
 }
