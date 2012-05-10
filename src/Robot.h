@@ -72,8 +72,13 @@ class Robot {
 		//Cible éventuel du robot
 		Cell* target;
 
+		//Sa zone de capitaine
+		Area* captainArea;
+		Area* stockArea;
+
 		//Nombre de CD qu'il contient
 		int cds;
+
 
 		//Recherche de chemin (pathfinding)
 		AStarLight* pathfinding;

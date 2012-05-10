@@ -33,16 +33,21 @@ Robot::Robot() {
 
 	this->cds = 0;
 
-	//POSITION DE DEPART : Robot centrée sur à 25.5cm de chaque bord
+	//POSITION DE DEPART
 	//Valeurs qui dépendent de la position de départ du robot, il suffit de changer la variable globales "POSITION"
 	if(START_POSITION == LEFT){
-		this->position = this->map->getCell(1, 17);
+		this->position = this->map->getCellWithDistance(155, 1750);
 		//Angle de 0 on positionne le robot face à la carte, aligné sur l'axe des abcisses
 		this->angle = 0;
+		this->captainArea = this->map->getCaptainAreaLeft();
+		this->stockArea = this->map->getStockAreaLeft();
+
 	} else if(START_POSITION == RIGHT) {
-		this->position = this->map->getCell(28, 17);
+		this->position = this->map->getCellWithDistance(2845, 1750);
 		//Angle de 1800 on positionne le robot face à la carte (donc dans le sens inverse que LEFT), aligné sur l'axe des abcisses
 		this->angle = 180;
+		this->captainArea = this->map->getCaptainAreaRight();
+		this->stockArea = this->map->getStockAreaRight();
 	}
 
 	//Par défaut, on a aucune cible, c'est l'algorithme qui se chargeras d'en trouver une dès que nécessaire
@@ -170,6 +175,13 @@ void Robot::actionDrop() {
 	//Lacher les CDs
 	this->conveyor->action();
 
+	//On incrémente le nombre de CD dans les zones correspondantes
+	if(this->target == this->captainArea->getCenter()) {
+		this->captainArea->addCD(this->cds);
+	} else {
+		this->stockArea->addCD(this->cds);
+	}
+
 	this->cds = 0;
 
 	//Passer en état SEARCH
@@ -236,8 +248,10 @@ void Robot::move(Cell* destination) {
 	//Soit la case est une diagonale (X et Y diffèrent), soit non
 	if(destination->getX() != this->position->getX() && destination->getY() != this->position->getY()) {
 		this->motor->move(Map::CELL_DIAGONAL);
-	} else {
+	} else if(destination->getX() != this->position->getX()) {
 		this->motor->move(Map::CELL_WIDTH);
+	} else if(destination->getY() != this->position->getY()) {
+		this->motor->move(Map::CELL_HEIGHT);
 	}
 
 	//Enfin, nous pouvons utiliser le moteur pour se déplacer
@@ -257,17 +271,55 @@ void Robot::turn(int newAngle) {
 }
 
 void Robot::findPathToCD() {
-	//Recherche le plus proche CD (car la carte a été mis à jour)
-	//TODO - prendre en compte le fait qu'il y a 3 cases de différence entre le robot et le cd (PLACE_RADIUS+1)
-	//this->target = this->map->getClosestCD(this->position);
-	//Recalculer un nouveau chemin (pour l'éviter)
+	//Recherche le plus proche CD
+	this->target = this->map->getClosestCD(this->position);
+	//On calcule le chemin intégral ver le CD
+	Node* pathToCD = this->pathfinding->compute(this->position, this->target);
+	this->path = pathToCD;
 
-	//target doit pointer 2 cases avant le cd (pour que le bras fasse son job)
+	//On s'arrête PLACE_RADIUS+1 cases avant la fin, car c'est la portée du bras
+	Node* temp = pathToCD->getNext();
+	while(temp != NULL) {
+		temp = temp->getNext();
+	}
+	//On coupe le chemin PLACE_RADIUS +1 cases avant la cellule où se trouve le CD (longueur du robot + portée du bras
+	for(int i=0; i < PLACE_RADIUS +1 ; i++) {
+		if(temp != NULL) {
+			temp = temp->getParent();
+		}
+	}
+	//TODO Mémoire leak sur ceux qui restent ?
+	temp->setNext(NULL);
 }
 
 void Robot::findPathToBack() {
 	//Recherche de la zone où il faut déposer
-	//TODO
-	//TODO - prendre en compte le fait qu'il y a 2 cases de différence (PLACE_RADIUS)
-	//target doit pointer 2 case avant la fin réel
+	if(this->captainArea->countCD() < 4) {
+		this->target = this->captainArea->getCenter();
+	} else {
+		this->target = this->stockArea->getCenter();
+	}
+
+	//On calcule le chemin intégral vers la zone de retrait
+	Node* pathToBack = this->pathfinding->compute(this->position, this->target);
+	this->path = pathToBack;
+
+	//On s'arrête PLACE_RADIUS+1 cases avant la fin, car c'est la portée du bras
+	Node* temp = pathToBack->getNext();
+
+	while(temp != NULL) {
+		temp = temp->getNext();
+	}
+
+	//Target pointe vers la cellule où se trouve le CD
+	this->target = temp->getCell();
+
+	//On coupe le chemin PLACE_RADIUS cases avant la cellule où se trouve le CD (longueur du robot + portée du bras
+	for(int i=0; i < PLACE_RADIUS ; i++) {
+		if(temp != NULL) {
+			temp = temp->getParent();
+		}
+	}
+	//TODO Mémoire leak sur ceux qui restent ?
+	temp->setNext(NULL);
 }

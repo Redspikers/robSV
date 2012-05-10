@@ -18,8 +18,8 @@ SensorColor::~SensorColor() {
 SensorColor::Color SensorColor::getColor() {
 	//TODO
 	if(analogRead(this->pinNumber)) {
-		return Color::WHITE;
+		return WHITE;
 	}
 
-	return Color::OTHER;
+	return OTHER;
 }

@@ -25,49 +25,49 @@ Map::Map() {
 
 	//Construction des zones
 	//Capitaine gauche - X(de 0cm à 500mm (10 cases)) sur Y(1500mm à 2000mm (10cases))
-	this->captainZoneLeft = this->getArea(0, 1500, 500, 500);
+	this->captainAreaLeft = new Area(this->getZone(0, 1500, 500, 500), this->getCellWithDistance(100, 1800), 100);
 
 	//Câle gauche - X(de 0mm à 400mm (8 cases)) sur Y(750mm à 1500mm (15cases))
-	this->stockZoneLeft = this->getArea(0, 750, 400, 750);
+	this->stockAreaLeft = new Area(this->getZone(0, 750, 400, 750), this->getCellWithDistance(100, 1650), 120);
 
 		//Capitaine droite - X(de 2500mm à 3000mm (10 cases)) sur Y(1500mm à 2000mm (10cases))
-	this->captainZoneRight = this->getArea(2500, 1500, 500, 500);
+	this->captainAreaRight = new Area(this->getZone(2500, 1500, 500, 500), this->getCellWithDistance(2900, 1800), 100);
 
 		//Câle droite - X(de 2600mm à 3000mm (8 cases)) sur Y(750mm à 1500mm (15cases))
-	this->stockZoneRight = this->getArea(2600, 750, 400, 750);
+	this->stockAreaRight = new Area(this->getZone(2600, 750, 400, 750), this->getCellWithDistance(2900, 1650), 120);
 
 
 	//Régler les obstacles fixes
 		//Câle avec couvercle : on n'y rentre pas !
 		//Partie gauche
 			// X(de 0mm à 400mm (4 cases)) sur Y(0cm à 750mm (7cases))
-	this->setAreaBlocked(0, 0, 400, 750);
+	this->setZoneBlocked(0, 0, 400, 750);
 		//Partie droite
 			// X(de 2600mm à 3000mm (4 cases)) sur Y(0mm à 750mm (7cases))
-	this->setAreaBlocked(2600, 0, 400, 750);
+	this->setZoneBlocked(2600, 0, 400, 750);
 
 		//Poteau gauche
 			// X(de 975cm à 1225cm (25 cases+2)) sur Y(875cm à 1125cm (25cases+2))
-	this->setAreaBlocked(975, 875, 250, 250);
+	this->setZoneBlocked(975, 875, 250, 250);
 		//Poteau droit
 			// X(de 1775cm à 2025cm (25 cases+2)) sur Y(875cm à 1125cm (25cases+2))
-	this->setAreaBlocked(1775, 875, 250, 250);
+	this->setZoneBlocked(1775, 875, 250, 250);
 
 		//Bordure de la carte
 	//Bordure bas
-	this->setAreaBlocked(0, 0, this->width, 1);
+	this->setZoneBlocked(0, 0, this->width, 1);
 	//Bordure haut
-	this->setAreaBlocked(0, this->height, this->width, 1);
+	this->setZoneBlocked(0, this->height, this->width, 1);
 	//Bordure gauche
-	this->setAreaBlocked(0, 0, 1, this->height);
+	this->setZoneBlocked(0, 0, 1, this->height);
 	//Bordure droite
-	this->setAreaBlocked(this->width, 0, 1, this->height);
+	this->setZoneBlocked(this->width, 0, 1, this->height);
 
 	//Bordure entre la zone du capitaine et la zone de stockage
 	//Gauche
-	this->setAreaBlocked(0, 1500, 500, 1);
+	this->setZoneBlocked(0, 1500, 500, 1);
 	//Droite
-	this->setAreaBlocked(2500, 1500, 500, 1);
+	this->setZoneBlocked(2500, 1500, 500, 1);
 
 	//Régler les CDs
 	//Haut gauche et haut droit
@@ -108,7 +108,7 @@ Map::~Map() {
 
 }
 
-Cell** Map::getArea(int x, int y, int width, int height) {
+Cell** Map::getZone(int x, int y, int width, int height) {
 	Cell** result = NULL;
 
 	int iStart = (int)(x / CELL_WIDTH);
@@ -130,8 +130,8 @@ Cell** Map::getArea(int x, int y, int width, int height) {
 	return result;
 }
 
-void Map::setAreaBlocked(int x, int y, int width, int height) {
-	Cell** area = this->getArea(x, y, width, height);
+void Map::setZoneBlocked(int x, int y, int width, int height) {
+	Cell** area = this->getZone(x, y, width, height);
 
 	int size = (int)(width / CELL_WIDTH) * (int)(height / CELL_HEIGHT);
 
@@ -151,6 +151,17 @@ Cell* Map::getCell(int x, int y) {
 	//On vérifie que l'on est pas hors champs
 	if(x < this->width && y < this->height) {
 		return this->map[x][y];
+	}
+	return NULL;
+}
+
+Cell* Map::getCellWithDistance(int x, int y) {
+	int i = (int)(x / CELL_WIDTH);
+	int j = (int)(y / CELL_HEIGHT);
+
+	//On vérifie que l'on est pas hors champs
+	if(i < this->width && j < this->height) {
+		return this->map[i][j];
 	}
 	return NULL;
 }
@@ -214,4 +225,17 @@ Cell* Map::getClosestCD(Cell* begin) {
 	}
 
 	return result;
+}
+
+Area* Map::getCaptainAreaLeft() {
+	return this->captainAreaLeft;
+}
+Area* Map::getCaptainAreaRight() {
+	return this->captainAreaRight;
+}
+Area* Map::getStockAreaLeft() {
+	return this->stockAreaLeft;
+}
+Area* Map::getStockAreaRight() {
+	return this->stockAreaRight;
 }

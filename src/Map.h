@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "Cell.h"
+#include "Area.h"
 
 class Map {
 	public:
@@ -25,7 +26,9 @@ class Map {
 		Map();
 		~Map();
 
+		//X and Y are index, not millimeters
 		Cell* getCell(int x, int y);
+		Cell* getCellWithDistance(int x, int y);
 
 		//Useful for pathfindings, integer is index, not millimeter
 		Cell** getNeighbors(int x, int y, int range);
@@ -34,21 +37,27 @@ class Map {
 		//Return the closest Cell where there is a CD
 		Cell* getClosestCD(Cell* begin);
 
+		Area* getCaptainAreaLeft();
+		Area* getCaptainAreaRight();
+
+		Area* getStockAreaLeft();
+		Area* getStockAreaRight();
+
 	private:
 		//Store all Cell in the map : it is a double array with Cell pointer's
 		Cell*** map;
 		int width;
 		int height;
 
-		Cell** captainZoneLeft;
-		Cell** captainZoneRight;
+		Area* captainAreaLeft;
+		Area* captainAreaRight;
 
-		Cell** stockZoneLeft;
-		Cell** stockZoneRight;
+		Area* stockAreaLeft;
+		Area* stockAreaRight;
 
 		//All integer in millimeter
-		Cell** getArea(int x, int y, int width, int height);
-		void setAreaBlocked(int x, int y, int width, int height);
+		Cell** getZone(int x, int y, int width, int height);
+		void setZoneBlocked(int x, int y, int width, int height);
 		void setCD(int x, int y);
 
 };
