@@ -13,11 +13,18 @@
 
 class Recognition {
     public:
+		enum Obstacle {
+			CD,
+			OHTER,
+			NONE,
+			UNDEFINED
+		};
+
         Recognition();
 
-        void getValues();
-        bool environEgal(int value1, int value2, int ecartmax);
-        bool comprisEntre(int min, int max, int value);
+        void updateValues();
+        bool around(int value1, int value2, int ecartmax);
+        bool isBetween(int min, int max, int value);
         int* getObstacles();
         void analyse();
 

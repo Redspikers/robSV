@@ -58,22 +58,22 @@ void Recognition::analyse() {
 
 	//*******OBSTACLE CD*************
 
-	if (comprisEntre(20, 50, this->valeur[5])) {
+	if(this->isBetween(20, 50, this->valeur[5])) {
 		this->distancesObstacles[0] = this->valeur[5]; //CD GAUCHE
-	}else{
+	} else {
 			this->distancesObstacles[0] = 0; //On supprime CD Gauche
 		}
 
 	//Bas Droit
-	if (comprisEntre(20, 50, this->valeur[3])) {
+	if(this->isBetween(20, 50, this->valeur[3])) {
 		this->distancesObstacles[2] = this->valeur[3]; //CD Droit
-	}else {
-			this->distancesObstacles[2] = 0; //On supprime CD Droit
-		}
+	} else {
+		this->distancesObstacles[2] = 0; //On supprime CD Droit
+	}
 
 
 	//CD MILIEU
-	if ( comprisEntre(20, 50, this->valeur[4])) {
+	if(this->isBetween(20, 50, this->valeur[4])) {
 		this->distancesObstacles[1] = this->valeur[4];
 	} else {
 		this->distancesObstacles[1] = 0;
@@ -83,36 +83,34 @@ void Recognition::analyse() {
 
 
 	//Haut droit et bas droit
-	if (comprisEntre(20, 150, this->valeur[0]) && comprisEntre(20, 150, this->valeur[3]) && environEgal(this->valeur[3], this->valeur[0], 20)) {
+	if(this->isBetween(20, 150, this->valeur[0]) && this->isBetween(20, 150, this->valeur[3]) && this->around(this->valeur[3], this->valeur[0], 20)) {
 		this->distancesObstacles[3] = this->valeur[0]; //Obstacle à Droite à Xcm
 	} else {
 		this->distancesObstacles[3] = 0;
 	}
 
 	//Haut Gauche et bas Gauche
-	if (comprisEntre(20, 150, this->valeur[1]) && comprisEntre(20, 150, this->valeur[5]) && environEgal(this->valeur[1], this->valeur[5], 20)) {
+	if(this->isBetween(20, 150, this->valeur[1]) && this->isBetween(20, 150, this->valeur[5]) && this->around(this->valeur[1], this->valeur[5], 20)) {
 		this->distancesObstacles[4] = this->valeur[1]; //Obstacle à Gauche à Xcm
 	} else {
 		this->distancesObstacles[4] = 0;
 	}
 
-
-
 	//Milieu
-	if (comprisEntre(20, 150, this->valeur[2])) {
+	if(this->isBetween(20, 150, this->valeur[2])) {
 		this->distancesObstacles[5] = this->valeur[2]; //Obstacle au milieu à Xcm
 	} else {
 		this->distancesObstacles[5] = 0;
 	}
 	// Arrière
-	if (comprisEntre(20, 150, this->valeur[6])) {
+	if(this->isBetween(20, 150, this->valeur[6])) {
 		this->distancesObstacles[6] = this->valeur[6]; //Obstacle à Gauche à Xcm
 	} else {
 		this->distancesObstacles[6] = 0;
 	}
 }
 
-void Recognition::getValues() {
+void Recognition::updateValues() {
 	this->valeur[0] = this->captorTR->get();
 	this->valeur[1] = this->captorTL->get();
 	this->valeur[2] = this->captorTM->get();
@@ -122,7 +120,7 @@ void Recognition::getValues() {
 	this->valeur[6] = this->captorBack->get();
 }
 
-bool Recognition::comprisEntre(int min, int max, int value) {
+bool Recognition::isBetween(int min, int max, int value) {
 	if (value >= min && value <= max) {
 		return true;
 	}
@@ -133,7 +131,7 @@ bool Recognition::comprisEntre(int min, int max, int value) {
 /*
  * EnvironEgal retourne true quans l'écart entre value1 et value2 est inférieur ou egale à ecartmax
  */
-bool Recognition::environEgal(int value1, int value2, int ecartmax) {
+bool Recognition::around(int value1, int value2, int ecartmax) {
 	if (value1 >= value2) {
 		if ((value1 - value2) <= ecartmax) {
 			return true;
@@ -163,7 +161,7 @@ bool Recognition::environEgal(int value1, int value2, int ecartmax) {
 
 int* Recognition::getObstacles() {
 	//Récupération des valeurs
-	this->getValues();
+	this->updateValues();
 
 	//Analyse pour créer le tableau d'obstacle
 	this->analyse();
