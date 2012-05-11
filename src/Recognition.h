@@ -12,37 +12,34 @@
 #include "Pin.h"
 
 class Recognition {
-    public:
+	public:
 		enum Obstacle {
-			CD,
-			OHTER,
-			NONE,
-			UNDEFINED
+			CD, OHTER, NONE, UNDEFINED
 		};
 
-        Recognition();
+		Recognition();
 
-        void updateValues();
-        bool around(int value1, int value2, int ecartmax);
-        bool isBetween(int min, int max, int value);
-        int* getObstacles();
-        void analyse();
+		void updateValues();
+		bool around(int value1, int value2, int ecartmax);
+		bool isBetween(int min, int max, int value);
+		int* getObstacles();
+		void analyse();
 
-    private:
-        Sensor* captorBL;
-        Sensor* captorBM;
-        Sensor* captorBR;
+	private:
+		Sensor* captorBL;
+		Sensor* captorBM;
+		Sensor* captorBR;
 
-        Sensor* captorTL;
-        Sensor* captorTM;
-        Sensor* captorTR;
+		Sensor* captorTL;
+		Sensor* captorTM;
+		Sensor* captorTR;
 
-        Sensor* captorBack;
+		Sensor* captorBack;
 
-        int* valeur;
-        int* distancesObstacles;
+		int* valeur;
+		int* distancesObstacles;
 
-        SensorConversion* conversion;
+		SensorConversion* conversion;
 
 };
 

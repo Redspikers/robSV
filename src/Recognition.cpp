@@ -31,14 +31,14 @@ Recognition::Recognition() {
 	//Instanciation des capteurs avec le PIN
 
 	//Les différents capteurs
-	this->captorBL = new Sensor(Pin::SENSOR_BOTTOM_LEFT, this->conversion);
-	this->captorBM = new Sensor(Pin::SENSOR_BOTTOM_MIDDLE, this->conversion);
-	this->captorBR = new Sensor(Pin::SENSOR_BOTTOM_RIGHT, this->conversion);
+	this->captorBL = new Sensor(SENSOR_BOTTOM_LEFT, this->conversion);
+	this->captorBM = new Sensor(SENSOR_BOTTOM_MIDDLE, this->conversion);
+	this->captorBR = new Sensor(SENSOR_BOTTOM_RIGHT, this->conversion);
 
-	this->captorTL = new Sensor(Pin::SENSOR_TOP_LEFT, this->conversion);
-	this->captorTM = new Sensor(Pin::SENSOR_TOP_MIDDLE, this->conversion);
-	this->captorTR = new Sensor(Pin::SENSOR_TOP_RIGHT, this->conversion);
-	this->captorBack = new Sensor(Pin::SENSOR_BACK, this->conversion);
+	this->captorTL = new Sensor(SENSOR_TOP_LEFT, this->conversion);
+	this->captorTM = new Sensor(SENSOR_TOP_MIDDLE, this->conversion);
+	this->captorTR = new Sensor(SENSOR_TOP_RIGHT, this->conversion);
+	this->captorBack = new Sensor(SENSOR_BACK, this->conversion);
 
 	this->valeur = new int[7];
 	this->distancesObstacles = new int[9];
@@ -57,23 +57,21 @@ void Recognition::analyse() {
 	 */
 
 	//*******OBSTACLE CD*************
-
-	if(this->isBetween(20, 50, this->valeur[5])) {
+	if (this->isBetween(20, 50, this->valeur[5])) {
 		this->distancesObstacles[0] = this->valeur[5]; //CD GAUCHE
 	} else {
-			this->distancesObstacles[0] = 0; //On supprime CD Gauche
-		}
+		this->distancesObstacles[0] = 0; //On supprime CD Gauche
+	}
 
 	//Bas Droit
-	if(this->isBetween(20, 50, this->valeur[3])) {
+	if (this->isBetween(20, 50, this->valeur[3])) {
 		this->distancesObstacles[2] = this->valeur[3]; //CD Droit
 	} else {
 		this->distancesObstacles[2] = 0; //On supprime CD Droit
 	}
 
-
 	//CD MILIEU
-	if(this->isBetween(20, 50, this->valeur[4])) {
+	if (this->isBetween(20, 50, this->valeur[4])) {
 		this->distancesObstacles[1] = this->valeur[4];
 	} else {
 		this->distancesObstacles[1] = 0;
@@ -81,29 +79,32 @@ void Recognition::analyse() {
 
 	//**********AUTRES OBSTACLES*****************
 
-
 	//Haut droit et bas droit
-	if(this->isBetween(20, 150, this->valeur[0]) && this->isBetween(20, 150, this->valeur[3]) && this->around(this->valeur[3], this->valeur[0], 20)) {
+	if (this->isBetween(20, 150, this->valeur[0])
+			&& this->isBetween(20, 150, this->valeur[3])
+			&& this->around(this->valeur[3], this->valeur[0], 20)) {
 		this->distancesObstacles[3] = this->valeur[0]; //Obstacle à Droite à Xcm
 	} else {
 		this->distancesObstacles[3] = 0;
 	}
 
 	//Haut Gauche et bas Gauche
-	if(this->isBetween(20, 150, this->valeur[1]) && this->isBetween(20, 150, this->valeur[5]) && this->around(this->valeur[1], this->valeur[5], 20)) {
+	if (this->isBetween(20, 150, this->valeur[1])
+			&& this->isBetween(20, 150, this->valeur[5])
+			&& this->around(this->valeur[1], this->valeur[5], 20)) {
 		this->distancesObstacles[4] = this->valeur[1]; //Obstacle à Gauche à Xcm
 	} else {
 		this->distancesObstacles[4] = 0;
 	}
 
 	//Milieu
-	if(this->isBetween(20, 150, this->valeur[2])) {
+	if (this->isBetween(20, 150, this->valeur[2])) {
 		this->distancesObstacles[5] = this->valeur[2]; //Obstacle au milieu à Xcm
 	} else {
 		this->distancesObstacles[5] = 0;
 	}
 	// Arrière
-	if(this->isBetween(20, 150, this->valeur[6])) {
+	if (this->isBetween(20, 150, this->valeur[6])) {
 		this->distancesObstacles[6] = this->valeur[6]; //Obstacle à Gauche à Xcm
 	} else {
 		this->distancesObstacles[6] = 0;
@@ -159,7 +160,6 @@ bool Recognition::around(int value1, int value2, int ecartmax) {
  * 5  Obstacle devant (milieu)
  * 6  Obstacle derrière
  */
-
 
 int* Recognition::getObstacles() {
 	//Récupération des valeurs

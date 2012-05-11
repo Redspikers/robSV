@@ -1,27 +1,13 @@
 #include "Arm.h"
 
-Arm::Arm(int pinElbow, int pinShoulder, int pinPomp, int pinPushButton, int pinSensorColor) {
-	this->pinElbow = pinElbow;
-	this->pinShoulder = pinShoulder;
-	this->pinPushButton = pinPushButton;
-
-	this->angleShoulderTake = Arm::ANGLE_SHOULDER_TAKE;
-	this->angleElbowTake = Arm::ANGLE_ELBOW_TAKE;
-
-	this->angleShoulderDrop = Arm::ANGLE_SHOULDER_DROP;
-	this->angleElbowDrop = Arm::ANGLE_ELBOW_DROP;
-
-	this->angleShoulderIdle = Arm::ANGLE_SHOULDER_IDLE;
-	this->angleElbowIdle = Arm::ANGLE_ELBOW_IDLE;
-
+Arm::Arm() {
 	this->servoElbow = new Servo();
 	this->servoShoulder = new Servo();
-	this->pomp = new Pomp(pinPomp);
-	this->sensor = new SensorColor(pinSensorColor);
+	this->pomp = new Pomp();
+	this->sensor = new SensorColor();
 
-	this->servoElbow->attach(this->pinElbow);
-	this->servoShoulder->attach(this->pinShoulder);
-
+	this->servoElbow->attach(ELBOW);
+	this->servoShoulder->attach(SHOULDER);
 
 }
 
@@ -35,12 +21,12 @@ void Arm::takeCD() {
 	 * */
 
 	//Mouvement des deux servos. Le même tout le temps car on choppe que les CDs du bas
-	this->servoElbow->write(this->angleShoulderTake); //Elbow
-	this->servoShoulder->write(this->angleElbowTake); //Shoulder
+	this->servoElbow->write(ANGLE_ELBOW_TAKE); //Elbow
+	this->servoShoulder->write(ANGLE_SHOULDER_TAKE); //Shoulder
 	//FIN Mouvement
 
 	//On vérifie qu'il y a bien un CD
-	if(this->sensor->getColor() == SensorColor::WHITE) {
+	if (this->sensor->getColor() == SensorColor::WHITE) {
 		//Compresion de la pompe
 		this->pomp->compress();
 	}
@@ -51,8 +37,8 @@ void Arm::takeCD() {
 
 void Arm::dropInside() {
 	//Mouvement des servos pour aller au tapis
-	this->servoElbow->write(this->angleElbowDrop); //Elbow
-	this->servoShoulder->write(this->angleShoulderDrop); //Shoulder
+	this->servoElbow->write(ANGLE_ELBOW_DROP); //Elbow
+	this->servoShoulder->write(ANGLE_SHOULDER_DROP); //Shoulder
 	//FIN Mouvement
 
 	//Relachement au dessus du tapis
@@ -62,7 +48,7 @@ void Arm::dropInside() {
 }
 
 bool Arm::hasCD() {
-	if(digitalRead(this->pinPushButton) == 1) {
+	if(digitalRead(PUSH_CD) == 1) {
 		return true;
 	}
 
@@ -71,7 +57,7 @@ bool Arm::hasCD() {
 
 void Arm::idle() {
 	//Retour position initiale
-	this->servoElbow->write(this->angleElbowIdle); //Elbow
-	this->servoShoulder->write(this->angleShoulderIdle); //Shoulder
+	this->servoElbow->write(ANGLE_ELBOW_IDLE); //Elbow
+	this->servoShoulder->write(ANGLE_SHOULDER_IDLE); //Shoulder
 	//FIN Mouvement
 }

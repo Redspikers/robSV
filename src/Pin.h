@@ -5,50 +5,42 @@
  *      Author: Koudja
  */
 
-
 #ifndef PIN_H_
 #define PIN_H_
 
-// les roues codeuse sont pas définis ici, c'est normal
-// elles sont définis à la dur dans Motor.h parce que c'est legerement différent...
-class Pin {
-	public:
-		//TODO Capteur analogique
-		static const int SENSOR_BOTTOM_LEFT = 22;
-		static const int SENSOR_BOTTOM_MIDDLE = 23;
-		static const int SENSOR_BOTTOM_RIGHT = 24;
-		static const int SENSOR_TOP_LEFT = 25;
-		static const int SENSOR_TOP_MIDDLE = 26;
-		static const int SENSOR_TOP_RIGHT = 27;
-		static const int SENSOR_BACK = 28;
+//TODO Capteur analogique
+#define SENSOR_BOTTOM_LEFT 22
+#define SENSOR_BOTTOM_MIDDLE 23
+#define SENSOR_BOTTOM_RIGHT 24
+#define SENSOR_TOP_LEFT 25
+#define SENSOR_TOP_MIDDLE 26
+#define SENSOR_TOP_RIGHT 27
+#define SENSOR_BACK 28
 
-		static const int COLOR_SENSOR = 29; //TODO
+//TODO
+#define COLOR_SENSOR 29
 
 
-		static const int SENSOR_COLOR_HIGH = 52;
 
+#define SENSOR_COLOR_HIGH 52
 
-		static const int CONVEYOR = 2; 
-		
-		static const int GATE_LEFT = 11;
-		static const int GATE_RIGHT = 10;
-		static const int ELBOW = 9;
-		static const int SHOULDER = 8;
-		static const int MOTOR_RIGHT = 7;
-		static const int MOTOR_LEFT = 6;
-		
-		static const int POMP = 5;
+#define CONVEYOR 2
 
-		static const int JACK = 40;
-		static const int JACK_HIGH = 42 ;
+#define GATE_LEFT 11
+#define GATE_RIGHT 10
+#define ELBOW 9
+#define SHOULDER 8
+#define MOTOR_RIGHT 7
+#define MOTOR_LEFT 6
 
-		static const int PUSH_CD = 46;
-		static const int PUSH_CD_HIGH = 48;
+#define POMP 5
 
-		static const int INTERRUPT_MOTOR_LEFT = 5;
+#define JACK 40
+#define JACK_HIGH 42
 
-		Pin();
-		virtual ~Pin();
-};
+#define PUSH_CD 46
+#define PUSH_CD_HIGH 48
+
+#define INTERRUPT_MOTOR_LEFT 5
 
 #endif /* PIN_H_ */

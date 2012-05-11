@@ -7,8 +7,8 @@
 
 #include "SensorColor.h"
 
-SensorColor::SensorColor(int pinNumber) {
-	this->pinNumber = pinNumber;
+SensorColor::SensorColor() {
+
 }
 
 SensorColor::~SensorColor() {
@@ -17,7 +17,7 @@ SensorColor::~SensorColor() {
 
 SensorColor::Color SensorColor::getColor() {
 	//TODO
-	if(analogRead(this->pinNumber)) {
+	if (analogRead(COLOR_SENSOR)) {
 		return WHITE;
 	}
 

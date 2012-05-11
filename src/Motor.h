@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+#include "Pin.h"
+
 //Temps du robot pour faire une rotation relative de 90° vers la droite ou vers la gauche (en milliSecondes)
 //moins le temps de d'acceleration et de deceleration
 #define TEMPS_ROTATION90 1.0
@@ -26,18 +28,16 @@ class Motor {
 		Servo* servoRight;
 		int pos;
 
-		int pinLeft;
-		int pinRight;
-
 	public:
-		Motor(int pinLeft, int pinRight);
+		Motor();
 		~Motor();
 		
 		void acceleration(int pos); 
 		
 		void back(int distanceMM);
 		void move(int distanceMM);
-		void turnOnSpot(int angleDegree);
+		void turn(int angleDegree);
+
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
 		int distanceParcourue(int countPulseLeft, int distanceLeft);
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);

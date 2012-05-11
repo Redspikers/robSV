@@ -9,22 +9,18 @@
 #define SENSORCOLOR_H_
 
 #include <Arduino.h>
+#include "Pin.h"
 
 class SensorColor {
 	public:
 		enum Color {
-			WHITE,
-			OTHER
+			WHITE, OTHER
 		};
 
-		SensorColor(int pinNumber);
+		SensorColor();
 		~SensorColor();
 
 		Color getColor();
-
-
-	private:
-		int pinNumber;
 };
 
 #endif /* SENSORCOLOR_H_ */

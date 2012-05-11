@@ -5,13 +5,13 @@
 #include "SensorConversion.h"
 
 class Sensor {
-public:
-	Sensor(int pinN, SensorConversion* conversion);
-	int get();
+	public:
+		Sensor(int pinN, SensorConversion* conversion);
+		int get();
 
-private:
-	int pinNumber;
-	SensorConversion* conversion;
+	private:
+		int pinNumber;
+		SensorConversion* conversion;
 
 };
 

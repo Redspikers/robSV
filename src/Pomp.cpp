@@ -1,18 +1,16 @@
 #include "Pomp.h"
 
-
-Pomp::Pomp(int pin) {
-	this->pin = pin;
-	pinMode(this->pin, OUTPUT);
+Pomp::Pomp() {
+	pinMode(POMP, OUTPUT);
 }
 
 void Pomp::compress() {
-	digitalWrite(this->pin, HIGH);
+	digitalWrite(POMP, HIGH);
 	this->compressed = true;
 }
 
 void Pomp::drop() {
-	digitalWrite(this->pin, LOW);
+	digitalWrite(POMP, LOW);
 	this->compressed = false;
 }
 

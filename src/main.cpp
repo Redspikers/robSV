@@ -6,6 +6,7 @@
  */
 
 #include <Arduino.h>
+#include <Servo.h>
 
 #include "Pin.h"
 #include "Robot.h"
@@ -18,27 +19,25 @@ void interruptMotorLeft() {
 
 void setup() {
 	robot = new Robot();
-	attachInterrupt(Pin::INTERRUPT_MOTOR_LEFT, interruptMotorLeft, RISING);
-	pinMode(Pin::POMP, OUTPUT); //pompe
+	attachInterrupt(INTERRUPT_MOTOR_LEFT, interruptMotorLeft, RISING);
+	pinMode(POMP, OUTPUT); //pompe
 
-	pinMode(Pin::JACK, INPUT); //Jack
-	pinMode(Pin::PUSH_CD, INPUT); //bouton poussoir
+	pinMode(JACK, INPUT);//Jack
+	pinMode(PUSH_CD, INPUT);//bouton poussoir
 
-	pinMode(Pin::JACK_HIGH, OUTPUT);  //Jack (valeur a placer a HIGH)
-	pinMode(Pin::PUSH_CD_HIGH, OUTPUT);  // bouton poussoir (valeur a placer a HIGH)
-	pinMode(Pin::SENSOR_COLOR_HIGH, OUTPUT);  //capteur couleur alim, mettre a HIGH	
-	pinMode(Pin::CONVEYOR, OUTPUT);  //Tapis roulant
-	
-	digitalWrite(Pin::JACK_HIGH, HIGH);
-	digitalWrite(Pin::PUSH_CD_HIGH, HIGH);
-	digitalWrite(Pin::SENSOR_COLOR_HIGH, HIGH);
+	pinMode(JACK_HIGH, OUTPUT);//Jack (valeur a placer a HIGH)
+	pinMode(PUSH_CD_HIGH, OUTPUT);// bouton poussoir (valeur a placer a HIGH)
+	pinMode(SENSOR_COLOR_HIGH, OUTPUT);//capteur couleur alim, mettre a HIGH
+	pinMode(CONVEYOR, OUTPUT);//Tapis roulant
+
+	digitalWrite(JACK_HIGH, HIGH);
+	digitalWrite(PUSH_CD_HIGH, HIGH);
+	digitalWrite(SENSOR_COLOR_HIGH, HIGH);
 }
 
 void loop() {
 	robot->loop();
 }
-
-
 
 int main(void) {
 	init();

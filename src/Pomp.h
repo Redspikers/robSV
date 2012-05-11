@@ -4,15 +4,16 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+#include "Pin.h"
+
 class Pomp {
 	public:
-		Pomp(int pin);
+		Pomp();
 		void compress();
 		void drop();
 
 	private:
-		bool compressed; //int pour l'instant
-		int pin;
+		bool compressed;
 
 };
 

@@ -7,10 +7,7 @@
 
 #include "Motor.h"
 
-Motor::Motor(int pinLeft, int pinRight) {
-	this->pinLeft = pinLeft;
-	this->pinRight = pinRight;
-
+Motor::Motor() {
 	//this->distanceTotaleRight=0;
 	this->distanceTotaleLeft=0;
 	//this->distanceRight = 0;
@@ -22,8 +19,8 @@ Motor::Motor(int pinLeft, int pinRight) {
 	this->servoLeft = new Servo();
 	this->servoRight = new Servo();
 
-	this->servoLeft->attach(this->pinLeft);
-	this->servoRight->attach(this->pinRight);
+	this->servoLeft->attach(MOTOR_LEFT);
+	this->servoRight->attach(MOTOR_RIGHT);
 }
 
 Motor::~Motor() {
@@ -100,7 +97,7 @@ void Motor::move(int distanceMilliMeter) {
 	this->servoRight->write(90);
 	this->servoLeft->write(90);
 
-countPulseLeft = 0;
+	countPulseLeft = 0;
 }
 
 void Motor::back(int distanceMilliMeter) {
@@ -114,7 +111,7 @@ void Motor::back(int distanceMilliMeter) {
 	}
 	
 
-	for(i=105; i >= 97; i--)
+	for(int i=105; i >= 97; i--)
 	{
 		this->servoRight->write(i);
 		this->servoLeft->write(i);
@@ -135,7 +132,7 @@ void Motor::back(int distanceMilliMeter) {
 
 
 //Le robot ne bouge pas par rapport au terrain,  il se contente de faire une rotation sur place
-void Motor::turnOnSpot(int angleDegree) {
+void Motor::turn(int angleDegree) {
 
 	// 967.12 = perimetre du cercle que parcourt le robot en rotation sur lui même
 	
