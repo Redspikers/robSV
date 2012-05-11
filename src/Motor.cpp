@@ -160,7 +160,7 @@ void Motor::turn(int angleDegree) {
 		}
 			
 		
-		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 150) )
+		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 100) )
 		{
 			delay(5);
 		}
@@ -197,7 +197,7 @@ else if (angleDegree > 180) {
 			delay(15);
 		}
 		
-		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 150) )
+		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 100) )
 		{
 			delay(5);
 		}
