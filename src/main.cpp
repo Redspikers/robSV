@@ -7,31 +7,29 @@
 
 #include <Arduino.h>
 
+#include "Pin.h"
 #include "Robot.h"
 
 Robot* robot;
 
-void incrementation_roueCodeuseLeft() {
-	robot->getMotor()->incrementation_roueCodeuseLeft();
+void interruptMotorLeft() {
+	robot->getMotor()->interruptMotorLeft();
 }
 
 void setup() {
 	robot = new Robot();
-	attachInterrupt(5, incrementation_roueCodeuseLeft, RISING);
-	pinMode( 5 ,  OUTPUT); //pompe
-	pinMode( 40 ,  INPUT); //Jack
-	pinMode( 46 ,  INPUT); //bouton poussoir
-	pinMode(42, OUTPUT);  //Jack (valeur a placer a HIGH)
-	pinMode(48, OUTPUT);  // bouton poussoir (valeur a placer a HIGH)
-	pinMode(2, OUTPUT);  //Tapis roulant
+	attachInterrupt(Pin::INTERRUPT_MOTOR_LEFT, interruptMotorLeft, RISING);
+	pinMode(Pin::POMP, OUTPUT); //pompe
+	pinMode(Pin::JACK, INPUT); //Jack
+	pinMode(Pin::PUSH_CD, INPUT); //bouton poussoir
+	pinMode(Pin::JACK, OUTPUT);  //Jack (valeur a placer a HIGH)
+	pinMode(Pin::PUSH_CD, OUTPUT);  // bouton poussoir (valeur a placer a HIGH)
+	pinMode(Pin::CONVEYOR, OUTPUT);  //Tapis roulant
 }
 
 void loop() {
 	robot->loop();
 }
-
-
-
 
 
 

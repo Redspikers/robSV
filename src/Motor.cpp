@@ -273,7 +273,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 	}
 }
 
-void Motor::incrementation_roueCodeuseLeft() {
+void Motor::interruptMotorLeft() {
 	this->countPulseLeft++;
 }
 

@@ -32,7 +32,7 @@ class Motor {
 
 	public:
 		Motor(int pinLeft, int pinRight);
-		virtual ~Motor();
+		~Motor();
 		
 		void acceleration(int pos); 
 		
@@ -42,7 +42,7 @@ class Motor {
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
 		int distanceParcourue(int countPulseLeft, int distanceLeft);
 		void distanceTotaleParcourue(int countPulseLeft, int countPulseRight, int distanceTotaleRight, int distanceTotaleLeft);
-		void incrementation_roueCodeuseLeft();
+		void interruptMotorLeft();
 		//void incrementation_roueCodeuseRight();
 		void deceleration(int posCourante);
 

@@ -19,13 +19,12 @@
 
 class AStarLight {
 	public:
-		AStarLight(Map* map, int radius);
+		AStarLight(Map* map);
 		~AStarLight();
 
-		Node* compute(Cell* begin, Cell* end);
+		Node* compute(Cell* begin, Cell* end, int radius);
 
 	private:
-		int radius;
 		Map* map;
 		NodeQueue* openList;
 		Node* closedList;

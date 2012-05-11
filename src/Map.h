@@ -34,6 +34,9 @@ class Map {
 		Cell** getNeighbors(int x, int y, int range);
 		int getNeighborsCount(int x, int y, int range);
 
+		Cell** getStraights(int x, int y, int range);
+		int getStraightsCount(int x, int y, int range);
+
 		//Return the closest Cell where there is a CD
 		Cell* getClosestCD(Cell* begin);
 

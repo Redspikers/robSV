@@ -9,8 +9,8 @@
 
 Map::Map() {
 	//Construction de la map - codée à la dure
-	this->width = 40;
-	this->height = 60;
+	this->width = (int)(3000 / CELL_WIDTH);
+	this->height = (int)(2000 / CELL_HEIGHT);
 
 	this->map = new Cell**[this->width];
 
@@ -122,8 +122,12 @@ Cell** Map::getZone(int x, int y, int width, int height) {
 
 	for(int i = iStart; i < iStop ; i++) {
 		for(int j = jStart; j < jStop ; j++) {
-			result[currentIndex] = this->map[i][j];
-			currentIndex++;
+			if(i < this->width && j < this->height) {
+				result[currentIndex] = this->map[i][j];
+				currentIndex++;
+			} else {
+				//ERROR
+			}
 		}
 	}
 
@@ -194,7 +198,7 @@ int Map::getNeighborsCount(int x, int y, int range) {
 	//Pour chaque cellules, on regarde si elle est hors-champs
 	for(int i = x-range ; i <= x+range; i++){
 		for(int j = y-range ; j <= y+range ; j++) {
-			if(i < 0 || i > this->width || j < 0 || j > this->height) {
+			if(i < 0 || i >= this->width || j < 0 || j >= this->height) {
 				result--;
 			}
 		}
@@ -204,22 +208,69 @@ int Map::getNeighborsCount(int x, int y, int range) {
 	return result;
 }
 
+Cell** Map::getStraights(int x, int y, int range) {
+	Cell** result = new Cell*[this->getStraightsCount(x, y, range)];
+	int currentIndex = 0;
+
+
+	if(x - range > 0) {
+		result[currentIndex] = this->map[x-range][y];
+		currentIndex++;
+	}
+	if(x + range < this->width) {
+		result[currentIndex] = this->map[x+range][y];
+		currentIndex++;
+	}
+	if(y - range > 0) {
+		result[currentIndex] = this->map[x][y-range];
+		currentIndex++;
+	}
+	if(y + range < this->height) {
+		result[currentIndex] = this->map[x][y+range];
+		currentIndex++;
+	}
+
+	return result;
+}
+int Map::getStraightsCount(int x, int y, int range) {
+	int result = 0;
+
+	if(x - range > 0) {
+		result++;
+	}
+	if(x + range < this->width) {
+		result++;
+	}
+	if(y - range > 0) {
+		result++;
+	}
+	if(y + range < this->height) {
+		result++;
+	}
+
+	return result;
+}
+
 Cell* Map::getClosestCD(Cell* begin) {
 	Cell* result = NULL;
-	double result_cost = 0;
+	int result_cost = 0;
 
 	Cell* temp = NULL;
-	double temp_cost = 0;
+	int temp_cost = 0;
 
+	//Initialise
+	result_cost = -1;
 	//On parcours l'ensemble de la map (peut-être à améliorer) pour trouver le plus proche CD (le résultat est optimal par contre)
 	for(int i = 0 ; i < this->width ; i++) {
 		for(int j = 0 ; j < this->height ; j++) {
 			temp = this->map[i][j];
-			temp_cost = sqrt((temp->getX() - begin->getX())*(temp->getX() - begin->getX()) + (temp->getY() - begin->getY())*(temp->getY() - begin->getY()));
+			if(temp->hasCD()) {
+				temp_cost = ((temp->getX() - begin->getX())*(temp->getX() - begin->getX()) + (temp->getY() - begin->getY())*(temp->getY() - begin->getY()));
 
-			if(temp_cost < result_cost) {
-				result = temp;
-				result_cost = temp_cost;
+				if((result_cost == -1) || (temp_cost < result_cost)) {
+					result = temp;
+					result_cost = temp_cost;
+				}
 			}
 		}
 	}

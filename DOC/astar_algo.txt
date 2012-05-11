@@ -1,0 +1,23 @@
+Tant que la destination n'est pas atteinte
+	Vider la liste ouverte
+
+	Recuperer les noeuds adjacents
+	Pour chaque voisins
+		Si le noeud est un obstacle
+			On l'oublie
+		Sinon si le noeud est un voisin déjà présent dans la liste fermée
+			On l'oublie
+		Sinon si le noeud est déjà présent dans la liste ouverte
+			Si le noeud avait une moins bonne qualitée, on met à jour la qualité et le parent
+		Sinon
+			On ajout le noeud dans la liste ouverte
+		FinSi
+	FinPour
+
+	Chercher le meilleur noeud de la liste ouverte et le mettre dans la liste fermée
+	Si pas de solutions
+		Fin de la boucle
+	FinSi
+
+	Changer le noeud courant par le noeud ajoutée
+FinTq

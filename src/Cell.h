@@ -8,6 +8,8 @@
 #ifndef CELL_H_
 #define CELL_H_
 
+#include <stdlib.h>
+
 class Cell {
 	public:
 		Cell(int x, int y, bool m_blocked);

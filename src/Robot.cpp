@@ -15,7 +15,7 @@ Robot::Robot() {
 	this->map = new Map();
 
 	//Algorithme de pathfinding
-	this->pathfinding = new AStarLight(this->map, Robot::PLACE_RADIUS);
+	this->pathfinding = new AStarLight(this->map);
 	//Au lancement du robot, on a pas de chemin prédéterminé
 	this->path = NULL;
 
@@ -72,6 +72,8 @@ void Robot::loop() {
 		this->actionDrop();
 	} else if(this->state == IDLE) {
 		this->actionIdle();
+	} else if(this->state == END) {
+		this->actionEnd();
 	}
 
 }
@@ -93,11 +95,12 @@ void Robot::actionSearch() {
 		//Si pas de changements (le plus fréquent)
 		if(!updated) {
 			//Se déplacer d'une case
-			this->move(this->path->getCell());
-
 			this->path = this->path->getNext();
+
 			//Si c'était le dernier noeud, passer en état TAKE
-			if(this->path == NULL) {
+			if(this->path != NULL) {
+				this->move(this->path->getCell());
+			} else {
 				this->changeState(TAKE);
 			}
 		} else {
@@ -117,11 +120,12 @@ void Robot::actionBack() {
 		//Si pas de changements (le plus fréquent)
 		if(!updated) {
 			//Se déplacer d'une case
-			this->move(this->path->getCell());
-
 			this->path = this->path->getNext();
-			//Si c'était le dernier noeud, passer en état DROP
-			if(this->path == NULL) {
+
+			//Si c'était le dernier noeud, passer en état TAKE
+			if(this->path != NULL) {
+				this->move(this->path->getCell());
+			} else {
 				this->changeState(DROP);
 			}
 		} else {
@@ -144,7 +148,10 @@ void Robot::actionTake() {
 	if(this->arm->hasCD()) {
 		this->arm->dropInside();
 		this->cds = this->cds + 1;
+		this->target->setCD(false);
 	}
+
+	this->target = NULL;
 
 	//Si il y a moins de 4 CDs
 	if(this->cds < Robot::MAX_CD) {
@@ -179,6 +186,15 @@ void Robot::actionDrop() {
 
 	//Passer en état SEARCH
 	this->changeState(SEARCH);
+}
+void Robot::actionEnd() {
+	if(this->cds > 0) {
+		//Si il reste des CDs à l'intérieur du robot, on va les déposer
+		this->actionBack();
+	} else {
+		//Sinon il n'y a plus rien à faire
+
+	}
 }
 
 void Robot::changeState(Robot::State newState) {
@@ -247,7 +263,7 @@ void Robot::move(Cell* destination) {
 		this->motor->move(Map::CELL_HEIGHT);
 	}
 
-	//Enfin, nous pouvons utiliser le moteur pour se déplacer
+	this->position = destination;
 
 }
 
@@ -266,23 +282,39 @@ void Robot::turn(int newAngle) {
 void Robot::findPathToCD() {
 	//Recherche le plus proche CD
 	this->target = this->map->getClosestCD(this->position);
-	//On calcule le chemin intégral ver le CD
-	Node* pathToCD = this->pathfinding->compute(this->position, this->target);
-	this->path = pathToCD;
 
-	//On s'arrête PLACE_RADIUS+1 cases avant la fin, car c'est la portée du bras
-	Node* temp = pathToCD->getNext();
-	while(temp != NULL) {
-		temp = temp->getNext();
-	}
-	//On coupe le chemin PLACE_RADIUS +1 cases avant la cellule où se trouve le CD (longueur du robot + portée du bras
-	for(int i=0; i < PLACE_RADIUS +1 ; i++) {
-		if(temp != NULL) {
-			temp = temp->getParent();
+	//Si il n'y a plus de CD (pour X raisons, la principale étant que l'on a tous récupéré)
+	if(this->target == NULL) {
+		//Passer en état END
+		this->changeState(END);
+	} else {
+		//Recherche des cellules où peut aller le robot (en tenant compte de sa corpulence et de sa portée du bras)
+		Cell** possibleDestination = this->map->getStraights(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+		int countDestination = this->map->getStraightsCount(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+		Cell* destination = NULL;
+
+		//Pour chaque cellule trouvées, on regarde si le robot peut y aller (ie, pas d'obstacles avec sa corpulence)
+		for(int i = 0; (i < countDestination && destination==NULL) ; i++) {
+			Cell** neighbors = this->map->getNeighbors(possibleDestination[i]->getX(), possibleDestination[i]->getY(), PLACE_RADIUS);
+			int countNeighbors = this->map->getNeighborsCount(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+			bool blocked = false;
+			for(int j=0 ; (j < countNeighbors && blocked==false) ; j++) {
+				if(neighbors[j]->isBlocked()) {
+					blocked = true;
+				}
+			}
+
+			if(!blocked) {
+				destination = possibleDestination[i];
+			}
 		}
+
+
+		//On calcule le chemin intégral ver le CD, ce chemni est calculé sans tenir compte de la taille du robot
+		this->path = this->pathfinding->compute(this->position, destination, PLACE_RADIUS);
+
+		//TODO Mémoire leak sur ceux qui restent ?
 	}
-	//TODO Mémoire leak sur ceux qui restent ?
-	temp->setNext(NULL);
 }
 
 void Robot::findPathToBack() {
@@ -293,28 +325,32 @@ void Robot::findPathToBack() {
 		this->target = this->stockArea->getCenter();
 	}
 
-	//On calcule le chemin intégral vers la zone de retrait
-	Node* pathToBack = this->pathfinding->compute(this->position, this->target);
-	this->path = pathToBack;
+	//Recherche des cellules où peut aller le robot (en tenant compte de sa corpulence et de sa portée du bras)
+	Cell** possibleDestination = this->map->getStraights(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+	int countDestination = this->map->getStraightsCount(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+	Cell* destination = NULL;
 
-	//On s'arrête PLACE_RADIUS+1 cases avant la fin, car c'est la portée du bras
-	Node* temp = pathToBack->getNext();
+	//Pour chaque cellule trouvées, on regarde si le robot peut y aller (ie, pas d'obstacles avec sa corpulence)
+	for(int i = 0; (i < countDestination && destination==NULL) ; i++) {
+		Cell** neighbors = this->map->getNeighbors(possibleDestination[i]->getX(), possibleDestination[i]->getY(), PLACE_RADIUS);
+		int countNeighbors = this->map->getNeighborsCount(this->target->getX(), this->target->getY(), PLACE_RADIUS);
+		bool blocked = false;
+		for(int j=0 ; (j < countNeighbors && blocked==false) ; j++) {
+			if(neighbors[j]->isBlocked()) {
+				blocked = true;
+			}
+		}
 
-	while(temp != NULL) {
-		temp = temp->getNext();
-	}
-
-	//Target pointe vers la cellule où se trouve le CD
-	this->target = temp->getCell();
-
-	//On coupe le chemin PLACE_RADIUS cases avant la cellule où se trouve le CD (longueur du robot + portée du bras
-	for(int i=0; i < PLACE_RADIUS ; i++) {
-		if(temp != NULL) {
-			temp = temp->getParent();
+		if(!blocked) {
+			destination = possibleDestination[i];
 		}
 	}
+
+
+	//On calcule le chemin intégral ver le CD, ce chemni est calculé sans tenir compte de la taille du robot
+	this->path = this->pathfinding->compute(this->position, destination, PLACE_RADIUS);
+
 	//TODO Mémoire leak sur ceux qui restent ?
-	temp->setNext(NULL);
 }
 
 Motor* Robot::getMotor() {

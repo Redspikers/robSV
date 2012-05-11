@@ -8,8 +8,7 @@
 #include "AStarLight.h"
 
 
-AStarLight::AStarLight(Map* map, int radius) {
-	this->radius = radius;
+AStarLight::AStarLight(Map* map) {
 	this->map = map;
 
 	this->openList = NULL;
@@ -20,7 +19,7 @@ AStarLight::~AStarLight() {
 
 }
 
-Node* AStarLight::compute(Cell* begin, Cell* end) {
+Node* AStarLight::compute(Cell* begin, Cell* end, int radius) {
 	/*
 	 * 0 - Déclaration des variables (on ne le fait pas à la volée afin de réduire l'espace nécessaire)
 	 */
@@ -93,8 +92,8 @@ Node* AStarLight::compute(Cell* begin, Cell* end) {
 			}
 
 			//Le noeud est joingnable (i.e. pas d'obstacles chez les voinsins
-			candidateNeighbors = this->map->getNeighbors(candidate->getX(), candidate->getY(), this->radius);
-			candidateNeighborsCount = this->map->getNeighborsCount(candidate->getX(), candidate->getY(), this->radius);
+			candidateNeighbors = this->map->getNeighbors(candidate->getX(), candidate->getY(), radius);
+			candidateNeighborsCount = this->map->getNeighborsCount(candidate->getX(), candidate->getY(), radius);
 			blocked = false;
 			for(j=0 ; (j < candidateNeighborsCount && !blocked) ; j++) {
 				if(candidateNeighbors[j]->isBlocked()) {

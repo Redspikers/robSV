@@ -23,7 +23,8 @@ class Robot {
 			SEARCH,
 			BACK,
 			TAKE,
-			DROP
+			DROP,
+			END
 		};
 
 		enum Position {
@@ -37,7 +38,7 @@ class Robot {
 		//Position de départ du robot - Qualifie les zones et la cellule de départ pour le robot
 		static const Robot::Position START_POSITION = Robot::LEFT;
 		//Place qu'occupe le robot pour le pathfinding
-		static const int PLACE_RADIUS = 2;
+		static const int PLACE_RADIUS = 4;
 		//Nombre de CD maximum que le robot peut contenir avant de retourner à la base
 		static const int MAX_CD = 4;
 		/*
@@ -57,7 +58,7 @@ class Robot {
 		void actionBack();
 		void actionTake();
 		void actionDrop();
-
+		void actionEnd();
 
 	private:
 		//Etat du robot temps en temps réel (détermine le comportement)

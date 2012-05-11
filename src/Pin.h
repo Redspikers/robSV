@@ -13,29 +13,31 @@
 // elles sont définis à la dur dans Motor.h parce que c'est legerement différent...
 class Pin {
 	public:
-		//TODO Remplacer les Pin
-		static const int SENSOR_BOTTOM_LEFT = 12;
-		static const int SENSOR_BOTTOM_MIDDLE = 13;
-		static const int SENSOR_BOTTOM_RIGHT = 14;
-		static const int SENSOR_TOP_LEFT = 15;
-		static const int SENSOR_TOP_MIDDLE = 16;
-		static const int SENSOR_TOP_RIGHT = 17;
-		static const int SENSOR_BACK = 18;
+		//TODO Capteur analogique
+		static const int SENSOR_BOTTOM_LEFT = 22;
+		static const int SENSOR_BOTTOM_MIDDLE = 23;
+		static const int SENSOR_BOTTOM_RIGHT = 24;
+		static const int SENSOR_TOP_LEFT = 25;
+		static const int SENSOR_TOP_MIDDLE = 26;
+		static const int SENSOR_TOP_RIGHT = 27;
+		static const int SENSOR_BACK = 28;
+
+		static const int COLOR_SENSOR = 29; //TODO
+		static const int CONVEYOR = 30; //TODO
 		
-		static const int SHOULDER = 8;
-		static const int ELBOW = 9;
 		static const int GATE_LEFT = 11;
 		static const int GATE_RIGHT = 10;
+		static const int ELBOW = 9;
+		static const int SHOULDER = 8;
 		static const int MOTOR_RIGHT = 7;
 		static const int MOTOR_LEFT = 6;
 		
 		static const int POMP = 5;
-		static const int CONVEYOR = 4;
-		static const int PUSH_CD = 2; //TODO
-		static const int COLOR_SENSOR = 1; //TODO
+		static const int JACK = 4;
+		static const int PUSH_CD = 3;
 
-		static const int JACK = 3;
-		
+		static const int INTERRUPT_MOTOR_LEFT = 5;
+
 		Pin();
 		virtual ~Pin();
 };
