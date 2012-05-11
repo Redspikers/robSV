@@ -27,11 +27,6 @@ Motor::~Motor() {
 
 }
 
-
-
-//METHODE SUIVANTE INUTILE
-
-/*
 //Fonction qui va faire tourner un seul servo à la distance a aprcourir voulu
 //Fonction qui prend le servo a faire tourner : 0 pour droite 
 //												1 pour gauche
@@ -72,7 +67,7 @@ void Motor::servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter
 		}
 
 	}
-}*/
+}
 
 
 void Motor::move(int distanceMilliMeter) {
