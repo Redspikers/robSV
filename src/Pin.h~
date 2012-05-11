@@ -23,8 +23,6 @@ class Pin {
 		static const int SENSOR_BACK = 28;
 
 		static const int COLOR_SENSOR = 29; //TODO
-
-
 		static const int SENSOR_COLOR_HIGH = 52;
 
 
