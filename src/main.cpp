@@ -18,6 +18,12 @@ void incrementation_roueCodeuseLeft() {
 void setup() {
 	robot = new Robot();
 	attachInterrupt(5, incrementation_roueCodeuseLeft, RISING);
+	pinMode( 5 ,  OUTPUT); //pompe
+	pinMode( 40 ,  INPUT); //Jack
+	pinMode( 46 ,  INPUT); //bouton poussoir
+	pinMode(42, OUTPUT);  //Jack (valeur a placer a HIGH)
+	pinMode(48, OUTPUT);  // bouton poussoir (valeur a placer a HIGH)
+	pinMode(2, OUTPUT);  //Tapis roulant
 }
 
 void loop() {
