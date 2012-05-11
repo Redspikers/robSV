@@ -70,7 +70,7 @@
 #define CD_PL_TR_X 1310
 #define CD_PL_TR_Y 1210
 
-#define CD_PL_L_X 860
+#define CD_PL_L_X 808
 #define CD_PL_L_Y 1000
 
 #define CD_PL_BL_X 890

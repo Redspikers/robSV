@@ -15,7 +15,7 @@ Robot::Robot() {
 	this->conveyor = new Conveyor();
 
 	//La motricité du robot (ses deux roues)
-	this->motor = new Motor(MOTOR_LEFT, MOTOR_RIGHT);
+	this->motor = new Motor();
 
 	//Les différents capteurs
 	this->sensor = new Recognition();
@@ -48,7 +48,7 @@ void Robot::loop() {
 void Robot::actionLeft() {
 	switch (this->targetCD) {
 		case 1:
-			this->moveX(510);
+			this->moveX(540);
 
 			this->moveY(CD_TL_Y);
 			this->moveX(CD_TL_X - ARM_REACH);
@@ -64,122 +64,204 @@ void Robot::actionLeft() {
 			this->take();
 			break;
 		case 3:
-			this->move(CD_PL_TM_X, CD_PL_TM_Y, false);
-			this->turn(180);
+			this->moveY(1500);
+
+			this->moveX(CD_PL_TM_X);
+			this->moveY(CD_PL_TM_Y - ARM_REACH);
+
+			this->turn(270);
 			this->take();
 			break;
 		case 4:
-			this->move(CD_PL_TL_X, CD_PL_TL_Y, true);
+			this->moveX(CD_PL_TL_X);
+			this->moveY(CD_PL_TL_Y - ARM_REACH);
+
 			this->turn(270);
 			this->take();
 
-			this->move(CAPTAIN_LEFT_X, CAPTAIN_LEFT_Y, false);
+			this->moveY(CAPTAIN_LEFT_Y);
+			this->moveX(CAPTAIN_LEFT_X);
+
 			this->drop();
 			break;
 		case 5:
-			this->move(CD_PL_L_X, CD_PL_L_Y, true);
-			this->turn(270);
+			this->moveX(540);
+
+			this->moveY(CD_PL_L_Y);
+			this->moveX(CD_PL_L_X - ARM_REACH);
+
+			this->turn(0);
 			this->take();
 			break;
 		case 6:
-			this->move(CD_PL_BL_X, CD_PL_BL_Y, false);
+			this->moveY(CD_PL_BL_Y);
+			this->moveX(CD_PL_BL_X - ARM_REACH);
+
 			this->turn(0);
 			this->take();
 			break;
 		case 7:
-			this->move(CD_PL_BM_X, CD_PL_BM_Y, false);
+			this->moveY(CD_PL_BM_Y);
+			this->moveX(CD_PL_BM_X - ARM_REACH);
+
 			this->turn(0);
 			this->take();
 			break;
 		case 8:
-			this->move(CD_PL_BR_X, CD_PL_BR_Y, true);
-			this->turn(0);
+			this->moveY(640);
+
+			this->moveX(CD_PL_BR_X);
+			this->moveY(CD_PL_BR_Y - ARM_REACH);
+
+			this->turn(90);
 			this->take();
 
-			this->move(STOCK_LEFT_X, STOCK_LEFT_Y, true);
+			this->moveX(650);
+
+			this->moveY(STOCK_LEFT_Y);
+			this->moveX(STOCK_LEFT_X);
+
 			this->drop();
 			break;
 		case 9:
-			this->move(CD_BL_X, CD_BL_Y, true);
+			this->moveX(750);
+
+			this->moveY(CD_BL_Y);
+			this->moveX(CD_BL_X - ARM_REACH);
+
 			this->turn(180);
 			this->take();
 			break;
-
 		case 10:
-			this->move(CD_ML_X, CD_ML_Y, true);
+			this->moveY(CD_ML_Y);
+			this->moveX(CD_ML_X - ARM_REACH);
+
 			this->turn(0);
 			this->take();
 			break;
 		case 11:
-			this->move(CD_MT_X, CD_MT_Y, false);
+			this->moveY(CD_MT_Y);
+			this->moveX(CD_MT_X - ARM_REACH);
+
 			this->turn(0);
 			this->take();
 			break;
 		case 12:
-			this->move(CD_MR_X, CD_MR_Y, true);
+			this->moveY(400);
+
+			this->moveX(CD_MR_X);
+			this->moveY(CD_MR_Y);
+
 			this->turn(270);
 			this->take();
 
-			this->move(STOCK_LEFT_X, STOCK_LEFT_Y,);
+			this->moveX(650);
+
+			this->moveY(STOCK_LEFT_Y);
+			this->moveX(STOCK_LEFT_X);
+
 			this->drop();
 			break;
 		case 13:
-			this->move(CD_MB_X, CD_MB_Y);
-			this->turn(270);
+			this->moveX(650);
+
+			this->moveY(CD_MB_Y);
+			this->moveX(CD_MB_X);
+
+			this->turn(0);
 			this->take();
 			break;
 		case 14:
-			this->move(CD_BR_X, CD_BR_Y);
-			this->turn(270);
+			this->moveY(CD_BR_Y);
+			this->moveX(CD_BR_X);
+
+			this->turn(0);
 			this->take();
 			break;
 		case 15:
-			this->move(CD_PR_BL_X, CD_PR_BL_Y);
-			this->turn(270);
+			this->moveX(CD_PR_BL_X);
+			this->moveY(CD_PR_BL_Y);
+
+			this->turn(90);
 			this->take();
 			break;
 		case 16:
-			this->move(CD_PR_BM_X, CD_PR_BM_Y);
-			this->turn(270);
+			this->moveY(CD_PR_BM_Y);
+			this->moveX(CD_PR_BM_X);
+
+			this->turn(0);
 			this->take();
 
-			this->move(STOCK_LEFT_X, STOCK_LEFT_Y);
+			this->moveX(650);
+
+			this->moveY(STOCK_LEFT_Y);
+			this->moveX(STOCK_LEFT_X);
+
 			this->drop();
 			break;
 		case 17:
-			this->move(CD_PR_BR_X, CD_PR_BR_Y);
-			this->turn(270);
+			this->moveX(650);
+			this->moveY(600);
+
+			this->moveX(CD_PR_BR_X);
+			this->moveY(CD_PR_BR_Y);
+
+			this->turn(90);
 			this->take();
 			break;
 		case 18:
-			this->move(CD_PR_R_X, CD_PR_R_Y);
-			this->turn(270);
+			this->moveX(CD_PR_R_X);
+			this->moveY(CD_PR_R_Y);
+
+			this->turn(90);
 			this->take();
 			break;
 		case 19:
-			this->move(CD_PR_TR_X, CD_PR_TR_Y);
-			this->turn(270);
+			this->moveX(2400);
+
+			this->moveY(CD_PR_TR_Y);
+			this->moveX(CD_PR_TR_X);
+
+			this->turn(180);
 			this->take();
 			break;
 		case 20:
-			this->move(CD_PR_TM_X, CD_PR_TM_Y);
-			this->turn(270);
+			this->moveY(CD_PR_TM_Y);
+			this->moveX(CD_PR_TM_X);
+
+			this->turn(180);
 			this->take();
 
-			this->move(STOCK_LEFT_X, STOCK_LEFT_Y);
+			this->moveX(2400);
+			this->moveY(600);
+			this->moveX(650);
+
+			this->moveY(STOCK_LEFT_Y);
+			this->moveX(STOCK_LEFT_X);
+
 			this->drop();
 			break;
 		case 21:
-			this->move(CD_PR_TL_X, CD_PR_TL_Y);
+			this->moveX(650);
+			this->moveY(1500);
+
+			this->moveX(CD_PR_TL_X);
+			this->moveY(CD_PR_TL_Y);
+
 			this->turn(270);
 			this->take();
 			break;
 		case 22:
-			this->move(CD_TR_X, CD_TR_Y);
-			this->turn(270);
+			this->moveY(CD_TR_Y);
+			this->moveX(CD_TR_X);
+
+			this->turn(0);
 			this->take();
 
-			this->move(STOCK_LEFT_X, STOCK_LEFT_Y);
+			this->moveX(650);
+			this->moveY(STOCK_LEFT_Y);
+			this->moveX(STOCK_LEFT_X);
+
 			this->drop();
 			break;
 
@@ -296,7 +378,7 @@ void Robot::turn(int newAngle) {
 		diff = diff + 360;
 	}
 
-	this->motor->turnOnSpot(diff);
+	this->motor->turn(diff);
 
 	this->angle = newAngle;
 }
