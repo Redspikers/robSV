@@ -144,10 +144,15 @@ void Motor::turn(int angleDegree) {
 	
 	
 	//angle vers la gauche du robot
-	if (angleDegree <= 180) {
+	if(angleDegree ==0)
+	{
+	}
+	else if (angleDegree <= 180) {
 	
 	double distanceMilliMeter = ((967.12/360) * angleDegree);
 		//Acceleration
+	
+		
 		for (pos = 90; pos >= 75; pos--) {
 			this->servoRight->write(pos);
 			this->servoLeft->write(180-pos);
@@ -181,7 +186,7 @@ void Motor::turn(int angleDegree) {
 	
 	//angle vers la droite du robot
 	
-if (angleDegree > 180) {
+else if (angleDegree > 180) {
 	
 	double distanceMilliMeter = ((967.12/360) * ( 360 - angleDegree) );
 	
