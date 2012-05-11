@@ -29,9 +29,9 @@ void setup() {
 	pinMode(Pin::SENSOR_COLOR_HIGH, OUTPUT);  //capteur couleur alim, mettre a HIGH	
 	pinMode(Pin::CONVEYOR, OUTPUT);  //Tapis roulant
 	
-	digitalWrite(JACK_HIGH, HIGH);
-	digitalWrite(PUSH_CD_HIGH, HIGH);
-	digitalWrite(SENSOR_COLOR_HIGH, HIGH);
+	digitalWrite(Pin::JACK_HIGH, HIGH);
+	digitalWrite(Pin::PUSH_CD_HIGH, HIGH);
+	digitalWrite(Pin::SENSOR_COLOR_HIGH, HIGH);
 }
 
 void loop() {

@@ -11,7 +11,7 @@ class Pomp {
 		void drop();
 
 	private:
-		boolean compressed; //int pour l'instant
+		bool compressed; //int pour l'instant
 		int pin;
 
 };
