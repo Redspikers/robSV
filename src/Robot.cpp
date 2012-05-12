@@ -20,9 +20,6 @@ Robot::Robot() {
 	//Les différents capteurs
 	this->sensor = new Recognition();
 
-	//Premier CD à attraper
-	this->targetCD = 1;
-
 	//Par défaut, le robot n'est pas actif
 	this->active = false;
 
@@ -36,6 +33,12 @@ Robot::Robot() {
 		this->y = START_RIGHT_Y;
 	}
 
+	//Action par défaut (lorsque le robot sera actif)
+	this->action = BEGIN;
+
+	this->cdInside = 0;
+	this->cdDrop = 0;
+
 
 }
 
@@ -45,350 +48,94 @@ Robot::~Robot() {
 
 void Robot::loop() {
 	if (this->active) {
-		if (START_POSITION == LEFT) {
-			this->actionLeft();
-		} else if (START_POSITION == RIGHT) {
-			this->actionRight();
+		if(this->action == SEARCH) {
+			this->actionSearch();
+		} else if(this->action == TAKE) {
+			this->actionTake();
+		} else if(this->action == DROP) {
+			this->actionDrop();
+		} else if(this->action == BEGIN) {
+			this->actionBegin();
 		}
-		this->targetCD++;
 	} else {
-		if (digitalRead(JACK) == 1) {
-			this->active = true;
+
+	}
+}
+
+void Robot::actionBegin() {
+	if(digitalRead(JACK) == 1) {
+		this->action = SEARCH;
+	}
+}
+
+void Robot::actionSearch() {
+
+}
+
+void Robot::actionTake() {
+
+}
+
+void Robot::actionDrop() {
+	if(this->cdDrop < MAX_CAPTAIN_CD) {
+		//Se tourner vers le mur du haut
+		this->turn(90);
+
+		//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+		while(!this->sensor->hasWallAhead()) {
+			this->move(this->x, this->y + 400);
 		}
+
+		//Corriger l'écart entre l'angle réel et l'angle en mémoire
+		this->correctAngle();
+
+		//Se déplacer à gauche ou droite (selon la position de départ)
+		if(START_POSITION == LEFT) {
+			//On se tourne vers la zone du capitaine
+			this->turn(180);
+		} else if(START_POSITION == RIGHT) {
+			//On se tourne vers la zone du capitaine
+			this->turn(0);
+		}
+
+	} else {
+		//TODO - Aller vers la zone de stock
 	}
 }
 
-void Robot::actionLeft() {
-	switch (this->targetCD) {
-		case 1:
-			this->moveX(CD_TL_X - ARM_REACH);
-			this->moveY(CD_TL_Y);
-
-			this->turn(270);
-			this->take();
-			break;
-		case 2:
-			this->moveX(CD_PL_TR_X);
-			this->moveY(CD_PL_TR_Y - ARM_REACH);
-
-			this->turn(270);
-			this->take();
-			break;
-		case 3:
-			this->moveY(1500);
-
-			this->moveX(CD_PL_TM_X);
-			this->moveY(CD_PL_TM_Y - ARM_REACH);
-
-			this->turn(270);
-			this->take();
-			break;
-		case 4:
-			this->moveX(CD_PL_TL_X);
-			this->moveY(CD_PL_TL_Y - ARM_REACH);
-
-			this->turn(270);
-			this->take();
-
-			this->moveY(CAPTAIN_LEFT_Y);
-			this->moveX(CAPTAIN_LEFT_X);
-
-			this->drop();
-			break;
-		case 5:
-			this->moveX(540);
-
-			this->moveY(CD_PL_L_Y);
-			this->moveX(CD_PL_L_X - ARM_REACH);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 6:
-			this->moveY(CD_PL_BL_Y);
-			this->moveX(CD_PL_BL_X - ARM_REACH);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 7:
-			this->moveY(CD_PL_BM_Y);
-			this->moveX(CD_PL_BM_X - ARM_REACH);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 8:
-			this->moveY(640);
-
-			this->moveX(CD_PL_BR_X);
-			this->moveY(CD_PL_BR_Y - ARM_REACH);
-
-			this->turn(90);
-			this->take();
-
-			this->moveX(650);
-
-			this->moveY(STOCK_LEFT_Y);
-			this->moveX(STOCK_LEFT_X);
-
-			this->drop();
-			break;
-		case 9:
-			this->moveX(750);
-
-			this->moveY(CD_BL_Y);
-			this->moveX(CD_BL_X - ARM_REACH);
-
-			this->turn(180);
-			this->take();
-			break;
-		case 10:
-			this->moveY(CD_ML_Y);
-			this->moveX(CD_ML_X - ARM_REACH);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 11:
-			this->moveY(CD_MT_Y);
-			this->moveX(CD_MT_X - ARM_REACH);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 12:
-			this->moveY(400);
-
-			this->moveX(CD_MR_X);
-			this->moveY(CD_MR_Y);
-
-			this->turn(270);
-			this->take();
-
-			this->moveX(650);
-
-			this->moveY(STOCK_LEFT_Y);
-			this->moveX(STOCK_LEFT_X);
-
-			this->drop();
-			break;
-		case 13:
-			this->moveX(650);
-
-			this->moveY(CD_MB_Y);
-			this->moveX(CD_MB_X);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 14:
-			this->moveY(CD_BR_Y);
-			this->moveX(CD_BR_X);
-
-			this->turn(0);
-			this->take();
-			break;
-		case 15:
-			this->moveX(CD_PR_BL_X);
-			this->moveY(CD_PR_BL_Y);
-
-			this->turn(90);
-			this->take();
-			break;
-		case 16:
-			this->moveY(CD_PR_BM_Y);
-			this->moveX(CD_PR_BM_X);
-
-			this->turn(0);
-			this->take();
-
-			this->moveX(650);
-
-			this->moveY(STOCK_LEFT_Y);
-			this->moveX(STOCK_LEFT_X);
-
-			this->drop();
-			break;
-		case 17:
-			this->moveX(650);
-			this->moveY(600);
-
-			this->moveX(CD_PR_BR_X);
-			this->moveY(CD_PR_BR_Y);
-
-			this->turn(90);
-			this->take();
-			break;
-		case 18:
-			this->moveX(CD_PR_R_X);
-			this->moveY(CD_PR_R_Y);
-
-			this->turn(90);
-			this->take();
-			break;
-		case 19:
-			this->moveX(2400);
-
-			this->moveY(CD_PR_TR_Y);
-			this->moveX(CD_PR_TR_X);
-
-			this->turn(180);
-			this->take();
-			break;
-		case 20:
-			this->moveY(CD_PR_TM_Y);
-			this->moveX(CD_PR_TM_X);
-
-			this->turn(180);
-			this->take();
-
-			this->moveX(2400);
-			this->moveY(600);
-			this->moveX(650);
-
-			this->moveY(STOCK_LEFT_Y);
-			this->moveX(STOCK_LEFT_X);
-
-			this->drop();
-			break;
-		case 21:
-			this->moveX(650);
-			this->moveY(1500);
-
-			this->moveX(CD_PR_TL_X);
-			this->moveY(CD_PR_TL_Y);
-
-			this->turn(270);
-			this->take();
-			break;
-		case 22:
-			this->moveY(CD_TR_Y);
-			this->moveX(CD_TR_X);
-
-			this->turn(0);
-			this->take();
-
-			this->moveX(650);
-			this->moveY(STOCK_LEFT_Y);
-			this->moveX(STOCK_LEFT_X);
-
-			this->drop();
-			break;
-
-		default:
-			this->actionEnd();
-			break;
-	}
-}
-
-void Robot::actionRight() {
-	switch (this->targetCD) {
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		case 4:
-
-			break;
-		case 5:
-
-			break;
-		case 6:
-
-			break;
-		case 7:
-
-			break;
-		case 8:
-
-			break;
-		case 9:
-
-			break;
-		case 10:
-
-			break;
-		case 11:
-
-			break;
-		case 12:
-
-			break;
-		case 13:
-
-			break;
-		case 14:
-
-			break;
-		case 15:
-
-			break;
-		case 16:
-
-			break;
-		case 17:
-
-			break;
-		case 18:
-
-			break;
-		case 19:
-
-			break;
-		case 20:
-
-			break;
-		case 21:
-
-			break;
-		case 22:
-
-			break;
-
-		default:
-			this->actionEnd();
-			break;
-	}
-}
-
-void Robot::actionEnd() {
-	//Lorsque le robot n'a plus rien à faire - il fait des tours
-	this->motor->turn(180);
-}
-
-void Robot::moveX(int newX) {
-	//On se déplace en X
-	if (this->x != newX) {
-		if (this->x < newX) {
-			this->turn(0);
-			this->motor->move(newX - this->x);
+void Robot::correctAngle() {
+	int side = 0;
+	int startAngle = this->angle;
+	while(!this->sensor->hasWallInFront()) {
+		//On calcule la distance théorique que doit avoir le robot
+		side = (this->sensor->getDistanceBL()) / (cos(ANGLE_BETWEEN_CAPTOR));
+
+		//On compare cette
+		if(side < this->sensor->getDistanceBL()) {
+			//On doit tourner le robot vers la droite
+			this->turn(this->angle - 5);
 		} else {
-			this->turn(180);
-			this->motor->move(this->x - newX);
+			//On doit tourner le robot vers la gauche
+			this->turn(this->angle + 5);
 		}
-
-		this->x = newX;
 	}
+
+	this->angle = startAngle;
 }
-void Robot::moveY(int newY) {
-	//On se déplace en Y
-	if (this->y != newY) {
-		if (this->y < newY) {
-			this->turn(90);
-			this->motor->move(newY - this->y);
-		} else {
-			this->turn(270);
-			this->motor->move(this->y - newY);
-		}
 
-		this->y = newY;
-	}
+void Robot::move(int newX, int newY) {
+	//Calculer la distance et l'angle
+	int distance = sqrt((newX - this->x)*(newX - this->x) + (newY - this->y)*(newY - this->y));
+	int angle = tan(abs(newY - this->y) / abs(newX - this->x));
+
+	angle = degrees(angle);
+
+	this->turn(angle);
+
+	this->motor->move(distance);
+
+	this->x = newX;
+	this->y = newY;
 }
 
 void Robot::turn(int newAngle) {
@@ -437,14 +184,6 @@ void Robot::drop() {
 	 //Lacher les CDs
 	 this->conveyor->action();
 	 */
-}
-
-void Robot::correctPosition() {
-
-}
-
-void Robot::correctAngle() {
-
 }
 
 void Robot::setInactive() {

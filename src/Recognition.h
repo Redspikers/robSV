@@ -11,6 +11,9 @@
 #include "Sensor.h"
 #include "Pin.h"
 
+#define ANGLE_BETWEEN_CAPTOR 40
+#define ALLOW_ERROR 40
+
 class Recognition {
 	public:
 		enum Obstacle {
@@ -24,6 +27,12 @@ class Recognition {
 		bool isBetween(int min, int max, int value);
 		int* getObstacles();
 		void analyse();
+
+
+		bool hasWallAhead();
+		bool hasWallInFront();
+
+		int getDistanceBL();
 
 	private:
 		Sensor* captorBL;

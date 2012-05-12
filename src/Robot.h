@@ -9,6 +9,8 @@
 #define ROBOT_H_
 
 #include <Arduino.h>
+#include <math.h>
+
 #include "Arm.h"
 #include "Conveyor.h"
 #include "Motor.h"
@@ -17,10 +19,17 @@
 
 #include "Position.h"
 
+#define MAX_INSIDE_CD 4
+#define MAX_CAPTAIN_CD 4
+
 class Robot {
 	public:
 		enum Position {
 			LEFT, RIGHT
+		};
+
+		enum Action {
+			BEGIN, SEARCH, TAKE, DROP
 		};
 
 		/**
@@ -41,15 +50,19 @@ class Robot {
 		void setInactive();
 
 	private:
-		//Numéro du CD à aller attraper (22 au total)
-		int targetCD;
-
 		//Robot actif ou non ?
 		bool active;
 
+		Action action;
+
+		//Ces valeurs ne sont pas exactes, et le robot le sait !
 		int x;
 		int y;
 		int angle;
+
+		int cdInside;
+
+		int cdDrop;
 
 		//Bras
 		Arm* arm;
@@ -65,19 +78,18 @@ class Robot {
 
 
 		//Distance en MM
-		void moveX(int newX);
-		void moveY(int newY);
+		void move(int newX, int newY);
 		//Tourne le robot en degré
 		void turn(int newAngle);
-
 		void take();
 		void drop();
 
-		void actionLeft();
-		void actionRight();
-		void actionEnd();
+		void actionBegin();
+		void actionSearch();
+		void actionTake();
 
-		void correctPosition();
+
+		void actionDrop();
 		void correctAngle();
 };
 
