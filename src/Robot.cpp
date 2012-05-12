@@ -9,7 +9,7 @@
 
 Robot::Robot() {
 	//Le bras mécanique avec ventouse
-	this->arm = new Arm();
+	//this->arm = new Arm();
 
 	//Le tapis au sein du robot
 	this->conveyor = new Conveyor();
@@ -25,6 +25,16 @@ Robot::Robot() {
 
 	//Par défaut, le robot n'est pas actif
 	this->active = false;
+
+	if (START_POSITION == LEFT) {
+		this->angle = START_LEFT_ANGLE;
+		this->x = START_LEFT_X;
+		this->y = START_LEFT_Y;
+	} else if (START_POSITION == RIGHT) {
+		this->angle = START_RIGHT_ANGLE;
+		this->x = START_RIGHT_X;
+		this->y = START_RIGHT_Y;
+	}
 }
 
 Robot::~Robot() {
@@ -38,6 +48,7 @@ void Robot::loop() {
 		} else if (START_POSITION == RIGHT) {
 			this->actionRight();
 		}
+		this->targetCD++;
 	} else {
 		if(digitalRead(JACK) == 1) {
 			this->active = true;
@@ -48,7 +59,7 @@ void Robot::loop() {
 void Robot::actionLeft() {
 	switch (this->targetCD) {
 		case 1:
-			this->moveX(540);
+			this->moveX(500 + ROBOT_HEIGHT + 100);
 
 			this->moveY(CD_TL_Y);
 			this->moveX(CD_TL_X - ARM_REACH);
@@ -266,7 +277,7 @@ void Robot::actionLeft() {
 			break;
 
 		default:
-			this->active = false;
+			this->actionEnd();
 			break;
 	}
 }
@@ -341,9 +352,14 @@ void Robot::actionRight() {
 			break;
 
 		default:
-			this->active = false;
+			this->actionEnd();
 			break;
 	}
+}
+
+void Robot::actionEnd() {
+	//Lorsque le robot n'a plus rien à faire - il fait des tours
+	this->motor->turn(180);
 }
 
 void Robot::moveX(int newX) {
@@ -356,6 +372,8 @@ void Robot::moveX(int newX) {
 				this->turn(180);
 				this->motor->move(this->x - newX);
 			}
+
+			this->x = newX;
 		}
 }
 void Robot::moveY(int newY) {
@@ -368,14 +386,19 @@ void Robot::moveY(int newY) {
 				this->turn(270);
 				this->motor->move(this->y - newY);
 			}
+
+			this->y = newY;
 		}
 }
 
 void Robot::turn(int newAngle) {
 	int diff = newAngle - this->angle;
 
-	if (diff < 0) {
+	while(diff < 0) {
 		diff = diff + 360;
+	}
+	while(diff >= 360) {
+		diff = diff - 360;
 	}
 
 	this->motor->turn(diff);
@@ -388,13 +411,16 @@ Motor* Robot::getMotor() {
 }
 
 void Robot::take() {
+	/*
 	this->arm->takeCD();
 	if (this->arm->hasCD()) {
 		this->arm->dropInside();
 	}
+	*/
 }
 
 void Robot::drop() {
+	/*
 	//Se tourner - le cul vers la destination !
 	if (START_POSITION == LEFT) {
 		this->turn(0);
@@ -404,4 +430,5 @@ void Robot::drop() {
 
 	//Lacher les CDs
 	this->conveyor->action();
+	*/
 }
