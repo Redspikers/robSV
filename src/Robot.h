@@ -73,6 +73,7 @@ class Robot {
 
 		void actionLeft();
 		void actionRight();
+		void actionEnd();
 };
 
 #endif /* ROBOT_H_ */

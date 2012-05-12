@@ -17,9 +17,11 @@
 //Where the robot start
 #define START_LEFT_X 300
 #define START_LEFT_Y 1670
+#define START_LEFT_ANGLE 0
 
 #define START_RIGHT_X 2700
 #define START_RIGHT_Y 1670
+#define START_RIGHT_ANGLE 180
 
 
 //Zone - where to drop CDs
