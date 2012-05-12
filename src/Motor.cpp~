@@ -119,7 +119,7 @@ void Motor::back(int distanceMilliMeter) {
 	for(int i=105; i >= 97; i--)
 	{
 		this->servoRight->write(i);
-		this->servoLeft->write(i);
+		this->servoLeft->write(i+1);
 		delay(15);
 	}
 	
