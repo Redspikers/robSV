@@ -23,7 +23,6 @@
 #define START_RIGHT_Y 1670
 #define START_RIGHT_ANGLE 180
 
-
 //Zone - where to drop CDs
 #define CAPTAIN_LEFT_X 250
 #define CAPTAIN_LEFT_Y 1750
@@ -36,7 +35,6 @@
 
 #define STOCK_RIGHT_X 2800
 #define STOCK_RIGHT_Y 1000
-
 
 //CDs
 #define CD_TL_X 1000

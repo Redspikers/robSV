@@ -18,7 +18,6 @@
 #define ANGLE_SHOULDER_IDLE 30
 #define ANGLE_ELBOW_IDLE 20
 
-
 class Arm {
 	public:
 		Arm();

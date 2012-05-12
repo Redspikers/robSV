@@ -38,6 +38,7 @@ class Robot {
 		//Fonctions de la arduino, reportées dans cette classe
 		void loop();
 		Motor* getMotor();
+		void setInactive();
 
 	private:
 		//Numéro du CD à aller attraper (22 au total)
@@ -62,6 +63,7 @@ class Robot {
 		//Reconnaissance (capteurs)
 		Recognition* sensor;
 
+
 		//Distance en MM
 		void moveX(int newX);
 		void moveY(int newY);
@@ -74,6 +76,9 @@ class Robot {
 		void actionLeft();
 		void actionRight();
 		void actionEnd();
+
+		void correctPosition();
+		void correctAngle();
 };
 
 #endif /* ROBOT_H_ */
