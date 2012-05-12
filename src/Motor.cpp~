@@ -143,19 +143,20 @@ void Motor::turn(int angleDegree) {
 	
 	
 	
-	//angle vers la gauche du robot
 	if(angleDegree ==0)
 	{
 	}
+
+	//angle vers la gauche du robot
 	else if (angleDegree <= 180) {
 	
 	double distanceMilliMeter = ((967.12/360) * angleDegree);
 		//Acceleration
 	
 		
-		for (pos = 90; pos >= 80; pos--) {
+		for (pos = 90; pos >= 75; pos--) {
 			this->servoRight->write(pos);
-			this->servoLeft->write(180-pos);
+			this->servoLeft->write(180-pos+1);
 			delay(15);
 		}
 			
@@ -166,11 +167,12 @@ void Motor::turn(int angleDegree) {
 		}
 		
 		//Deceleration
-		for (pos= 80; pos < 85; pos++) {
+		for (pos= 75; pos < 80; pos++) {
 			this->servoRight->write(pos);
-			this->servoLeft->write(180-pos);
+			this->servoLeft->write(180-pos+1);
 			delay(15);
 		}
+		this->servoLeft->write(100);
 		
 		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter) )
 		{
@@ -191,9 +193,9 @@ else if (angleDegree > 180) {
 	double distanceMilliMeter = ((967.12/360) * ( 360 - angleDegree) );
 	
 		//Acceleration
-		for (pos = 90; pos >= 80; pos--) {
+		for (pos = 90; pos >= 75; pos--) {
 			this->servoLeft->write(pos);
-			this->servoRight->write(180-pos);
+			this->servoRight->write(180-pos-1);
 			delay(15);
 		}
 		
@@ -203,9 +205,9 @@ else if (angleDegree > 180) {
 		}
 		
 		//Deceleration
-		for (pos= 80; pos < 85; pos++) {
+		for (pos= 75; pos < 80; pos++) {
 			this->servoLeft->write(pos);
-			this->servoRight->write(180-pos);
+			this->servoRight->write(180-pos-1);
 			delay(15);
 		}
 		
@@ -247,7 +249,7 @@ void Motor::acceleration(int pos) //accelere de 90 a pos
 		for(i=90; i < pos; i++)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i);
+			this->servoLeft->write(i+1);
 			delay(15);
 		}
 	}
@@ -256,7 +258,7 @@ void Motor::acceleration(int pos) //accelere de 90 a pos
 		for(i=90; i>= pos; i--)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i);
+			this->servoLeft->write(i-1);
 			delay(15);
 		}
 	}
@@ -270,7 +272,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 		for(i=posCourante; i >= 90; i--)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i);
+			this->servoLeft->write(i+1);
 			delay(15);
 		}
 	}
@@ -279,7 +281,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 		for(i=posCourante; i < 90; i++)
 		{
 			this->servoRight->write(i);
-			this->servoLeft->write(i);
+			this->servoLeft->write(i-1);
 			delay(15);
 		}
 	}
