@@ -48,7 +48,7 @@ void Arm::dropInside() {
 }
 
 bool Arm::hasCD() {
-	if(digitalRead(PUSH_CD) == 1) {
+	if (digitalRead(PUSH_CD) == 1) {
 		return true;
 	}
 

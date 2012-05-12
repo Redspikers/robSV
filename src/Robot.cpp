@@ -35,6 +35,8 @@ Robot::Robot() {
 		this->x = START_RIGHT_X;
 		this->y = START_RIGHT_Y;
 	}
+
+
 }
 
 Robot::~Robot() {
@@ -50,7 +52,7 @@ void Robot::loop() {
 		}
 		this->targetCD++;
 	} else {
-		if(digitalRead(JACK) == 1) {
+		if (digitalRead(JACK) == 1) {
 			this->active = true;
 		}
 	}
@@ -59,12 +61,10 @@ void Robot::loop() {
 void Robot::actionLeft() {
 	switch (this->targetCD) {
 		case 1:
-			this->moveX(500 + ROBOT_HEIGHT + 100);
-
-			this->moveY(CD_TL_Y);
 			this->moveX(CD_TL_X - ARM_REACH);
+			this->moveY(CD_TL_Y);
 
-			this->turn(0);
+			this->turn(270);
 			this->take();
 			break;
 		case 2:
@@ -364,40 +364,40 @@ void Robot::actionEnd() {
 
 void Robot::moveX(int newX) {
 	//On se déplace en X
-		if (this->x != newX) {
-			if (this->x < newX) {
-				this->turn(0);
-				this->motor->move(newX - this->x);
-			} else {
-				this->turn(180);
-				this->motor->move(this->x - newX);
-			}
-
-			this->x = newX;
+	if (this->x != newX) {
+		if (this->x < newX) {
+			this->turn(0);
+			this->motor->move(newX - this->x);
+		} else {
+			this->turn(180);
+			this->motor->move(this->x - newX);
 		}
+
+		this->x = newX;
+	}
 }
 void Robot::moveY(int newY) {
 	//On se déplace en Y
-		if(this->y != newY) {
-			if (this->y < newY) {
-				this->turn(90);
-				this->motor->move(newY - this->y);
-			} else {
-				this->turn(270);
-				this->motor->move(this->y - newY);
-			}
-
-			this->y = newY;
+	if (this->y != newY) {
+		if (this->y < newY) {
+			this->turn(90);
+			this->motor->move(newY - this->y);
+		} else {
+			this->turn(270);
+			this->motor->move(this->y - newY);
 		}
+
+		this->y = newY;
+	}
 }
 
 void Robot::turn(int newAngle) {
 	int diff = newAngle - this->angle;
 
-	while(diff < 0) {
+	while (diff < 0) {
 		diff = diff + 360;
 	}
-	while(diff >= 360) {
+	while (diff >= 360) {
 		diff = diff - 360;
 	}
 
@@ -411,24 +411,42 @@ Motor* Robot::getMotor() {
 }
 
 void Robot::take() {
+	delay(2000);
 	/*
-	this->arm->takeCD();
-	if (this->arm->hasCD()) {
-		this->arm->dropInside();
-	}
-	*/
+	 this->arm->takeCD();
+	 if (this->arm->hasCD()) {
+	 this->arm->dropInside();
+	 }
+	 */
 }
 
 void Robot::drop() {
-	/*
-	//Se tourner - le cul vers la destination !
-	if (START_POSITION == LEFT) {
-		this->turn(0);
-	} else {
-		this->turn(180);
-	}
 
-	//Lacher les CDs
-	this->conveyor->action();
-	*/
+
+
+	 //Se tourner - le cul vers la destination !
+	 if (START_POSITION == LEFT) {
+	 this->turn(0);
+	 } else {
+	 this->turn(180);
+	 }
+
+	 delay(2000);
+
+/*
+	 //Lacher les CDs
+	 this->conveyor->action();
+	 */
+}
+
+void Robot::correctPosition() {
+
+}
+
+void Robot::correctAngle() {
+
+}
+
+void Robot::setInactive() {
+	this->active = false;
 }

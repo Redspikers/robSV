@@ -20,8 +20,6 @@
 //TODO
 #define COLOR_SENSOR 29
 
-
-
 #define SENSOR_COLOR_HIGH 52
 
 #define CONVEYOR 2
