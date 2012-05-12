@@ -27,7 +27,7 @@ class Motor {
 		Servo* servoLeft;
 		Servo* servoRight;
 		int pos;
-
+		int j;
 	public:
 		Motor();
 		~Motor();
