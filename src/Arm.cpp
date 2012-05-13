@@ -19,7 +19,7 @@ void Arm::takeCD() {
 	 * On retourne True uniquement dans le cas où tout s'est bien passé 
 	 * (bonne couleur & pas laché en cours & laché au dessus du tapis et retour position initiale
 	 * */
-
+	int i;
 	//Mouvement des deux servos. Le même tout le temps car on choppe que les CDs du bas
 	this->servoElbow->write(ANGLE_ELBOW_TAKE); //Elbow
 	this->servoShoulder->write(ANGLE_SHOULDER_TAKE); //Shoulder
@@ -36,6 +36,7 @@ void Arm::takeCD() {
 }
 
 void Arm::dropInside() {
+	int i;
 	//Mouvement des servos pour aller au tapis
 	this->servoElbow->write(ANGLE_ELBOW_DROP); //Elbow
 	this->servoShoulder->write(ANGLE_SHOULDER_DROP); //Shoulder
@@ -48,6 +49,7 @@ void Arm::dropInside() {
 }
 
 bool Arm::hasCD() {
+	int i;	
 	if(digitalRead(PUSH_CD) == 1) {
 		return true;
 	}
@@ -56,8 +58,17 @@ bool Arm::hasCD() {
 }
 
 void Arm::idle() {
+	int i;
 	//Retour position initiale
 	this->servoElbow->write(ANGLE_ELBOW_IDLE); //Elbow
 	this->servoShoulder->write(ANGLE_SHOULDER_IDLE); //Shoulder
 	//FIN Mouvement
+}
+
+void Arm::idleBegin()
+{
+	int i;
+	this->servoElbow->write(ANGLE_ELBOW_IDLE); //Elbow
+	this->servoShoulder->write(ANGLE_SHOULDER_IDLE); //Shoulder
+	
 }
