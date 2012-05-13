@@ -12,7 +12,7 @@
 
 class Motor {
 	private:
-	
+
 		//int distanceTotaleRight;
 		int distanceTotaleLeft; //distance parcourue depuis le début du match
 		//int distanceRight;
@@ -20,10 +20,10 @@ class Motor {
 
 		//int nbPulseRight_temp;
 		int nbPulseLeft_temp; //nb d'impulsion temporaire (nb depuis la derniere occurence de distanceParcourue
-		
+
 		volatile int countPulseLeft;
 		//int countPulseRight;
-		
+
 		Servo* servoLeft;
 		Servo* servoRight;
 		int pos;
@@ -31,9 +31,9 @@ class Motor {
 	public:
 		Motor();
 		~Motor();
-		
-		void acceleration(int pos); 
-		
+
+		void acceleration(int pos);
+
 		void back(int distanceMM);
 		void move(int distanceMM);
 		void turn(int angleDegree);
