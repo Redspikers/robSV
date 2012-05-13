@@ -88,8 +88,6 @@ void Motor::move(int distanceMilliMeter) {
 
 	for(i=75; i < 83; i++)
 		{
-		Serial.println("countPulseLeft");
-		Serial.println(countPulseLeft);
 			this->servoRight->write(i);
 			this->servoLeft->write(i);
 			delay(15);
