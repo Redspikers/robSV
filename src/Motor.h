@@ -28,8 +28,6 @@ class Motor {
 		Servo* servoRight;
 		int pos;
 		int j;
-		int i;
-		double distanceMilliMeter;
 	public:
 		Motor();
 		~Motor();

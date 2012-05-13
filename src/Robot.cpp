@@ -20,8 +20,7 @@ Robot::Robot() {
 	//Les différents capteurs
 	this->sensor = new Recognition();
 
-	//Par défaut, le robot n'est pas actif
-	this->active = false;
+	this->active = true;
 
 	if (START_POSITION == LEFT) {
 		this->angle = START_LEFT_ANGLE;
@@ -58,12 +57,23 @@ void Robot::loop() {
 			this->actionBegin();
 		}
 	} else {
-
+		//Le robot s'arrête, on ne fait plus rien
 	}
 }
 
 void Robot::actionBegin() {
 	if(digitalRead(JACK) == 1) {
+		//On attend que le petit robot bouge
+		delay(2000);
+
+		//On avance assez pour sortir de la zone du capitaine
+		if (START_POSITION == LEFT) {
+			this->move(this->x + 800, this->y);
+		} else if (START_POSITION == RIGHT) {
+			this->move(this->x - 800, this->y);
+		}
+
+		//On passe en état SEARCH pour la prochaine boucle
 		this->action = SEARCH;
 	}
 }
@@ -93,10 +103,31 @@ void Robot::actionDrop() {
 		if(START_POSITION == LEFT) {
 			//On se tourne vers la zone du capitaine
 			this->turn(180);
+
+			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+			while(!this->sensor->hasWallAhead()) {
+				this->move(this->x + 400, this->y);
+			}
+
+			this->turn(0);
+
+			this->drop();
+
 		} else if(START_POSITION == RIGHT) {
 			//On se tourne vers la zone du capitaine
 			this->turn(0);
+
+			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+			while(!this->sensor->hasWallAhead()) {
+				this->move(this->x + 400, this->y);
+			}
+
+			this->turn(180);
+
+			this->drop();
 		}
+
+
 
 	} else {
 		//TODO - Aller vers la zone de stock

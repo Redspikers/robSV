@@ -78,25 +78,26 @@ void Motor::servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter
 void Motor::move(int distanceMilliMeter) {
 	// servo moteur de 90 a 24 marche avant !
 	
-	
-	while(((countPulseLeft /20.25 ) *189.028) < distanceMilliMeter)
+	int i;
+	acceleration(75);
+	while(((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 150))
 	{
-		delay(1);
+		delay(5);
 	}
 	
 
-	/*for(i=75; i < 83; i++)
+	for(i=75; i < 83; i++)
 		{
 			this->servoRight->write(i);
 			this->servoLeft->write(i);
 			delay(15);
 		}
-	*/
+
 		
-	/*while(((this->countPulseLeft /20.25 ) *189.028) < distanceMilliMeter)
+	while(((this->countPulseLeft /20.25 ) *189.028) < distanceMilliMeter)
 	{
 		delay(1);
-	}*/
+	}
 	
 	this->servoRight->write(90);
 	this->servoLeft->write(90);
@@ -108,13 +109,13 @@ void Motor::back(int distanceMilliMeter) {
 	// Servo moteur de 90 à 158 : marche arrière
 	
 	
-	acceleration(100);
-	while(((countPulseLeft /20.25 ) *189.028) < distanceMilliMeter )
+	acceleration(105);
+	while(((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 150))
 	{
-		delay(1);
+		delay(5);
 	}
 	
-/*
+
 	for(int i=105; i >= 97; i--)
 	{
 		this->servoRight->write(i);
@@ -126,7 +127,7 @@ void Motor::back(int distanceMilliMeter) {
 	{
 		delay(1);
 	}
-*/	
+	
 	this->servoRight->write(90);
 	this->servoLeft->write(90);
 
@@ -149,11 +150,11 @@ void Motor::turn(int angleDegree) {
 	//angle vers la gauche du robot
 	else if (angleDegree <= 180) {
 	
-	distanceMilliMeter = ((967.12/360) * angleDegree);
+	double distanceMilliMeter = ((967.12/360) * angleDegree);
 		//Acceleration
 	
 		j=90;
-		for (pos = 90; pos >= 80; pos--) {
+		for (pos = 90; pos >= 75; pos--) {
 			this->servoRight->write(j);
 			this->servoLeft->write(180-pos);
 			if(pos%2==0)
@@ -164,11 +165,11 @@ void Motor::turn(int angleDegree) {
 		}
 			
 		
-		while( ((countPulseLeft /20.25 ) *189.028) < distanceMilliMeter )
+		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 100) )
 		{
-			delay(1);
+			delay(5);
 		}
-		/*
+		
 		//Deceleration
 		j=75;
 		for (pos= 75; pos < 80; pos++) {
@@ -186,7 +187,7 @@ void Motor::turn(int angleDegree) {
 		{
 			delay(1);
 		}
-		*/
+		
 		this->servoRight->write(90);
 		this->servoLeft->write(90);
 		countPulseLeft =0;
@@ -198,10 +199,10 @@ void Motor::turn(int angleDegree) {
 	
 else if (angleDegree > 180) {
 	
-	distanceMilliMeter = ((967.12/360) * ( 360 - angleDegree) );
+	double distanceMilliMeter = ((967.12/360) * ( 360 - angleDegree) );
 		j=90;
 		//Acceleration
-		for (pos = 90; pos >= 80; pos--) {
+		for (pos = 90; pos >= 75; pos--) {
 			this->servoLeft->write(pos);
 			this->servoRight->write(180-j);
 			if(pos%2==0)
@@ -211,11 +212,11 @@ else if (angleDegree > 180) {
 			delay(15);
 		}
 		
-		while( ((countPulseLeft /20.25 ) *189.028) < distanceMilliMeter )
+		while( ((this->countPulseLeft /20.25 ) *189.028) < (distanceMilliMeter - 100) )
 		{
-			delay(1);
+			delay(5);
 		}
-		/*
+		
 		j=75;
 		//Deceleration
 		for (pos= 75; pos < 80; pos++) {
@@ -233,7 +234,7 @@ else if (angleDegree > 180) {
 		{
 			delay(1);
 		}
-		*/
+		
 		this->servoRight->write(90);
 		this->servoLeft->write(90);
 		
@@ -305,7 +306,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 }
 
 void Motor::interruptMotorLeft() {
-	countPulseLeft++;
+	this->countPulseLeft++;
 }
 
 /*

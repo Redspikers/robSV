@@ -11,8 +11,7 @@
 #include "Sensor.h"
 #include "Pin.h"
 
-#define ANGLE_BETWEEN_CAPTOR 40
-#define ALLOW_ERROR 40
+#include "Definition.h"
 
 class Recognition {
 	public:

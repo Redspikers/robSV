@@ -17,10 +17,8 @@
 #include "Recognition.h"
 #include "Pin.h"
 
-#include "Position.h"
+#include "Definition.h"
 
-#define MAX_INSIDE_CD 4
-#define MAX_CAPTAIN_CD 4
 
 class Robot {
 	public:

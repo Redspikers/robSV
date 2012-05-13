@@ -1,18 +1,34 @@
 /*
- * Position.h
+ * Definition.h
  *
  *  Created on: 11 mai 2012
  *      Author: Koudja
  */
 
-#ifndef POSITION_H_
-#define POSITION_H_
+#ifndef DEFINITION_H_
+#define DEFINITION_H_
+
+//Variables de zones
+#define MAX_INSIDE_CD 4
+#define MAX_CAPTAIN_CD 4
 
 //Some specifities
 #define ROBOT_WIDTH 340
 #define ROBOT_HEIGHT 290
+
+//Angle des capteurs et erreur (en MM) autorisées
+#define ANGLE_BETWEEN_CAPTOR 40
+#define ALLOW_ERROR 40
+
 //Allonge du bras entre la fin du robot et la ventouse au sol
 #define ARM_REACH 90
+
+
+
+
+
+
+
 
 //Where the robot start
 #define START_LEFT_X 300
@@ -22,6 +38,12 @@
 #define START_RIGHT_X 2700
 #define START_RIGHT_Y 1670
 #define START_RIGHT_ANGLE 180
+
+
+
+
+
+
 
 //Zone - where to drop CDs
 #define CAPTAIN_LEFT_X 250
@@ -35,6 +57,11 @@
 
 #define STOCK_RIGHT_X 2800
 #define STOCK_RIGHT_Y 1000
+
+
+
+
+
 
 //CDs
 #define CD_TL_X 1000
@@ -103,4 +130,4 @@
 #define CD_PR_BR_X 2110
 #define CD_PR_BR_Y 790
 
-#endif /* POSITION_H_ */
+#endif /* DEFINITION_H_ */
