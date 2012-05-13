@@ -1,7 +1,0 @@
-:D
-Possible d'uploader l'UML ici Antoine ? =)
-
-Autre chose : il y a erreur de ma part a propos des servo moteur. myservo.write prend en entré un angle !
-ça se traduit plus par une position absolu, puisque une fois mis a 180, si on lui redemande d'aller a 180 il ne bouge pas, il y est.
-Donc c'est bcp plus pratique pr le bras, les volet.
-Par contre, le fonctionnement en vitesse reste valable pr la motricité (c'est la sabertooth qui gère ça)

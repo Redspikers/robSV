@@ -1,8 +1,0 @@
-en bits
-
-Pointeurs = 8;
-Entier = 16;
-Boolean = 8;
-
-Taille Cellule = 56
-Taille map = 134 400
