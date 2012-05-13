@@ -98,6 +98,7 @@ bool Recognition::hasWall() {
 int Recognition::getDistanceBL() {
 	return this->captorBL->get();
 }
+/**** MODIF APPORTER PAR RAPPORT a Recognition.cpp */
 
 int Recognition::getDistanceBR() {
 	return this->captorBR->get();
@@ -122,3 +123,4 @@ int Recognition::getDistanceTM() {
 int Recognition::getDistanceBack() {
 	return this->captorBack->get();
 }
+/***** FIN DE MODIF **/

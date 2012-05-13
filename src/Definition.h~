@@ -118,5 +118,4 @@
 #define DISTANCE_CD_TAKE 500
 
 
-
 #endif /* DEFINITION_H_ */
