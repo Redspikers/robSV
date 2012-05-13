@@ -36,7 +36,6 @@ Recognition::Recognition() {
 	this->captorTL = new Sensor(SENSOR_TOP_LEFT, this->conversion);
 	this->captorTM = new Sensor(SENSOR_TOP_MIDDLE, this->conversion);
 	this->captorTR = new Sensor(SENSOR_TOP_RIGHT, this->conversion);
-	this->captorBack = new Sensor(SENSOR_BACK, this->conversion);
 }
 
 bool Recognition::isBetween(int min, int max, int value) {
