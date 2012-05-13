@@ -27,9 +27,8 @@ class Recognition {
 		int* getObstacles();
 		void analyse();
 
-
-		bool hasWallAhead();
-		bool hasWallInFront();
+		bool hasWall();
+		bool hasWallParallel();
 
 		int getDistanceBL();
 

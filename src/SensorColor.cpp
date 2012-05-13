@@ -17,7 +17,7 @@ SensorColor::~SensorColor() {
 
 SensorColor::Color SensorColor::getColor() {
 	//TODO
-	if (analogRead(COLOR_SENSOR)) {
+	if(analogRead(COLOR_SENSOR)) {
 		return WHITE;
 	}
 

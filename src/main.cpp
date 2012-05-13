@@ -58,9 +58,9 @@ int main(void) {
 
 	setup();
 
-	for (;;) {
+	for(;;) {
 		loop();
-		if (serialEventRun)
+		if(serialEventRun)
 			serialEventRun();
 	}
 

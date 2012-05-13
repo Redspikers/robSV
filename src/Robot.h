@@ -19,7 +19,6 @@
 
 #include "Definition.h"
 
-
 class Robot {
 	public:
 		enum Position {
@@ -45,6 +44,7 @@ class Robot {
 		//Fonctions de la arduino, reportées dans cette classe
 		void loop();
 		Motor* getMotor();
+		Recognition* getRecognition();
 		void setInactive();
 
 	private:
@@ -74,7 +74,6 @@ class Robot {
 		//Reconnaissance (capteurs)
 		Recognition* sensor;
 
-
 		//Distance en MM
 		void move(int newX, int newY);
 		//Tourne le robot en degré
@@ -85,7 +84,6 @@ class Robot {
 		void actionBegin();
 		void actionSearch();
 		void actionTake();
-
 
 		void actionDrop();
 		void correctAngle();

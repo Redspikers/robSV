@@ -22,11 +22,11 @@ Robot::Robot() {
 
 	this->active = true;
 
-	if (START_POSITION == LEFT) {
+	if(START_POSITION == LEFT) {
 		this->angle = START_LEFT_ANGLE;
 		this->x = START_LEFT_X;
 		this->y = START_LEFT_Y;
-	} else if (START_POSITION == RIGHT) {
+	} else if(START_POSITION == RIGHT) {
 		this->angle = START_RIGHT_ANGLE;
 		this->x = START_RIGHT_X;
 		this->y = START_RIGHT_Y;
@@ -38,7 +38,6 @@ Robot::Robot() {
 	this->cdInside = 0;
 	this->cdDrop = 0;
 
-
 }
 
 Robot::~Robot() {
@@ -46,7 +45,7 @@ Robot::~Robot() {
 }
 
 void Robot::loop() {
-	if (this->active) {
+	if(this->active) {
 		if(this->action == SEARCH) {
 			this->actionSearch();
 		} else if(this->action == TAKE) {
@@ -67,14 +66,14 @@ void Robot::actionBegin() {
 		delay(2000);
 
 		//On avance assez pour sortir de la zone du capitaine
-		if (START_POSITION == LEFT) {
+		if(START_POSITION == LEFT) {
 			this->move(this->x + 800, this->y);
-		} else if (START_POSITION == RIGHT) {
+		} else if(START_POSITION == RIGHT) {
 			this->move(this->x - 800, this->y);
 		}
 
 		//On passe en état SEARCH pour la prochaine boucle
-		this->action = SEARCH;
+		this->action = DROP;
 	}
 }
 
@@ -92,7 +91,7 @@ void Robot::actionDrop() {
 		this->turn(90);
 
 		//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
-		while(!this->sensor->hasWallAhead()) {
+		while(!this->sensor->hasWall()) {
 			this->move(this->x, this->y + 400);
 		}
 
@@ -105,29 +104,29 @@ void Robot::actionDrop() {
 			this->turn(180);
 
 			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
-			while(!this->sensor->hasWallAhead()) {
-				this->move(this->x + 400, this->y);
+			while(!this->sensor->hasWall()) {
+				this->move(this->x + 100, this->y);
 			}
 
-			this->turn(0);
-
 			this->drop();
+
+			//On sort de la zone
+			this->move(this->x + 800, this->y);
 
 		} else if(START_POSITION == RIGHT) {
 			//On se tourne vers la zone du capitaine
 			this->turn(0);
 
 			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
-			while(!this->sensor->hasWallAhead()) {
-				this->move(this->x + 400, this->y);
+			while(!this->sensor->hasWall()) {
+				this->move(this->x + 100, this->y);
 			}
 
-			this->turn(180);
-
 			this->drop();
+
+			//On sort de la zone
+			this->move(this->x - 800, this->y);
 		}
-
-
 
 	} else {
 		//TODO - Aller vers la zone de stock
@@ -137,16 +136,17 @@ void Robot::actionDrop() {
 void Robot::correctAngle() {
 	int side = 0;
 	int startAngle = this->angle;
-	while(!this->sensor->hasWallInFront()) {
+
+	while(!this->sensor->hasWallParallel()) {
 		//On calcule la distance théorique que doit avoir le robot
 		side = (this->sensor->getDistanceBL()) / (cos(ANGLE_BETWEEN_CAPTOR));
 
-		//On compare cette
+		//On compare cette distance théorique avec la réelle
 		if(side < this->sensor->getDistanceBL()) {
-			//On doit tourner le robot vers la droite
+			//On doit tourner le robot vers la droite (on le fait par pas de 5 degrée)
 			this->turn(this->angle - 5);
 		} else {
-			//On doit tourner le robot vers la gauche
+			//On doit tourner le robot vers la gauche (on le fait par pas de 5 degrée)
 			this->turn(this->angle + 5);
 		}
 	}
@@ -156,12 +156,14 @@ void Robot::correctAngle() {
 
 void Robot::move(int newX, int newY) {
 	//Calculer la distance et l'angle
-	int distance = sqrt((newX - this->x)*(newX - this->x) + (newY - this->y)*(newY - this->y));
+	int distance = sqrt((newX - this->x) * (newX - this->x) + (newY - this->y) * (newY - this->y));
 	int angle = tan(abs(newY - this->y) / abs(newX - this->x));
 
 	angle = degrees(angle);
 
 	this->turn(angle);
+
+	//TODO faire des petits mouvements et vérifier les obstacles !
 
 	this->motor->move(distance);
 
@@ -172,10 +174,10 @@ void Robot::move(int newX, int newY) {
 void Robot::turn(int newAngle) {
 	int diff = newAngle - this->angle;
 
-	while (diff < 0) {
+	while(diff < 0) {
 		diff = diff + 360;
 	}
-	while (diff >= 360) {
+	while(diff >= 360) {
 		diff = diff - 360;
 	}
 
@@ -186,6 +188,10 @@ void Robot::turn(int newAngle) {
 
 Motor* Robot::getMotor() {
 	return this->motor;
+}
+
+Recognition* Robot::getRecognition() {
+	return this->sensor;
 }
 
 void Robot::take() {
@@ -199,19 +205,16 @@ void Robot::take() {
 }
 
 void Robot::drop() {
+	//Se tourner - le cul vers la destination !
+	if(START_POSITION == LEFT) {
+		this->turn(0);
+	} else {
+		this->turn(180);
+	}
 
+	delay(2000);
 
-
-	 //Se tourner - le cul vers la destination !
-	 if (START_POSITION == LEFT) {
-	 this->turn(0);
-	 } else {
-	 this->turn(180);
-	 }
-
-	 delay(2000);
-
-/*
+	/*
 	 //Lacher les CDs
 	 this->conveyor->action();
 	 */

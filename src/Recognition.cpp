@@ -29,8 +29,6 @@ Recognition::Recognition() {
 	this->conversion = new SensorConversion();
 
 	//Instanciation des capteurs avec le PIN
-
-	//Les différents capteurs
 	this->captorBL = new Sensor(SENSOR_BOTTOM_LEFT, this->conversion);
 	this->captorBM = new Sensor(SENSOR_BOTTOM_MIDDLE, this->conversion);
 	this->captorBR = new Sensor(SENSOR_BOTTOM_RIGHT, this->conversion);
@@ -42,7 +40,7 @@ Recognition::Recognition() {
 }
 
 bool Recognition::isBetween(int min, int max, int value) {
-	if (value >= min && value <= max) {
+	if(value >= min && value <= max) {
 		return true;
 	}
 	return false;
@@ -53,21 +51,20 @@ bool Recognition::isBetween(int min, int max, int value) {
  * EnvironEgal retourne true quans l'écart entre value1 et value2 est inférieur ou egale à ecartmax
  */
 bool Recognition::around(int value1, int value2, int ecartmax) {
-	if (value1 >= value2) {
-		if ((value1 - value2) <= ecartmax) {
+	if(value1 >= value2) {
+		if((value1 - value2) <= ecartmax) {
 			return true;
 		}
 	} else {
-		if ((value2 - value1) <= ecartmax) {
+		if((value2 - value1) <= ecartmax) {
 			return true;
 		}
 	}
 	return false;
 }
 
-
 //Renvoie true de manière plus restrictive que hasWallAhead(), car il faut que les capteurs soit
-bool Recognition::hasWallInFront() {
+bool Recognition::hasWallParallel() {
 	//Le capteur du milieu sert de référence
 	//Distance que les capteurs des cotés doivent avoir
 	int side = (this->captorBM->get()) / (cos(ANGLE_BETWEEN_CAPTOR));
@@ -86,12 +83,11 @@ bool Recognition::hasWallInFront() {
 	return false;
 }
 
-
-bool Recognition::hasWallAhead() {
+bool Recognition::hasWall() {
 	if(20 < this->captorBL->get() && this->captorBL->get() < 50) {
 		if(20 < this->captorBM->get() && this->captorBM->get() < 50) {
 			if(20 < this->captorBR->get() && this->captorBR->get() < 50) {
-					return true;
+				return true;
 			}
 		}
 	}

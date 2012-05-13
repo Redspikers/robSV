@@ -26,7 +26,7 @@ void Arm::takeCD() {
 	//FIN Mouvement
 
 	//On vérifie qu'il y a bien un CD
-	if (this->sensor->getColor() == SensorColor::WHITE) {
+	if(this->sensor->getColor() == SensorColor::WHITE) {
 		//Compresion de la pompe
 		this->pomp->compress();
 	}
@@ -48,7 +48,7 @@ void Arm::dropInside() {
 }
 
 bool Arm::hasCD() {
-	if (digitalRead(PUSH_CD) == 1) {
+	if(digitalRead(PUSH_CD) == 1) {
 		return true;
 	}
 
