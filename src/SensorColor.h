@@ -10,6 +10,7 @@
 
 #include <Arduino.h>
 #include "Pin.h"
+#include "Definition.h"
 
 class SensorColor {
 	public:

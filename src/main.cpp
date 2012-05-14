@@ -10,17 +10,11 @@
 
 #include "Pin.h"
 #include "Robot.h"
-#include "Timer.h"
 
 Robot* robot;
-Timer* timer;
 
 void interruptMotorLeft() {
 	robot->getMotor()->interruptMotorLeft();
-}
-
-void stop() {
-	robot->setInactive();
 }
 
 void setup() {
@@ -39,13 +33,9 @@ void setup() {
 	digitalWrite(JACK_HIGH, HIGH);
 	digitalWrite(PUSH_CD_HIGH, HIGH);
 	digitalWrite(SENSOR_COLOR_HIGH, HIGH);
-
-	timer = new Timer();
-	timer->setTimeout(90000, stop);
 }
 
 void loop() {
-	timer->run();
 	robot->loop();
 }
 

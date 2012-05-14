@@ -16,8 +16,13 @@
 #define ROBOT_WIDTH 340
 #define ROBOT_HEIGHT 290
 
+#define MAP_WIDTH 3000
+#define MAP_HEIGHT 2000
+
+#define DELAY_BEFORE_BEGIN 2000
+
 //Angle des capteurs et erreur (en MM) autorisées
-#define ANGLE_BETWEEN_CAPTOR 40
+#define ANGLE_BETWEEN_CAPTOR 30
 #define ALLOW_ERROR 40
 
 //Allonge du bras entre la fin du robot et la ventouse au sol
@@ -112,7 +117,6 @@
 #define CD_PR_BR_X 2110
 #define CD_PR_BR_Y 790
 
-
 // Valeur minimum analogique renvoyé par le capteur de couleur pour choper du blanc
 // TODO : A ETALONNER SUR PLACE
 
@@ -121,11 +125,11 @@
 #define DISTANCE_CD_TAKE 500
 
 /*	epaule : angle 180 : déployé
-			angle 90 : perpendiculaire au sol
-			angle 0 : collision avec l'interieur du robot
-	coude : angle 0 : déployé
+ angle 90 : perpendiculaire au sol
+ angle 0 : collision avec l'interieur du robot
+ coude : angle 0 : déployé
 
-*/
+ */
 //Angle des moteurs pour le mouvement 1 (Chopper le CD)    //TODO
 #define ANGLE_SHOULDER_TAKE 135
 #define ANGLE_ELBOW_TAKE 90
@@ -138,7 +142,5 @@
 //Angle des servo pour la position idleBegin (position en début de match c'est tout)
 #define ANGLE_SHOULDER_IDLE_BEGIN 90
 #define ANGLE_ELBOW_IDLE_BEGIN 140
-
-
 
 #endif /* DEFINITION_H_ */

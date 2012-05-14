@@ -9,7 +9,7 @@ Gate::Gate() {
 void Gate::openGate() {
 
 	this->servoGate->write(Gate::angleOpen);
-	
+
 }
 
 void Gate::closeGate() {

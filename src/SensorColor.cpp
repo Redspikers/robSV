@@ -16,7 +16,6 @@ SensorColor::~SensorColor() {
 }
 
 bool SensorColor::isWhite() {
-	//TODO
 	if(analogRead(COLOR_SENSOR) > VAL_ANALOG_WHITE) {
 		return true;
 	}

@@ -83,7 +83,7 @@ void Motor::move(int distanceMilliMeter) {
 
 	for(i = 75; i < 83; i++) {
 		this->servoRight->write(i);
-		this->servoLeft->write(i-1);
+		this->servoLeft->write(i - 1);
 		delay(15);
 	}
 

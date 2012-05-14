@@ -9,10 +9,11 @@
 
 Recognition::Recognition() {
 	this->conversion = new SensorConversion();
+	this->conversionBlue = new SensorConversionBlue();
 
 	//Instanciation des capteurs avec le PIN
 	this->captorBL = new Sensor(SENSOR_BOTTOM_LEFT, this->conversion);
-	this->captorBM = new Sensor(SENSOR_BOTTOM_MIDDLE, this->conversion);
+	this->captorBM = new SensorBlue(SENSOR_BOTTOM_MIDDLE, this->conversionBlue);
 	this->captorBR = new Sensor(SENSOR_BOTTOM_RIGHT, this->conversion);
 
 	this->captorTL = new Sensor(SENSOR_TOP_LEFT, this->conversion);
@@ -117,26 +118,34 @@ bool Recognition::isRobot() {
 	return false;
 }
 
+bool Recognition::isCDInFront() {
+	if(this->getDistanceBM() == 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 int Recognition::getDistanceBL() {
-return this->captorBL->get();
+	return this->captorBL->get();
 }
 
 int Recognition::getDistanceBR() {
-return this->captorBR->get();
+	return this->captorBR->get();
 }
 
 int Recognition::getDistanceBM() {
-return this->captorBM->get();
+	return this->captorBM->get();
 }
 
 int Recognition::getDistanceTR() {
-return this->captorTR->get();
+	return this->captorTR->get();
 }
 
 int Recognition::getDistanceTL() {
-return this->captorTL->get();
+	return this->captorTL->get();
 }
 
 int Recognition::getDistanceTM() {
-return this->captorTM->get();
+	return this->captorTM->get();
 }

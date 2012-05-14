@@ -19,11 +19,6 @@ Robot::Robot() {
 
 	//Les différents capteurs
 	this->sensor = new Recognition();
-	
-	//Lancement du timer qui permet l'arret du robot au bout de 85 secondes
-	Timer3.initialize(85000000);
-	//Timer3.pwm(13, 512);    Supprimer si l'arret marche
-	Timer3.attachInterrupt(this->stop);
 
 	this->active = true;
 	this->cdInside = 0;
@@ -67,14 +62,10 @@ void Robot::loop() {
 void Robot::actionBegin() {
 	if(digitalRead(JACK) == 1) {
 		//On attend que le petit robot bouge
-		delay(2000);
+		delay(DELAY_BEFORE_BEGIN);
 
 		//On avance assez pour sortir de la zone du capitaine
-		if(START_POSITION == LEFT) {
-			this->move(this->x + 800, this->y, false);
-		} else if(START_POSITION == RIGHT) {
-			this->move(this->x - 800, this->y, false);
-		}
+		this->canonicalMove(800);
 
 		//On passe en état SEARCH pour la prochaine boucle
 		this->action = SEARCH;
@@ -84,13 +75,13 @@ void Robot::actionBegin() {
 void Robot::actionSearch() {
 	bool cdFound = false;
 	//Le robot va faire des tours de la carte à la recherche de CD, comme à Disney Land mais en mieux et plus hasardeux.
-	if((this->x <= MAP_WIDTH/2)&&(this->y <= MAP_HEIGHT/2)) {
+	if((this->x <= MAP_WIDTH / 2) && (this->y <= MAP_HEIGHT / 2)) {
 		cdFound = this->move(2200, 300, true);
-	} else if((this->x <= MAP_WIDTH/2)&&(this->y >= MAP_HEIGHT/2)) {
+	} else if((this->x <= MAP_WIDTH / 2) && (this->y >= MAP_HEIGHT / 2)) {
 		cdFound = this->move(800, 300, true);
-	} else if((this->x >= MAP_WIDTH/2)&&(this->y <= MAP_HEIGHT/2)) {
+	} else if((this->x >= MAP_WIDTH / 2) && (this->y <= MAP_HEIGHT / 2)) {
 		cdFound = this->move(2200, 1700, true);
-	} else if((this->x >= MAP_WIDTH/2)&&(this->y >= MAP_HEIGHT/2)) {
+	} else if((this->x >= MAP_WIDTH / 2) && (this->y >= MAP_HEIGHT / 2)) {
 		cdFound = this->move(800, 1700, true);
 	}
 
@@ -121,12 +112,9 @@ void Robot::actionDrop() {
 
 		//Se déplacer à gauche ou droite (selon la position de départ)
 		if(START_POSITION == LEFT) {
-			//On se tourne vers la zone du capitaine
-			this->turn(180);
-
 			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
 			while(!this->sensor->isWall()) {
-				this->move(this->x + 100, this->y, false);
+				this->move(this->x - 100, this->y, false);
 			}
 
 			this->drop();
@@ -135,9 +123,6 @@ void Robot::actionDrop() {
 			this->move(this->x + 800, this->y, false);
 
 		} else if(START_POSITION == RIGHT) {
-			//On se tourne vers la zone du capitaine
-			this->turn(0);
-
 			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
 			while(!this->sensor->isWall()) {
 				this->move(this->x + 100, this->y, false);
@@ -178,10 +163,39 @@ void Robot::correctAngle() {
 bool Robot::move(int newX, int newY, bool searchCD) {
 	//Calculer la distance et l'angle
 	int distance = sqrt((newX - this->x) * (newX - this->x) + (newY - this->y) * (newY - this->y));
-	int angle = tan(abs(newY - this->y) / abs(newX - this->x));
+	int angle = 0;
 	int distanceLeft = distance;
 
-	angle = degrees(angle);
+	if(this->x == newX) {
+		if(this->y < newY) {
+			angle = 90;
+		} else if(this->y > newY) {
+			angle = 270;
+		} else if(this->y == newY) {
+			angle = 0;
+		}
+	} else {
+		angle = atan(fabs(newY - this->y) / fabs(newX - this->x));
+		angle = degrees(angle);
+
+		if(this->x < newX) {
+			if(this->y < newY) {
+
+			} else if(this->y > newY) {
+				angle = 270 + angle;
+			} else {
+				angle = 0;
+			}
+		} else if(this->x > newX) {
+			if(this->y < newY) {
+				angle = 90 + angle;
+			} else if(this->y > newY) {
+				angle = 180 + angle;
+			} else {
+				angle = 180;
+			}
+		}
+	}
 
 	this->turn(angle);
 
@@ -233,8 +247,12 @@ bool Robot::move(int newX, int newY, bool searchCD) {
 void Robot::canonicalMove(int distance) {
 	this->motor->move(distance);
 
-	this->x = this->x + (distance/cos(this->angle));
-	this->y = this->y + (distance/sin(this->angle));
+	if(cos(this->angle) != 0) {
+		this->x = this->x + (distance / cos(this->angle));
+	}
+	if(sin(this->angle) != 0) {
+		this->y = this->y + (distance / sin(this->angle));
+	}
 }
 
 void Robot::turn(int newAngle) {
@@ -263,7 +281,7 @@ Recognition* Robot::getRecognition() {
 void Robot::take() {
 	//TODO
 	/*
-	this->arm->takeCD();
+	 this->arm->takeCD();
 	 if (this->arm->hasCD()) {
 	 this->arm->dropInside();
 	 }
@@ -281,12 +299,12 @@ void Robot::drop() {
 
 	//TODO
 	/*
-	//Lacher les CDs
+	 //Lacher les CDs
 	 this->conveyor->action();
-*/
-	 this->cdDrop = this->cdDrop + this->cdInside;
+	 */
+	this->cdDrop = this->cdDrop + this->cdInside;
 
-	 this->cdInside = 0;
+	this->cdInside = 0;
 
 }
 
@@ -294,20 +312,69 @@ void Robot::setInactive() {
 	this->active = false;
 }
 
+/***************MARSUPILAMI MODIF APPORTER PAR RAPPORT A Robot.cpp ********/
+/***** DECLARATION DES METHODE A AJOUTER DANS Robot.h ****/
 
-void Robot::stop() {
-	//Arret des moteurs
-	this->motor->stop();
-	
-	//Arret du tapis 
-	this->conveyor->stop();
-	
-	//Arret du bras (=relachement de la pompe)
-	this->arm->stop();
-	//On met le programme en pause une heure = on bloque l'execution du programme
-	delay(3600000);
-	
-	
-	
-	
+void Robot::frontCD() {
+
+//le CD est en face !
+	if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+
+		this->motor->move(this->sensor->getDistanceBM());
+		if(this->sensor->isCDInFront()) {
+			return; // Pret pour take
+		}
+
+		else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() < DISTANCE_CD_TAKE) {
+			this->motor->move(this->sensor->getDistanceBM());
+			return; //On est pret pour take
+		} else {
+			//TODO Robot plus en face du CD, s'est perdu
+		}
+
+	}
+
+//Le CD est sur la gauche
+	else if(this->sensor->getDistanceBL() <= DISTANCE_CD_TAKE) {
+
+		this->motor->turn(ANGLE_BETWEEN_CAPTOR);
+		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) { //le virage a été bon
+			this->motor->move(this->sensor->getDistanceBM());
+			if(this->sensor->isCDInFront()) {
+				return; // On est pret pour take
+			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+				this->motor->move(this->sensor->getDistanceBM());
+				return; // On est pret pour take
+			} else { //move mauvais
+					 //TODO robot plus en face du CD
+			}
+
+		} else { //virage mauvais
+				 //TODO robot pas en face du CD
+		}
+
+	}
+
+//Le CD est sur la droite
+	else if(this->sensor->getDistanceBR() <= DISTANCE_CD_TAKE) {
+
+		this->motor->turn(360 - ANGLE_BETWEEN_CAPTOR);
+		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) { //le virage a été bon
+			this->motor->move(this->sensor->getDistanceBM());
+			if(this->sensor->isCDInFront()) {
+				return; // On est pret pour take
+			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+				this->motor->move(this->sensor->getDistanceBM());
+				return; // on est pret pour take
+			} else { //move mauvais
+					 //TODO robot plus en face du CD
+			}
+
+		} else { //turn mauvais
+				 //TODO robot pas en face du CD
+		}
+
+	}
 }
+
+/**** FIN DE MODIF *****/

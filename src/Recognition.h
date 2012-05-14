@@ -9,6 +9,9 @@
 #define SENSOR_H_
 
 #include "Sensor.h"
+#include "SensorBlue.h"
+#include "SensorConversion.h"
+#include "SensorConversionBlue.h"
 #include "Pin.h"
 
 #include "Definition.h"
@@ -26,6 +29,7 @@ class Recognition {
 		bool isCD();
 		bool isObstacle();
 		bool isRobot();
+		bool isCDInFront();
 
 		int getDistanceBL();
 		int getDistanceBM();
@@ -36,7 +40,7 @@ class Recognition {
 
 	private:
 		Sensor* captorBL;
-		Sensor* captorBM;
+		SensorBlue* captorBM;
 		Sensor* captorBR;
 
 		Sensor* captorTL;
@@ -44,6 +48,7 @@ class Recognition {
 		Sensor* captorTR;
 
 		SensorConversion* conversion;
+		SensorConversionBlue* conversionBlue;
 
 };
 

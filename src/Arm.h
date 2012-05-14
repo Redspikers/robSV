@@ -16,6 +16,7 @@ class Arm {
 		void dropInside();
 		void idle();
 		void idleBegin();
+		void exitIdleBegin();
 		void stop();
 		bool hasCD();
 
