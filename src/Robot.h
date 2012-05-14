@@ -16,6 +16,7 @@
 #include "Motor.h"
 #include "Recognition.h"
 #include "Pin.h"
+#include "TimerThree.h"
 
 #include "Definition.h"
 
@@ -88,6 +89,9 @@ class Robot {
 
 		void actionDrop();
 		void correctAngle();
+		
+		//Arret du robot
+		void stop();
 };
 
 #endif /* ROBOT_H_ */

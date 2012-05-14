@@ -37,6 +37,7 @@ class Motor {
 		void back(int distanceMM);
 		void move(int distanceMM);
 		void turn(int angleDegree);
+		void stop();
 
 		void servoUnique(bool servoChoisi, bool direction, int distanceMilliMeter);
 		int distanceParcourue(int countPulseLeft, int distanceLeft);

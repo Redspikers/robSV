@@ -19,6 +19,11 @@ Robot::Robot() {
 
 	//Les différents capteurs
 	this->sensor = new Recognition();
+	
+	//Lancement du timer qui permet l'arret du robot au bout de 85 secondes
+	Timer3.initialize(85000000);
+	//Timer3.pwm(13, 512);    Supprimer si l'arret marche
+	Timer3.attachInterrupt(this->stop);
 
 	this->active = true;
 	this->cdInside = 0;
@@ -287,4 +292,22 @@ void Robot::drop() {
 
 void Robot::setInactive() {
 	this->active = false;
+}
+
+
+void Robot::stop() {
+	//Arret des moteurs
+	this->motor->stop();
+	
+	//Arret du tapis 
+	this->conveyor->stop();
+	
+	//Arret du bras (=relachement de la pompe)
+	this->arm->stop();
+	//On met le programme en pause une heure = on bloque l'execution du programme
+	delay(3600000);
+	
+	
+	
+	
 }

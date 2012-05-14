@@ -11,3 +11,10 @@ void Conveyor::action() {
 	digitalWrite(CONVEYOR, LOW);
 }
 
+
+
+void Conveyor::stop() {
+	digitalWrite(CONVEYOR, LOW);
+}
+
+

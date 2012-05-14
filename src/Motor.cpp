@@ -273,6 +273,12 @@ void Motor::interruptMotorLeft() {
 	this->countPulseLeft++;
 }
 
+void Motor::stop() {
+	//Arret des moteurs
+	this->servoRight->write(90);
+	this->servoLeft->write(90);
+}
+
 /*
  void Motor::incrementation_roueCodeuseRight() {
  this->countPulseRight++;

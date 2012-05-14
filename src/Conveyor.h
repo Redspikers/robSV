@@ -11,6 +11,7 @@ class Conveyor {
 
 		Conveyor();
 		void action();
+		void stop();
 };
 
 #endif

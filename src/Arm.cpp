@@ -123,3 +123,7 @@ void Arm::move(int angleBegin, int angleEnd, bool servo)
 
 	}
 }
+
+void Arm::stop(){
+	this->pomp->drop();
+}
