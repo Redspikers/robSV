@@ -80,15 +80,41 @@ bool Recognition::isWall() {
 
 bool Recognition::isCD() {
 	//Un CD n'est visible que par les capteurs du bas, ne bouge pas, et n'est que sur un seul capteur à la fois
-	//TODO
+	//Renvoie true entre 20 et 50cm
+
+	if(!this->isObstacle()) {
+		if(this->isBetween(20, 50, this->captorBL->get()) || this->isBetween(20, 50, this->captorBM->get()) || this->isBetween(20, 50, this->captorBR->get())) {
+			return true;
+		}
+	}
+
+	return false;
 }
 bool Recognition::isObstacle() {
 	//Un obstacle est visible que par 2 capteurs alignée verticalement et ne bouge pas
-	//TODO
+	//Renvoie true entre 20 et 30cm
+
+	if(this->isBetween(20, 50, this->captorBL->get()) && this->isBetween(20, 50, this->captorTL->get())) {
+		return true;
+	} else if(this->isBetween(20, 50, this->captorBM->get()) && this->isBetween(20, 50, this->captorTM->get())) {
+		return true;
+	} else if(this->isBetween(20, 50, this->captorBR->get()) && this->isBetween(20, 50, this->captorTR->get())) {
+		return true;
+	}
+
+	return false;
 }
 bool Recognition::isRobot() {
 	//Un robot peut être vu que par un (ou deux) capteurs en mêmes temps (bas ou/et haut) et est le seul à bouger
-	//TODO
+	//Renvoie true entre 20 et 30cm
+
+	if(!this->isCD() && !this->isObstacle()) {
+		if(this->isBetween(20, 50, this->captorBL->get()) || this->isBetween(20, 50, this->captorBM->get()) || this->isBetween(20, 50, this->captorBR->get())) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 int Recognition::getDistanceBL() {

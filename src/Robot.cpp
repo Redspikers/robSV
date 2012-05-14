@@ -21,6 +21,8 @@ Robot::Robot() {
 	this->sensor = new Recognition();
 
 	this->active = true;
+	this->cdInside = 0;
+	this->cdDrop = 0;
 
 	if(START_POSITION == LEFT) {
 		this->angle = START_LEFT_ANGLE;
@@ -34,9 +36,6 @@ Robot::Robot() {
 
 	//Action par défaut (lorsque le robot sera actif)
 	this->action = BEGIN;
-
-	this->cdInside = 0;
-	this->cdDrop = 0;
 
 }
 
@@ -67,9 +66,9 @@ void Robot::actionBegin() {
 
 		//On avance assez pour sortir de la zone du capitaine
 		if(START_POSITION == LEFT) {
-			this->move(this->x + 800, this->y);
+			this->move(this->x + 800, this->y, false);
 		} else if(START_POSITION == RIGHT) {
-			this->move(this->x - 800, this->y);
+			this->move(this->x - 800, this->y, false);
 		}
 
 		//On passe en état SEARCH pour la prochaine boucle
@@ -78,7 +77,24 @@ void Robot::actionBegin() {
 }
 
 void Robot::actionSearch() {
+	bool cdFound = false;
+	//Le robot va faire des tours de la carte à la recherche de CD, comme à Disney Land mais en mieux et plus hasardeux.
+	if((this->x <= MAP_WIDTH/2)&&(this->y <= MAP_HEIGHT/2)) {
+		cdFound = this->move(2200, 300, true);
+	} else if((this->x <= MAP_WIDTH/2)&&(this->y >= MAP_HEIGHT/2)) {
+		cdFound = this->move(800, 300, true);
+	} else if((this->x >= MAP_WIDTH/2)&&(this->y <= MAP_HEIGHT/2)) {
+		cdFound = this->move(2200, 1700, true);
+	} else if((this->x >= MAP_WIDTH/2)&&(this->y >= MAP_HEIGHT/2)) {
+		cdFound = this->move(800, 1700, true);
+	}
 
+	if(cdFound) {
+		this->action = TAKE;
+	}
+
+	//A noter qu'à la fin d'un tour, il va aller corriger son angle (car au dela de 4 virages la précision devrait se faire ressentir)
+	//TODO
 }
 
 void Robot::actionTake() {
@@ -90,9 +106,9 @@ void Robot::actionDrop() {
 		//Se tourner vers le mur du haut
 		this->turn(90);
 
-		//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+		//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
 		while(!this->sensor->isWall()) {
-			this->move(this->x, this->y + 400);
+			this->move(this->x, this->y + 100, false);
 		}
 
 		//Corriger l'écart entre l'angle réel et l'angle en mémoire
@@ -103,29 +119,29 @@ void Robot::actionDrop() {
 			//On se tourne vers la zone du capitaine
 			this->turn(180);
 
-			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
 			while(!this->sensor->isWall()) {
-				this->move(this->x + 100, this->y);
+				this->move(this->x + 100, this->y, false);
 			}
 
 			this->drop();
 
 			//On sort de la zone
-			this->move(this->x + 800, this->y);
+			this->move(this->x + 800, this->y, false);
 
 		} else if(START_POSITION == RIGHT) {
 			//On se tourne vers la zone du capitaine
 			this->turn(0);
 
-			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 400mm)
+			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
 			while(!this->sensor->isWall()) {
-				this->move(this->x + 100, this->y);
+				this->move(this->x + 100, this->y, false);
 			}
 
 			this->drop();
 
 			//On sort de la zone
-			this->move(this->x - 800, this->y);
+			this->move(this->x - 800, this->y, false);
 		}
 
 	} else {
@@ -154,21 +170,66 @@ void Robot::correctAngle() {
 	this->angle = startAngle;
 }
 
-void Robot::move(int newX, int newY) {
+bool Robot::move(int newX, int newY, bool searchCD) {
 	//Calculer la distance et l'angle
 	int distance = sqrt((newX - this->x) * (newX - this->x) + (newY - this->y) * (newY - this->y));
 	int angle = tan(abs(newY - this->y) / abs(newX - this->x));
+	int distanceLeft = distance;
 
 	angle = degrees(angle);
 
 	this->turn(angle);
 
-	//TODO faire des petits mouvements et vérifier les obstacles !
+	//La boucle while ne s'arrête que lorsque newX et newY (destination finale) ont été atteint
+	while(distanceLeft > 0) {
+		//Si un CD est visible et que 'searchCD' est sur TRUE, alors on quitte la fonction en renvoyant true
+		if(this->sensor->isCD() && searchCD) {
+			return true;
+		}
 
+		//Si il y a un quelconque obstacle, entammer une procédure d'évitemment (boucle if)
+		if(this->sensor->isObstacle() || this->sensor->isRobot()) {
+			//Tant que les capteurs repèrent l'obstacle
+			while(this->sensor->isObstacle() || this->sensor->isRobot()) {
+				//Le robot se tourne petit à petit
+				this->turn(this->angle + 1);
+			}
+			//Lorsque l'obstacle n'est plus visible, on avance de 100mm
+			this->canonicalMove(100);
+
+			//On met à jour la distance et l'angle car la procédure d'évitemment à probablement modifier l'angle de robot et donc sa distance par rapport à son objectif initial
+			angle = tan(abs(newY - this->y) / abs(newX - this->x));
+			distance = sqrt((newX - this->x) * (newX - this->x) + (newY - this->y) * (newY - this->y));
+			distanceLeft = distance;
+
+			//On tourne le robot à nouveau vers sa destination
+			this->turn(angle);
+		}
+
+		//On avance par pas de 100mm tant que l'on est pas arrivé
+		if(distanceLeft > 100) {
+			this->canonicalMove(100);
+			distanceLeft = distanceLeft - 100;
+		} else {
+			this->canonicalMove(distanceLeft);
+			distanceLeft = 0;
+		}
+
+	}
+
+	//Si on arrive à cette doncition, c'est que le chemin est terminé, on renvoit donc false si on cherche des CDs et true le cas contraire
+	if(searchCD) {
+		return false;
+	}
+
+	return true;
+}
+
+void Robot::canonicalMove(int distance) {
 	this->motor->move(distance);
 
-	this->x = newX;
-	this->y = newY;
+	this->x = this->x + (distance/cos(this->angle));
+	this->y = this->y + (distance/sin(this->angle));
 }
 
 void Robot::turn(int newAngle) {
@@ -195,10 +256,13 @@ Recognition* Robot::getRecognition() {
 }
 
 void Robot::take() {
+	//TODO
+	/*
 	this->arm->takeCD();
 	 if (this->arm->hasCD()) {
 	 this->arm->dropInside();
 	 }
+	 */
 
 }
 
@@ -210,9 +274,11 @@ void Robot::drop() {
 		this->turn(180);
 	}
 
+	//TODO
+	/*
 	//Lacher les CDs
 	 this->conveyor->action();
-
+*/
 	 this->cdDrop = this->cdDrop + this->cdInside;
 
 	 this->cdInside = 0;

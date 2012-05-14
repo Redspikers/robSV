@@ -75,11 +75,12 @@ class Robot {
 		Recognition* sensor;
 
 		//Distance en MM
-		void move(int newX, int newY);
+		bool move(int newX, int newY, bool searchCD);
 		//Tourne le robot en degré
 		void turn(int newAngle);
 		void take();
 		void drop();
+		void canonicalMove(int distance);
 
 		void actionBegin();
 		void actionSearch();
