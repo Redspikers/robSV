@@ -20,6 +20,8 @@ class Arm {
 		bool hasCD();
 
 	private:
+		void move(int angleBegin, int angleEnd, bool servo);
+
 		Servo* servoElbow;
 		Servo* servoShoulder;
 		Pomp* pomp;

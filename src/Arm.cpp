@@ -1,6 +1,7 @@
 #include "Arm.h"
 
 Arm::Arm() {
+	
 	this->servoElbow = new Servo();
 	this->servoShoulder = new Servo();
 	this->pomp = new Pomp();
@@ -11,39 +12,43 @@ Arm::Arm() {
 
 }
 
+//A n'utiliser que avant le début du match. Inutile pendant le match
+void Arm::idleBegin() {
+	
+	
+	this->servoElbow->write(ANGLE_ELBOW_IDLE_BEGIN); //Elbow
+	this->servoShoulder->write(ANGLE_SHOULDER_IDLE_BEGIN); //Shoulder
+	
+}
+
+
+void Arm::exitIdleBegin()
+{
+	this->move(ANGLE_SHOULDER_IDLE_BEGIN, ANGLE_SHOULDER_IDLE, 0);
+	this->move(ANGLE_ELBOW_IDLE_BEGIN, ANGLE_ELBOW_IDLE, 1);
+	 //le bras se trouve alors en position "Idle"
+}
+
+
 void Arm::takeCD() {
-	/*
-	 * On verifie qu'il est de bonne couleur et on attrape le cd
-	 * Si à n'importe quel moment , le CD est laché (et donc le capteur ne voit plus rien)
-	 * On retourne False
-	 * On retourne True uniquement dans le cas où tout s'est bien passé 
-	 * (bonne couleur & pas laché en cours & laché au dessus du tapis et retour position initiale
-	 * */
-	//Mouvement des deux servos. Le même tout le temps car on choppe que les CDs du bas
-	this->servoElbow->write(ANGLE_ELBOW_TAKE); //Elbow
-	this->servoShoulder->write(ANGLE_SHOULDER_TAKE); //Shoulder
-	//FIN Mouvement
-
-	//On vérifie qu'il y a bien un CD
-	if(this->sensor->getColor() == SensorColor::WHITE) {
-		//Compresion de la pompe
-		this->pomp->compress();
-	}
-
+	
+	this->move(ANGLE_ELBOW_IDLE, ANGLE_ELBOW_TAKE, 1);
+	this->move(ANGLE_SHOULDER_IDLE, ANGLE_SHOULDER_TAKE, 0);
+	
+	this->dropInside();	
 	//Dans tout les cas, on revient à la position initiale
 	this->idle();
 }
 
 void Arm::dropInside() {
 	//Mouvement des servos pour aller au tapis
-	this->servoElbow->write(ANGLE_ELBOW_DROP); //Elbow
-	this->servoShoulder->write(ANGLE_SHOULDER_DROP); //Shoulder
-	//FIN Mouvement
-
+	this->move(ANGLE_ELBOW_TAKE, ANGLE_ELBOW_DROP, 1);
+	this->move(ANGLE_SHOULDER_TAKE, ANGLE_SHOULDER_DROP, 0);
+	
+	
 	//Relachement au dessus du tapis
 	this->pomp->drop();
 
-	this->idle();
 }
 
 bool Arm::hasCD() {
@@ -54,15 +59,67 @@ bool Arm::hasCD() {
 	return false;
 }
 
-void Arm::idle() {
+
+void Arm::idle()
+{
+	
 	//Retour position initiale
-	this->servoElbow->write(ANGLE_ELBOW_IDLE); //Elbow
-	this->servoShoulder->write(ANGLE_SHOULDER_IDLE); //Shoulder
+	this->move(ANGLE_SHOULDER_DROP, ANGLE_SHOULDER_IDLE, 0);
+	this->move(ANGLE_ELBOW_DROP, ANGLE_ELBOW_IDLE, 1);
+	
 	//FIN Mouvement
 }
 
-void Arm::idleBegin() {
-	this->servoElbow->write(ANGLE_ELBOW_IDLE); //Elbow
-	this->servoShoulder->write(ANGLE_SHOULDER_IDLE); //Shoulder
+
+/* move : Passe le servo de angleBegin à angleEnd
+		
+			choix du servo : bool servo
+			 if (servo == 0)  -----> Epaule
+			 if (servo == 1) ------> Coude
+			
+			*/
+void Arm::move(int angleBegin, int angleEnd, bool servo)
+{
+	int i;
+	if(angleBegin<angleEnd)
+	{
+		if(servo == 0)
+		{
+			for(i=angleBegin; i<angleEnd; i++)
+			{
+				this->servoShoulder->write(i); 
+				delay(5);
+			}
+		}
+		else
+		{
+			for(i=angleBegin; i<angleEnd; i++)
+			{
+				this->servoElbow->write(i);
+				delay(5); 
+			}
+		}
+	}
 	
+	else if(angleBegin > angleEnd)
+	{
+		if(servo == 0)
+		{
+			for(i=angleBegin; i >=angleEnd; i--)
+			{
+				
+				this->servoShoulder->write(i); 
+				delay(5);
+			}
+		}
+		else
+		{
+			for(i=angleBegin; i>=angleEnd; i--)
+			{
+				this->servoElbow->write(i); 
+				delay(5);
+			}
+		}
+
+	}
 }

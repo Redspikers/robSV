@@ -112,6 +112,11 @@
 #define CD_PR_BR_X 2110
 #define CD_PR_BR_Y 790
 
+
+// Valeur minimum analogique renvoyé par le capteur de couleur pour choper du blanc
+// TODO : A ETALONNER SUR PLACE
+
+#define VAL_ANALOG_WHITE 600
 // distance cd pour TAKE
 #define DISTANCE_CD_TAKE 500
 
@@ -121,10 +126,10 @@
 	coude : angle 0 : déployé
 
 */
-//Angle des moteurs pour le mouvement 1 (Chopper le CD) //TODO
+//Angle des moteurs pour le mouvement 1 (Chopper le CD)    //TODO
 #define ANGLE_SHOULDER_TAKE 135
 #define ANGLE_ELBOW_TAKE 90
-//Angle des moteurs pour le mouvement 2 (Amener au tapis)
+//Angle des moteurs pour le mouvement 2 (Amener au tapis)      //TODO
 #define ANGLE_SHOULDER_DROP 90
 #define ANGLE_ELBOW_DROP 120
 //Angle des moteurs pour le mouvement 3 (Retour position de recherche de CD)

@@ -20,9 +20,9 @@
 //TODO
 #define COLOR_SENSOR 29
 
-#define SENSOR_COLOR_HIGH 52
+#define SENSOR_COLOR_HIGH 53
 
-#define CONVEYOR 2
+#define CONVEYOR 22
 
 #define GATE_LEFT 11
 #define GATE_RIGHT 10

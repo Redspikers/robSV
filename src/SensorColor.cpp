@@ -15,11 +15,11 @@ SensorColor::~SensorColor() {
 
 }
 
-SensorColor::Color SensorColor::getColor() {
+bool SensorColor::isWhite() {
 	//TODO
-	if(analogRead(COLOR_SENSOR)) {
-		return WHITE;
+	if(analogRead(COLOR_SENSOR) > VAL_ANALOG_WHITE) {
+		return true;
 	}
 
-	return OTHER;
+	return false;
 }

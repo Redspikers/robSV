@@ -13,14 +13,11 @@
 
 class SensorColor {
 	public:
-		enum Color {
-			WHITE, OTHER
-		};
 
 		SensorColor();
 		~SensorColor();
 
-		Color getColor();
+		bool isWhite();
 };
 
 #endif /* SENSORCOLOR_H_ */

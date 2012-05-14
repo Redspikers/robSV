@@ -1,7 +1,7 @@
 #include "Pomp.h"
 
 Pomp::Pomp() {
-	pinMode(POMP, OUTPUT);
+
 }
 
 void Pomp::compress() {
