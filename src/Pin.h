@@ -24,8 +24,7 @@
 
 #define CONVEYOR 22
 
-#define GATE_LEFT 11
-#define GATE_RIGHT 10
+#define GATE_PIN 10
 #define ELBOW 9
 #define SHOULDER 8
 #define MOTOR_RIGHT 7
