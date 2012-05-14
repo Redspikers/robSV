@@ -8,18 +8,15 @@
 
 class Gate {
 	public:
-		static const int ANGLE_OPEN_RIGHT = 90;
-		static const int ANGLE_OPEN_LEFT = 90;
-		static const int ANGLE_CLOSE_LEFT = 90;
-		static const int ANGLE_CLOSE_RIGHT = 90;
+		static const int angleOpen = 180;
+		static const int angleClose = 0;
 
 		Gate();
 		void closeGate();
 		void openGate();
 
 	private:
-		Servo* servoGateLeft; //Right et gauche déf par rapport à la marche avant du robot (choix arbitraire)
-		Servo* servoGateRight;
+		Servo* servoGate;
 
 };
 

@@ -1,7 +1,6 @@
 #include "Conveyor.h"
 
 Conveyor::Conveyor() {
-	pinMode(CONVEYOR, OUTPUT);
 
 }
 
