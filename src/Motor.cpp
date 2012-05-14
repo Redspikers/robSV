@@ -74,7 +74,7 @@ Motor::~Motor() {
 
 void Motor::move(int distanceMilliMeter) {
 	// servo moteur de 90 a 24 marche avant !
-
+	this->countPulseLeft = 0;
 	int i;
 	acceleration(75);
 	while(((this->countPulseLeft / 20.25) * 189.028) < (distanceMilliMeter - 150)) {
@@ -82,16 +82,12 @@ void Motor::move(int distanceMilliMeter) {
 	}
 
 	for(i = 75; i < 83; i++) {
-		Serial.println("countPulseLeft");
-		Serial.println(countPulseLeft);
 		this->servoRight->write(i);
-		this->servoLeft->write(i);
+		this->servoLeft->write(i-1);
 		delay(15);
 	}
 
 	while(((this->countPulseLeft / 20.25) * 189.028) < distanceMilliMeter) {
-		Serial.println("countPulseLeft");
-		Serial.println(countPulseLeft);
 		delay(1);
 	}
 
@@ -104,12 +100,12 @@ void Motor::move(int distanceMilliMeter) {
 void Motor::back(int distanceMilliMeter) {
 	// Servo moteur de 90 à 158 : marche arrière
 
-	acceleration(105);
+	acceleration(110);
 	while(((this->countPulseLeft / 20.25) * 189.028) < (distanceMilliMeter - 150)) {
 		delay(5);
 	}
 
-	for(int i = 105; i >= 97; i--) {
+	for(int i = 110; i >= 97; i--) {
 		this->servoRight->write(i);
 		this->servoLeft->write(i + 1);
 		delay(15);
@@ -261,6 +257,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 			this->servoLeft->write(i + 1);
 			delay(15);
 		}
+		this->servoLeft->write(90);
 	}
 	if(posCourante < 90) {
 		for(i = posCourante; i < 90; i++) {
@@ -268,6 +265,7 @@ void Motor::deceleration(int posCourante) // decelere de posCourante à 90
 			this->servoLeft->write(i - 1);
 			delay(15);
 		}
+		this->servoLeft->write(90);
 	}
 }
 
