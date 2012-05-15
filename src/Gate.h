@@ -8,8 +8,8 @@
 
 class Gate {
 	public:
-		static const int angleOpen = 180;
-		static const int angleClose = 0;
+		static const int angleOpen = 0;
+		static const int angleClose = 95;
 
 		Gate();
 		void closeGate();
