@@ -16,7 +16,6 @@
 #include "Motor.h"
 #include "Recognition.h"
 #include "Pin.h"
-#include "TimerThree.h"
 #include "Definition.h"
 
 class Robot {
@@ -47,7 +46,6 @@ class Robot {
 		Recognition* getRecognition();
 		void setInactive();
 		void stop();
-		void frontCD();
 
 	private:
 		//Robot actif ou non ?
@@ -80,7 +78,7 @@ class Robot {
 		bool move(int newX, int newY, bool searchCD);
 		//Tourne le robot en degré
 		void turn(int newAngle);
-		void take();
+		bool take();
 		void drop();
 		void canonicalMove(int distance);
 

@@ -1,4 +1,3 @@
-
 #include "SensorConversionBlue.h"
 #include <new.h>
 SensorConversionBlue::SensorConversionBlue() {

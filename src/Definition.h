@@ -20,6 +20,7 @@
 #define MAP_HEIGHT 2000
 
 #define DELAY_BEFORE_BEGIN 2000
+#define DELAY_BEFORE_STOP 85
 
 //Angle des capteurs et erreur (en MM) autorisées
 #define ANGLE_BETWEEN_CAPTOR 30
