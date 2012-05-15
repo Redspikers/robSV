@@ -12,6 +12,7 @@ Motor::Motor() {
 	this->distanceTotaleLeft = 0;
 	//this->distanceRight = 0;
 	this->distanceLeft = 0;
+	this->countPulseLeft = 0;
 
 	//this->nbPulseRight_temp = 0;
 	this->nbPulseLeft_temp = 0;
@@ -77,7 +78,7 @@ void Motor::move(int distanceMilliMeter) {
 	this->countPulseLeft = 0;
 	int i;
 	acceleration(75);
-	while(((this->countPulseLeft / 20.25) * 189.028) < (distanceMilliMeter - 150)) {
+	/*while(((this->countPulseLeft / 20.25) * 189.028) < (distanceMilliMeter - 150)) {
 		delay(5);
 	}
 
@@ -86,15 +87,15 @@ void Motor::move(int distanceMilliMeter) {
 		this->servoLeft->write(i - 1);
 		delay(15);
 	}
-
+*/
 	while(((this->countPulseLeft / 20.25) * 189.028) < distanceMilliMeter) {
-		delay(1);
+		delay(2);
 	}
 
 	this->servoRight->write(90);
 	this->servoLeft->write(90);
 
-	countPulseLeft = 0;
+	this->countPulseLeft = 0;
 }
 
 void Motor::back(int distanceMilliMeter) {
@@ -123,7 +124,7 @@ void Motor::back(int distanceMilliMeter) {
 
 //Le robot ne bouge pas par rapport au terrain,  il se contente de faire une rotation sur place
 void Motor::turn(int angleDegree) {
-
+	int j;
 	// 967.12 = perimetre du cercle que parcourt le robot en rotation sur lui même
 
 	if(angleDegree == 0) {
