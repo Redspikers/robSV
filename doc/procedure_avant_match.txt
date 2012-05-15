@@ -1,0 +1,3 @@
+Définir les PINS
+ETALONNER LA LED (blanche)
+Régler la position dans le code

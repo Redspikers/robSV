@@ -8,17 +8,18 @@
 #ifndef PIN_H_
 #define PIN_H_
 
+#include <pins_arduino.h>
+
 //TODO Capteur analogique
-#define SENSOR_BOTTOM_LEFT 22
-#define SENSOR_BOTTOM_MIDDLE 23
-#define SENSOR_BOTTOM_RIGHT 24
-#define SENSOR_TOP_LEFT 25
-#define SENSOR_TOP_MIDDLE 26
-#define SENSOR_TOP_RIGHT 27
-#define SENSOR_BACK 28
+#define SENSOR_BOTTOM_LEFT A5
+#define SENSOR_BOTTOM_MIDDLE A4
+#define SENSOR_BOTTOM_RIGHT A3
+#define SENSOR_TOP_LEFT A2
+#define SENSOR_TOP_MIDDLE A1
+#define SENSOR_TOP_RIGHT A0
 
 //TODO
-#define COLOR_SENSOR 29
+#define COLOR_SENSOR A7
 
 #define SENSOR_COLOR_HIGH 53
 

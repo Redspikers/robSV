@@ -30,12 +30,12 @@
 #define ARM_REACH 90
 
 //Where the robot start
-#define START_LEFT_X 300
-#define START_LEFT_Y 1670
+#define START_LEFT_X 150
+#define START_LEFT_Y 1750
 #define START_LEFT_ANGLE 0
 
-#define START_RIGHT_X 2700
-#define START_RIGHT_Y 1670
+#define START_RIGHT_X 2850
+#define START_RIGHT_Y 1750
 #define START_RIGHT_ANGLE 180
 
 //Zone - where to drop CDs
@@ -50,6 +50,8 @@
 
 #define STOCK_RIGHT_X 2800
 #define STOCK_RIGHT_Y 1000
+
+
 
 //CDs
 #define CD_TL_X 1000
@@ -118,12 +120,16 @@
 #define CD_PR_BR_X 2110
 #define CD_PR_BR_Y 790
 
+
+
 // Valeur minimum analogique renvoyé par le capteur de couleur pour choper du blanc
 // TODO : A ETALONNER SUR PLACE
 
 #define VAL_ANALOG_WHITE 600
 // distance cd pour TAKE
 #define DISTANCE_CD_TAKE 500
+
+
 
 /*	epaule : angle 180 : déployé
  angle 90 : perpendiculaire au sol

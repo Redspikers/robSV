@@ -62,13 +62,13 @@ void Robot::loop() {
 void Robot::actionBegin() {
 	int valueJack = 0;
 
-	for(int i =0 ; i<20 ; i++) {
+	for(int i = 0; i < 20; i++) {
 		valueJack = valueJack + digitalRead(JACK);
 	}
 
-	valueJack = valueJack/20;
+	valueJack = valueJack / 20;
 
-	if(valueJack < 0.5) {
+	if(valueJack > 0.5) {
 		valueJack = 1;
 	} else {
 		valueJack = 0;
@@ -90,20 +90,91 @@ void Robot::actionSearch() {
 	bool cdFound = false;
 	//Le robot va faire des tours de la carte à la recherche de CD, comme à Disney Land mais en mieux et plus hasardeux.
 	if((this->x <= MAP_WIDTH / 2) && (this->y <= MAP_HEIGHT / 2)) {
-		cdFound = this->move(2200, 300, true);
+		cdFound = this->move(2200, 400, true);
 	} else if((this->x <= MAP_WIDTH / 2) && (this->y >= MAP_HEIGHT / 2)) {
-		cdFound = this->move(800, 300, true);
+		cdFound = this->move(800, 400, true);
 	} else if((this->x >= MAP_WIDTH / 2) && (this->y <= MAP_HEIGHT / 2)) {
-		cdFound = this->move(2200, 1700, true);
+		cdFound = this->move(2200, 1600, true);
 	} else if((this->x >= MAP_WIDTH / 2) && (this->y >= MAP_HEIGHT / 2)) {
-		cdFound = this->move(800, 1700, true);
+		cdFound = this->move(800, 1600, true);
 	}
 
 	if(cdFound) {
 		this->action = TAKE;
 	}
+}
 
-	//A noter qu'à la fin d'un tour, il va aller corriger son angle (car au dela de 4 virages la précision devrait se faire ressentir)
+void Robot::actionTake() {
+	bool haveToTake = false;
+	bool taken = false;
+
+	if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+		this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
+
+		if(this->sensor->isCDInFront()) {
+			haveToTake = true;
+		} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() < DISTANCE_CD_TAKE) {
+			this->canonicalMove(this->sensor->getDistanceBM());
+			haveToTake = true;
+		} else {
+			//Robot plus en face du CD, s'est perdu
+		}
+
+	} else if(this->sensor->getDistanceBL() <= DISTANCE_CD_TAKE) {
+		this->turn(this->angle + ANGLE_BETWEEN_CAPTOR);
+
+		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+			this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
+
+			if(this->sensor->isCDInFront()) {
+				haveToTake = true;
+			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+				this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
+				haveToTake = true;
+			} else {
+				//robot plus en face du CD
+			}
+
+		} else {
+			//robot pas en face du CD
+		}
+
+	} else if(this->sensor->getDistanceBR() <= DISTANCE_CD_TAKE) {
+		this->turn(this->angle - ANGLE_BETWEEN_CAPTOR);
+
+		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+			this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
+			if(this->sensor->isCDInFront()) {
+				haveToTake = true;
+			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
+				this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
+				haveToTake = true;
+			} else {
+				//robot plus en face du CD
+			}
+
+		} else {
+			//robot pas en face du CD
+		}
+
+	}
+
+	if(haveToTake) {
+		taken = this->take();
+	}
+
+	if(taken) {
+		if(this->cdInside > MAX_INSIDE_CD) {
+			this->action = DROP;
+		} else {
+			this->action = SEARCH;
+		}
+	} else {
+		this->action = SEARCH;
+	}
+}
+
+void Robot::actionDrop() {
 	//Se tourner vers le mur du haut
 	this->turn(90);
 
@@ -114,22 +185,9 @@ void Robot::actionSearch() {
 
 	//Corriger l'écart entre l'angle réel et l'angle en mémoire
 	this->correctAngle();
-}
 
-void Robot::actionDrop() {
-	//Se tourner vers le mur du haut
-			this->turn(90);
-
-			//Se déplacer tant que les 3 capteurs du bas n'ont pas vu de mur (on se déplace par pas de 100mm)
-			while(!this->sensor->isWall()) {
-				this->move(this->x, this->y + 100, false);
-			}
-
-			//Corriger l'écart entre l'angle réel et l'angle en mémoire
-			this->correctAngle();
-
-			//On peut aussi corriger la position en Y car on sait que l'on fait face au mur du haut
-			this->y = MAP_HEIGHT - 100;
+	//On peut aussi corriger la position en Y car on sait que l'on fait face au mur du haut
+	this->y = MAP_HEIGHT - 100;
 
 	if(this->cdDrop < MAX_CAPTAIN_CD) {
 		//Se déplacer à gauche ou droite (selon la position de départ)
@@ -179,7 +237,7 @@ void Robot::correctAngle() {
 	int startAngle = this->angle;
 
 	//On calcule la distance théorique que doit avoir le robot
-	side = this->sensor->getDistanceBM() / (cos(ANGLE_BETWEEN_CAPTOR));
+	side = this->sensor->getDistanceBM() / (cos(radians(ANGLE_BETWEEN_CAPTOR)));
 
 	while(!this->sensor->isWallParallel()) {
 		//On compare cette distance théorique avec la réelle
@@ -210,20 +268,19 @@ bool Robot::move(int newX, int newY, bool searchCD) {
 			angle = 0;
 		}
 	} else {
-		angle = atan(fabs(newY - this->y) / fabs(newX - this->x));
-		angle = degrees(angle);
+		angle = degrees(atan2(fabs(newY - this->y), fabs(newX - this->x)));
 
 		if(this->x < newX) {
 			if(this->y < newY) {
-
+				angle = 0 + angle;
 			} else if(this->y > newY) {
-				angle = 270 + angle;
+				angle = 360 - angle;
 			} else {
 				angle = 0;
 			}
 		} else if(this->x > newX) {
 			if(this->y < newY) {
-				angle = 90 + angle;
+				angle = 180 - angle;
 			} else if(this->y > newY) {
 				angle = 180 + angle;
 			} else {
@@ -248,11 +305,14 @@ bool Robot::move(int newX, int newY, bool searchCD) {
 				//Le robot se tourne petit à petit
 				this->turn(this->angle + 1);
 			}
-			//Lorsque l'obstacle n'est plus visible, on avance de 100mm
-			this->canonicalMove(100);
+			//Lorsque l'obstacle n'est plus visible, on avance de 100mm (si pas de mur)
+			if(!this->sensor->isWall()) {
+				this->canonicalMove(100);
+			}
 
-			//On met à jour la distance et l'angle car la procédure d'évitemment à probablement modifier l'angle de robot et donc sa distance par rapport à son objectif initial
-			angle = tan(abs(newY - this->y) / abs(newX - this->x));
+
+			//On met à jour la distance et l'angle car la procédure d'évitemment à probablement modifier l'angle de robot et aussi sa distance par rapport à son objectif initial
+			angle = tan(fabs(newY - this->y) / fabs(newX - this->x));
 			distance = sqrt((newX - this->x) * (newX - this->x) + (newY - this->y) * (newY - this->y));
 			distanceLeft = distance;
 
@@ -279,85 +339,12 @@ bool Robot::move(int newX, int newY, bool searchCD) {
 	return true;
 }
 
-void Robot::actionTake() {
-	bool haveToTake = false;
-	bool taken = false;
-
-	if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
-		this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
-
-		if(this->sensor->isCDInFront()) {
-			haveToTake = true;
-		} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() < DISTANCE_CD_TAKE) {
-			this->canonicalMove(this->sensor->getDistanceBM());
-			haveToTake = true;
-		} else {
-			//TODO Robot plus en face du CD, s'est perdu
-		}
-
-	} else if(this->sensor->getDistanceBL() <= DISTANCE_CD_TAKE) {
-		this->turn(this->angle + ANGLE_BETWEEN_CAPTOR);
-
-		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
-			this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
-
-			if(this->sensor->isCDInFront()) {
-				haveToTake = true;
-			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
-				this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
-				haveToTake = true;
-			} else {
-				//TODO robot plus en face du CD
-			}
-
-		} else {
-			//TODO robot pas en face du CD
-		}
-
-	} else if(this->sensor->getDistanceBR() <= DISTANCE_CD_TAKE) {
-		this->turn(this->angle - ANGLE_BETWEEN_CAPTOR);
-
-		if(this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
-			this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
-			if(this->sensor->isCDInFront()) {
-				haveToTake = true;
-			} else if(this->sensor->getDistanceBM() != 0 && this->sensor->getDistanceBM() <= DISTANCE_CD_TAKE) {
-				this->canonicalMove(this->sensor->getDistanceBM() - ARM_REACH);
-				haveToTake = true;
-			} else {
-				//TODO robot plus en face du CD
-			}
-
-		} else {
-			//TODO robot pas en face du CD
-		}
-
-	}
-
-	if(haveToTake) {
-		taken = this->take();
-	}
-
-	if(taken) {
-		if(this->cdInside > MAX_INSIDE_CD) {
-			this->action = DROP;
-		} else {
-			this->action = SEARCH;
-		}
-	} else {
-		this->action = SEARCH;
-	}
-}
-
 void Robot::canonicalMove(int distance) {
 	this->motor->move(distance);
 
-	if(cos(this->angle) != 0) {
-		this->x = this->x + (distance / cos(this->angle));
-	}
-	if(sin(this->angle) != 0) {
-		this->y = this->y + (distance / sin(this->angle));
-	}
+	this->x = this->x + (distance * cos(radians(this->angle)));
+
+	this->y = this->y + (distance * sin(radians(this->angle)));
 }
 
 void Robot::turn(int newAngle) {
@@ -389,12 +376,18 @@ bool Robot::take() {
 	 this->arm->takeCD();
 	 if (this->arm->hasCD()) {
 	 this->arm->dropInside();
+	 this->cdInside++;
 	 return true;
 	 }
 
 
 	 */
-	return false;
+
+	//DEBUG - TODO
+	this->cdInside++;
+	delay(5000);
+
+	return true;
 
 }
 
@@ -412,6 +405,9 @@ void Robot::drop() {
 	this->cdDrop = this->cdDrop + this->cdInside;
 
 	this->cdInside = 0;
+
+	//Debug - TODO
+	delay(5000);
 
 }
 
