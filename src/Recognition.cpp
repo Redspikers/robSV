@@ -45,7 +45,7 @@ bool Recognition::around(int value1, int value2, int ecartmax) {
 	return false;
 }
 
-//Renvoie true de manière plus restrictive que isWall(), car il faut que les capteurs soit bien positionné
+//Renvoie true de manière moins restrictive que isWall(), car il faut que les capteurs soit bien positionné
 bool Recognition::isWallParallel() {
 	//Le capteur du milieu sert de référence
 	//Distance que les capteurs des cotés doivent avoir
