@@ -40,11 +40,11 @@ class Recognition {
 
 	private:
 		Sensor* captorBL;
-		SensorBlue* captorBM;
+		Sensor* captorBM;
 		Sensor* captorBR;
 
 		Sensor* captorTL;
-		Sensor* captorTM;
+		SensorBlue* captorTM;
 		Sensor* captorTR;
 
 		SensorConversion* conversion;

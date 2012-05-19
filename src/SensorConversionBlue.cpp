@@ -34,3 +34,6 @@ int SensorConversionBlue::get(int i, int j) {
 	return this->conversion[i][j];
 }
 
+int SensorConversionBlue::getSize() {
+	return 5;
+}

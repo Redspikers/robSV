@@ -13,35 +13,46 @@ Arm::Arm() {
 
 //A n'utiliser que avant le début du match. Inutile pendant le match
 void Arm::idleBegin() {
-	this->servoElbow->write(ANGLE_ELBOW_IDLE_BEGIN); //Elbow
 	this->servoShoulder->write(ANGLE_SHOULDER_IDLE_BEGIN); //Shoulder
-
+	this->servoElbow->write(ANGLE_ELBOW_IDLE_BEGIN); //Elbow
 }
 
 void Arm::exitIdleBegin() {
-	this->move(ANGLE_SHOULDER_IDLE_BEGIN, ANGLE_SHOULDER_IDLE, 0);
-	this->move(ANGLE_ELBOW_IDLE_BEGIN, ANGLE_ELBOW_IDLE, 1);
+	this->move(ANGLE_SHOULDER_IDLE_BEGIN, ANGLE_SHOULDER_IDLE, true);
+	this->move(ANGLE_ELBOW_IDLE_BEGIN, ANGLE_ELBOW_IDLE, false);
 	//le bras se trouve alors en position "Idle"
 }
 
 void Arm::takeCD() {
+	this->move(ANGLE_ELBOW_IDLE, ANGLE_ELBOW_TAKE, false);
+	this->move(ANGLE_SHOULDER_IDLE, ANGLE_SHOULDER_TAKE, true);
 
-	this->move(ANGLE_ELBOW_IDLE, ANGLE_ELBOW_TAKE, 1);
-	this->move(ANGLE_SHOULDER_IDLE, ANGLE_SHOULDER_TAKE, 0);
+	this->pomp->compress();
 
-	this->dropInside();
-	//Dans tout les cas, on revient à la position initiale
+	delay(2500);
+
 	this->idle();
 }
 
 void Arm::dropInside() {
 	//Mouvement des servos pour aller au tapis
-	this->move(ANGLE_ELBOW_TAKE, ANGLE_ELBOW_DROP, 1);
-	this->move(ANGLE_SHOULDER_TAKE, ANGLE_SHOULDER_DROP, 0);
+	
+	this->move(ANGLE_ELBOW_IDLE, ANGLE_ELBOW_DROP, false);
+	this->move(ANGLE_SHOULDER_IDLE, ANGLE_SHOULDER_DROP, true);
 
 	//Relachement au dessus du tapis
 	this->pomp->drop();
 
+	this->idle();
+
+}
+
+bool Arm::seeCD() {
+	if(this->sensor->isWhite()) {
+		return true;
+	}
+
+	return false;
 }
 
 bool Arm::hasCD() {
@@ -53,48 +64,37 @@ bool Arm::hasCD() {
 }
 
 void Arm::idle() {
-
-	//Retour position initiale
-	this->move(ANGLE_SHOULDER_DROP, ANGLE_SHOULDER_IDLE, 0);
-	this->move(ANGLE_ELBOW_DROP, ANGLE_ELBOW_IDLE, 1);
-
-	//FIN Mouvement
+	this->move(ANGLE_SHOULDER_DROP, ANGLE_SHOULDER_IDLE, true);
+	this->move(ANGLE_ELBOW_DROP, ANGLE_ELBOW_IDLE, false);
 }
 
-/* move : Passe le servo de angleBegin à angleEnd
- 
- choix du servo : bool servo
- if (servo == 0)  -----> Epaule
- if (servo == 1) ------> Coude
- 
- */
-void Arm::move(int angleBegin, int angleEnd, bool servo) {
-	int i;
+void Arm::move(int angleBegin, int angleEnd, bool shoulder) {
+	int i = 0;
 	if(angleBegin < angleEnd) {
-		if(servo == 0) {
+		if(shoulder) {
 			for(i = angleBegin; i < angleEnd; i++) {
 				this->servoShoulder->write(i);
-				delay(5);
+				delay(15);
 			}
 		} else {
 			for(i = angleBegin; i < angleEnd; i++) {
 				this->servoElbow->write(i);
-				delay(5);
+				delay(15);
 			}
 		}
 	}
 
 	else if(angleBegin > angleEnd) {
-		if(servo == 0) {
+		if(shoulder) {
 			for(i = angleBegin; i >= angleEnd; i--) {
 
 				this->servoShoulder->write(i);
-				delay(5);
+				delay(15);
 			}
 		} else {
 			for(i = angleBegin; i >= angleEnd; i--) {
 				this->servoElbow->write(i);
-				delay(5);
+				delay(15);
 			}
 		}
 

@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "Arm.h"
+#include "Gate.h"
 #include "Conveyor.h"
 #include "Motor.h"
 #include "Timer.h"
@@ -21,19 +22,17 @@
 
 class Robot {
 	public:
+		//Left = Violet ; Right = Rouge ; None = none (ET OUI)
 		enum Position {
-			LEFT, RIGHT
+			LEFT, RIGHT, NONE
 		};
 
 		enum Action {
-			BEGIN, SEARCH, TAKE, DROP
+			BEGIN, SEARCH, TAKE, DROP, DUMB, HOMOLOGATION
 		};
 
-		/**
-		 * Variables de configuration
-		 */
-		//Position de départ du robot - Qualifie les zones et la cellule de départ pour le robot
-		static const Robot::Position START_POSITION = Robot::LEFT;
+		//Passe t'on l'homologation ? ROFL
+		static const bool HAS_HOMOLOGATION = false;
 		/*
 		 *
 		 */
@@ -47,7 +46,11 @@ class Robot {
 		Recognition* getRecognition();
 		void stop();
 
+		void init();
+
 	private:
+		Robot::Position position;
+
 		//Robot actif ou non ?
 		bool active;
 		bool fistLoop;
@@ -69,6 +72,9 @@ class Robot {
 		//Tapis
 		Conveyor* conveyor;
 
+		//Porte
+		Gate* gate;
+
 		//Déplacement
 		Motor* motor;
 
@@ -88,9 +94,13 @@ class Robot {
 		void actionBegin();
 		void actionSearch();
 		void actionTake();
-
 		void actionDrop();
+		void actionDumb();
+		void actionHomologation();
+
 		void correctAngle();
+
+		bool avoid();
 };
 
 #endif /* ROBOT_H_ */

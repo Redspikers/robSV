@@ -10,11 +10,11 @@
 class Gate {
 	public:
 		Gate();
-		void closeGate();
-		void openGate();
+		void close();
+		void open();
 
 	private:
-		Servo* servoGate;
+		Servo* servo;
 
 };
 

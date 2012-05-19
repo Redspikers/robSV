@@ -20,25 +20,26 @@
 
 
 #define COLOR_SENSOR A7
-
 #define SENSOR_COLOR_HIGH 53
 
-#define CONVEYOR 22
+#define CONVEYOR 31
 
-#define GATE_PIN 10
+#define GATE_PIN 10 //11
 #define ELBOW 9
 #define SHOULDER 8
 #define MOTOR_RIGHT 7
 #define MOTOR_LEFT 6
 
-#define POMP 5
+#define POMP 34
 
-#define JACK 42
-#define JACK_HIGH 40
+#define JACK 40
+#define JACK_HIGH 42
 
 #define PUSH_CD 46
 #define PUSH_CD_HIGH 48
 
 #define INTERRUPT_MOTOR_LEFT 2
+
+#define BUTTON_POSITION 52
 
 #endif /* PIN_H_ */

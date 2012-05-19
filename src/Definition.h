@@ -32,16 +32,31 @@
 
 //Angle des capteurs et erreur (en MM) autorisées lors des comparaisons théoriques (trigonométire) et réels
 #define ANGLE_BETWEEN_CAPTOR 30
-#define ALLOW_ERROR 40 //TODO calibrer
+#define ALLOW_ERROR 50 //TODO calibrer
 
+/*
+Angles du bras
+ */
+//Angle des moteurs pour le mouvement 1 (Chopper le CD)
+#define ANGLE_SHOULDER_TAKE 105
+#define ANGLE_ELBOW_TAKE 47 //le coude descend en premier
+//Angle des moteurs pour le mouvement 2 (Amener au tapis)
+#define ANGLE_SHOULDER_DROP 125
+#define ANGLE_ELBOW_DROP 175
+//Angle des moteurs pour le mouvement 3 (Retour position de recherche de CD)
+#define ANGLE_SHOULDER_IDLE 170
+#define ANGLE_ELBOW_IDLE 90
+//Angle des servo pour la position idleBegin (position en début de match c'est tout)
+#define ANGLE_SHOULDER_IDLE_BEGIN 90
+#define ANGLE_ELBOW_IDLE_BEGIN 140
 //Allonge du bras entre la fin du robot et la ventouse au sol
 #define ARM_REACH 90
 
 //Angle de la porte
 #define GATE_ANGLE_OPEN 0
-#define GATE_ANGLE_CLOSE 95
+#define GATE_ANGLE_CLOSE 160
 
-//Where the robot start
+//Où le robot commence
 #define START_LEFT_X 150
 #define START_LEFT_Y 1750
 #define START_LEFT_ANGLE 0
@@ -137,24 +152,5 @@
 #define DISTANCE_CD_TAKE 500
 
 
-
-/*	epaule : angle 180 : déployé
- angle 90 : perpendiculaire au sol
- angle 0 : collision avec l'interieur du robot
- coude : angle 0 : déployé
-
- */
-//Angle des moteurs pour le mouvement 1 (Chopper le CD)    //TODO
-#define ANGLE_SHOULDER_TAKE 135
-#define ANGLE_ELBOW_TAKE 90
-//Angle des moteurs pour le mouvement 2 (Amener au tapis)      //TODO
-#define ANGLE_SHOULDER_DROP 90
-#define ANGLE_ELBOW_DROP 120
-//Angle des moteurs pour le mouvement 3 (Retour position de recherche de CD)
-#define ANGLE_SHOULDER_IDLE 140
-#define ANGLE_ELBOW_IDLE 50
-//Angle des servo pour la position idleBegin (position en début de match c'est tout)
-#define ANGLE_SHOULDER_IDLE_BEGIN 90
-#define ANGLE_ELBOW_IDLE_BEGIN 140
 
 #endif /* DEFINITION_H_ */

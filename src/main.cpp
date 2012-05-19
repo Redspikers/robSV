@@ -10,7 +10,6 @@
 
 #include "Pin.h"
 #include "Robot.h"
-#include "TimerThree.h"
 
 Robot* robot;
 
@@ -39,11 +38,6 @@ void setup() {
 	digitalWrite(JACK_HIGH, HIGH);
 	digitalWrite(PUSH_CD_HIGH, HIGH);
 	digitalWrite(SENSOR_COLOR_HIGH, HIGH);
-
-	//Lancement du timer qui permet l'arret du robot au bout de 85 secondes
-	Timer3.initialize(DELAY_BEFORE_STOP * 1000000);
-	//Timer3.pwm(13, 512); Supprimer si l'arret marche
-	Timer3.attachInterrupt(stop);
 }
 
 void loop() {

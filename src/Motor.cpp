@@ -29,7 +29,7 @@ void Motor::move(int distanceMilliMeter) {
 	this->countPulseLeft = 0;
 	int i = 0;
 	this->acceleration(75);
-	/*
+
 	while(((this->countPulseLeft / 20.25) * 189.028) < (distanceMilliMeter - 150)) {
 		delay(5);
 	}
@@ -39,7 +39,7 @@ void Motor::move(int distanceMilliMeter) {
 		this->servoLeft->write(i - 1);
 		delay(15);
 	}
-	*/
+
 
 	while(((this->countPulseLeft / 20.25) * 189.028) < distanceMilliMeter) {
 		delay(1);

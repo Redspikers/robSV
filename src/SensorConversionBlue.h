@@ -7,6 +7,7 @@ class SensorConversionBlue {
 		~SensorConversionBlue();
 
 		int get(int i, int j);
+		int getSize();
 
 	private:
 		int** conversion;

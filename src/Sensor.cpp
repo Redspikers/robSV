@@ -19,11 +19,11 @@ int Sensor::get() {
 	valeur /= 20;
 
 	//Si les valeurs sortent des bornes (à 5 près), on renvoit 0
-	if((valeur < this->conversion->get(0, 1) - 5) || (valeur > this->conversion->get(11, 1) + 5))
+	if((valeur < this->conversion->get(0, 1) - 5) || (valeur > this->conversion->get(this->conversion->getSize()-1, 1) + 5))
 		return 0;
 
 	//On approxime la distance en utilisant le tableau
-	for(i = 0; i < 12; i++) {
+	for(i = 0; i < this->conversion->getSize(); i++) {
 		if((valeur < this->conversion->get(i, 1)) && (valeur >= borne_inf[1])) {
 			return (int) (borne_inf[0] + ((valeur - borne_inf[1]) / (float) (borne_inf[1] - this->conversion->get(i, 1)) * 10));
 		}

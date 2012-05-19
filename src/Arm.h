@@ -19,6 +19,7 @@ class Arm {
 		void exitIdleBegin();
 		void stop();
 		bool hasCD();
+		bool seeCD();
 
 	private:
 		void move(int angleBegin, int angleEnd, bool servo);

@@ -13,11 +13,11 @@ Recognition::Recognition() {
 
 	//Instanciation des capteurs avec le PIN
 	this->captorBL = new Sensor(SENSOR_BOTTOM_LEFT, this->conversion);
-	this->captorBM = new SensorBlue(SENSOR_BOTTOM_MIDDLE, this->conversionBlue);
+	this->captorBM = new Sensor(SENSOR_BOTTOM_MIDDLE, this->conversion);
 	this->captorBR = new Sensor(SENSOR_BOTTOM_RIGHT, this->conversion);
 
 	this->captorTL = new Sensor(SENSOR_TOP_LEFT, this->conversion);
-	this->captorTM = new Sensor(SENSOR_TOP_MIDDLE, this->conversion);
+	this->captorTM = new SensorBlue(SENSOR_TOP_MIDDLE, this->conversionBlue);
 	this->captorTR = new Sensor(SENSOR_TOP_RIGHT, this->conversion);
 }
 
@@ -45,7 +45,7 @@ bool Recognition::around(int value1, int value2, int ecartmax) {
 	return false;
 }
 
-//Renvoie true de manière moins restrictive que isWall(), car il faut que les capteurs soit bien positionné
+//Renvoie true de manière plus restrictive que isWall(), car il faut que les capteurs soit bien positionné
 bool Recognition::isWallParallel() {
 	//Le capteur du milieu sert de référence
 	//Distance que les capteurs des cotés doivent avoir
@@ -56,8 +56,8 @@ bool Recognition::isWallParallel() {
 	int right = this->captorBR->get();
 
 	//Comparaison des valeurs théoriques et réels avec une tolérance à l'erreur de ALLOW_ERROR mm
-	if(isBetween(side - ALLOW_ERROR, side + ALLOW_ERROR, left)) {
-		if(isBetween(side - ALLOW_ERROR, side + ALLOW_ERROR, right)) {
+	if(this->isBetween(side - ALLOW_ERROR, side + ALLOW_ERROR, left)) {
+		if(this->isBetween(side - ALLOW_ERROR, side + ALLOW_ERROR, right)) {
 			return true;
 		}
 	}
@@ -81,10 +81,10 @@ bool Recognition::isWall() {
 
 bool Recognition::isCD() {
 	//Un CD n'est visible que par les capteurs du bas, ne bouge pas, et n'est que sur un seul capteur à la fois
-	//Renvoie true entre 20 et 50cm
+	//Renvoie true entre 20 et 40cm
 
 	if(!this->isObstacle()) {
-		if(this->isBetween(20, 50, this->captorBL->get()) || this->isBetween(20, 50, this->captorBM->get()) || this->isBetween(20, 50, this->captorBR->get())) {
+		if(this->isBetween(20, 40, this->captorBL->get()) || this->isBetween(20, 40, this->captorBM->get()) || this->isBetween(20, 40, this->captorBR->get())) {
 			return true;
 		}
 	}
@@ -95,22 +95,22 @@ bool Recognition::isObstacle() {
 	//Un obstacle est visible que par 2 capteurs alignée verticalement et ne bouge pas
 	//Renvoie true entre 20 et 30cm
 
-	if(this->isBetween(20, 50, this->captorBL->get()) && this->isBetween(20, 50, this->captorTL->get())) {
+	if(this->isBetween(20, 30, this->captorBL->get()) && this->isBetween(20, 30, this->captorTL->get())) {
 		return true;
-	} else if(this->isBetween(20, 50, this->captorBM->get()) && this->isBetween(20, 50, this->captorTM->get())) {
+	} else if(this->isBetween(20, 30, this->captorBM->get()) && this->isBetween(20, 30, this->captorTM->get())) {
 		return true;
-	} else if(this->isBetween(20, 50, this->captorBR->get()) && this->isBetween(20, 50, this->captorTR->get())) {
+	} else if(this->isBetween(20, 30, this->captorBR->get()) && this->isBetween(20, 30, this->captorTR->get())) {
 		return true;
 	}
 
 	return false;
 }
 bool Recognition::isRobot() {
-	//Un robot peut être vu que par un (ou deux) capteurs en mêmes temps (bas ou/et haut) et est le seul à bouger
+	//Un robot peut être vu que par un (ou deux) capteurs en mêmes temps (haut) et est le seul à bouger
 	//Renvoie true entre 20 et 30cm
 
-	if(!this->isCD() && !this->isObstacle()) {
-		if(this->isBetween(20, 50, this->captorBL->get()) || this->isBetween(20, 50, this->captorBM->get()) || this->isBetween(20, 50, this->captorBR->get())) {
+	if(!this->isObstacle()) {
+		if(this->isBetween(20, 50, this->captorTL->get()) || this->isBetween(10, 30, this->captorTM->get()) || this->isBetween(20, 50, this->captorTR->get())) {
 			return true;
 		}
 	}
